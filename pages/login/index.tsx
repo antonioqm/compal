@@ -1,15 +1,18 @@
 import {
   Box,
   Button,
-  ButtonGroup,
+  Chip,
   FormControl,
+  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  Paper,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import styles from "../../styles/Login.module.scss";
@@ -17,32 +20,45 @@ import { useTheme } from "@mui/material/styles";
 import Image from "next/image";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
+const Teste = () => {
+  return (
+    <Chip
+      sx={{ height: 30, width: "100%" }}
+      label="@compal.com"
+    />
+  );
+};
+
 function index() {
   const theme = useTheme();
 
   interface LoginType {
-    first: 'local';
-    second: 'domain';
-};
-  
+    first: "local";
+    second: "domain";
+  }
+
   interface State {
     password: string;
     showPassword: boolean;
     identifier: string;
-    loginType: 'local' | 'domain';
+    loginType: "local" | "domain";
   }
 
   const [values, setValues] = React.useState<State>({
     password: "",
     showPassword: false,
     identifier: "",
-    loginType: 'local'
+    loginType: "local",
   });
-  
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
+      let newValue = event.target.value;
+      if (values.loginType === "local") {
+        console.log("isLocal");
+        newValue = newValue.replace(/@/g, "");
+      }
+      setValues({ ...values, [prop]: newValue });
     };
 
   const handleClickShowPassword = () => {
@@ -57,15 +73,14 @@ function index() {
   ) => {
     event.preventDefault();
   };
-  const [loginType, setLoginType] = React.useState('local');
 
   const handleToggleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newLoginType:'local' | 'domain'
+    newLoginType: "local" | "domain"
   ) => {
     setValues({
       ...values,
-      loginType: newLoginType
+      loginType: newLoginType,
     });
   };
 
@@ -85,25 +100,59 @@ function index() {
         ></Image>
       </div>
       <Box className={styles.formWrapper} bgcolor={"red"} minHeight={"100vh"}>
-        <div className={styles.content}>
-          <ToggleButtonGroup
-            color="primary"
-            exclusive
-            value={values.loginType}
-            onChange={handleToggleChange}
-            fullWidth
+        <Image
+          src="/logo/compal-symbol.svg"
+          alt="Compal Logo"
+          width={50}
+          height={50}
+        ></Image>
+        <Paper elevation={10} className={styles.content}>
+          <Typography
+            color={"#424753"}
+            variant="h4"
+            sx={{
+              my: 2,
+              fontSize: 22,
+              color: "#636B69",
+              letterSpacing: 1,
+              fontWeight: 700,
+            }}
           >
-            <ToggleButton value={"domain"}>Domínio</ToggleButton>
-            <ToggleButton value={"local"}>Local</ToggleButton>
-          </ToggleButtonGroup>
-          <TextField
-            value={values.identifier}
-            onChange={handleChange('identifier')}
-            fullWidth
-            label="Identificador"
-            type="text"
-            color="primary"
-          />
+            Admin MSD
+          </Typography>
+
+          <FormControl fullWidth variant="outlined">
+            <FormHelperText sx={{ mx: 0 }} id="filled-weight-helper-text">
+              Como você gostaria de se identificar?
+            </FormHelperText>
+            <ToggleButtonGroup
+              color="primary"
+              exclusive
+              value={values.loginType}
+              onChange={handleToggleChange}
+              fullWidth
+            >
+              <ToggleButton value={"local"}>ID</ToggleButton>
+              <ToggleButton value={"domain"}>Domínio</ToggleButton>
+            </ToggleButtonGroup>
+          </FormControl>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-identifier">
+              Identificador
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-identifier"
+              type="text"
+              value={values.identifier}
+              onChange={handleChange("identifier")}
+              endAdornment={
+                <InputAdornment position="end">
+                   { values.loginType === 'local' &&  <Teste />}
+                </InputAdornment>
+              }
+              label="Identificador"
+            />
+          </FormControl>
           <FormControl fullWidth variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Senha</InputLabel>
             <OutlinedInput
@@ -136,16 +185,21 @@ function index() {
           >
             Entrar
           </Button>
-        </div>
+        </Paper>
       </Box>
-
       <Box
         className={styles.rightContainer}
         bgcolor={"red"}
         minHeight={"100vh"}
-      >
-        as
-      </Box>
+      ></Box>
+      <div className={[styles.logoBG, styles.logoFloating].join(" ")}>
+        <Image
+          src="/logo/compal-symbol-green.svg"
+          alt="Compal Logo"
+          width={240}
+          height={240}
+        ></Image>
+      </div>
     </Box>
   );
 }
