@@ -1,0 +1,41 @@
+.container {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.formWrapper{
+  background: #64A70B;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.content {
+  background-color: white;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 40px;
+  gap: 24px;
+  border-radius: 8px;
+}
+
+.rightContainer{
+  width: 33.333%;
+  background: #C4CBD2;
+}
+
+
+
+.logoWrapper {
+  position: absolute;
+  left: 56px;
+  top: 56px;
+}
+
+
