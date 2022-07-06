@@ -21,12 +21,7 @@ import Image from "next/image";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Teste = () => {
-  return (
-    <Chip
-      sx={{ height: 30, width: "100%" }}
-      label="@compal.com"
-    />
-  );
+  return <Chip sx={{   height: 32, width: "100%", borderRadius: 6 }} label="@compal.com" />;
 };
 
 function index() {
@@ -47,16 +42,16 @@ function index() {
   const [values, setValues] = React.useState<State>({
     password: "",
     showPassword: false,
-    identifier: "",
-    loginType: "local",
+    identifier: "antonio",
+    loginType: "domain",
   });
 
   const handleChange =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
       let newValue = event.target.value;
-      if (values.loginType === "local") {
+      if (values.loginType === "domain") {
         console.log("isLocal");
-        newValue = newValue.replace(/@/g, "");
+        newValue = newValue.replace(/@$/g, "");
       }
       setValues({ ...values, [prop]: newValue });
     };
@@ -76,12 +71,23 @@ function index() {
 
   const handleToggleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newLoginType: "local" | "domain"
+    newLoginType: "local" | "domain" | null
   ) => {
-    setValues({
-      ...values,
-      loginType: newLoginType,
-    });
+    if (newLoginType === "domain" && newLoginType !== null) {
+      console.log("is ", newLoginType);
+      console.log("values.identifier ", values.identifier.replace(/@.+$/g, ""));
+
+      setValues({
+        ...values,
+        identifier: values.identifier.replace(/@.+$/g, ""),
+        loginType: newLoginType,
+      });
+    } else if(newLoginType === "local" && newLoginType !== null) {
+      setValues({
+        ...values,
+        loginType: newLoginType,
+      });
+    }
   };
 
   return (
@@ -141,13 +147,14 @@ function index() {
               Identificador
             </InputLabel>
             <OutlinedInput
+              sx={{ pr: 1 }}
               id="outlined-adornment-identifier"
               type="text"
               value={values.identifier}
               onChange={handleChange("identifier")}
               endAdornment={
                 <InputAdornment position="end">
-                   { values.loginType === 'local' &&  <Teste />}
+                  {values.loginType === "domain" && <Teste />}
                 </InputAdornment>
               }
               label="Identificador"
@@ -192,14 +199,14 @@ function index() {
         bgcolor={"red"}
         minHeight={"100vh"}
       ></Box>
-      <div className={[styles.logoBG, styles.logoFloating].join(" ")}>
+      {/* <div className={[styles.logoBG, styles.logoFloating].join(" ")}>
         <Image
           src="/logo/compal-symbol-green.svg"
           alt="Compal Logo"
           width={240}
           height={240}
         ></Image>
-      </div>
+      </div> */}
     </Box>
   );
 }

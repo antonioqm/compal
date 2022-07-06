@@ -27,18 +27,19 @@
 }
 
 .rightContainer{
-  width: 33.333%;
-  background: linear-gradient(180deg, rgba(196, 203, 210, 0.53) 0%, rgba(255, 255, 255, 0.24) 100%);
-  backdrop-filter: blur(16px);
-  z-index: 2;
+  width: 0%;
+  background: linear-gradient(180deg, rgb(196 203 210 / 26%) 0%, rgb(255 255 255 / 0%) 100%);
+  backdrop-filter: blur(4px);
+    z-index: 2;
+    border-left: 1px solid rgb(255 255 255 / 15%);
 }
 
 
 
 .logoWrapper {
   position: absolute;
-  left: 56px;
-  top: 56px;
+  left: 24px;
+  top: 24px;
 }
 
 .logoBG{
