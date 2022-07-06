@@ -5,15 +5,35 @@
   justify-content: center;
 }
 .formWrapper{
-  background: #64A70B;
   flex-grow: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 32px;
+  width: 100%;
 }
 
+.container::before {
+  content: "";
+    position: absolute;
+    width: 210px;
+    height: 210px;
+    background: linear-gradient(140.9deg, #ffc107 -14.02%, rgba(144, 202, 249, 0) 70.50%);
+    border-radius: 50%;
+    top: -160px;
+    right: -130px;
+}
+.container::after {
+    content: "";
+    position: absolute;
+    width: 210px;
+    height: 210px;
+    background: linear-gradient(210.04deg, #ffc107 -50.94%, rgba(144, 202, 249, 0) 83.49%);
+    border-radius: 50%;
+    top: -30px;
+    right: -180px;
+}
 .content {
   background-color: white;
   width: 400px;

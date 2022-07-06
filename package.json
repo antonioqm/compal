@@ -13,13 +13,15 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.3",
+    "@tabler/icons": "^1.72.0",
     "formik": "^2.2.9",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-hook-form": "^7.33.1",
     "react-imask": "^6.4.2",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "yup-locale-pt": "^0.0.9"
   },
   "devDependencies": {
     "@types/node": "17.0.42",
