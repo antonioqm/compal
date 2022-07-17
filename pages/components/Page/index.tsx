@@ -189,9 +189,9 @@ export function Page() {
     >
       <CssBaseline />
 
-      <AppBar position="fixed" open={open}>
+      {/* <AppBar position="fixed" open={open}>
         <Toolbar sx={{ height: "100%" }}>
-          {/* <IconButton
+          <IconButton
             disableRipple
             color="inherit"
             aria-label="open drawer"
@@ -203,7 +203,7 @@ export function Page() {
             }}
           >
             <MenuIcon />
-          </IconButton> */}
+          </IconButton>
           <IconButton
             color="default"
             sx={{
@@ -248,9 +248,9 @@ export function Page() {
             PART NUMBER
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
 
-      <Drawer variant="permanent" open={open}>
+      {/* <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton
             size="large"
@@ -309,7 +309,7 @@ export function Page() {
             </ListItem>
           ))}
         </List>
-      </Drawer>
+      </Drawer> */}
       <Box
         component="main"
         sx={{

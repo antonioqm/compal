@@ -23,10 +23,13 @@ import MuiListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Image from "next/image";
-import { useState } from "react";
-import MENU_ITEMS from "./MENU_ITEMS";
+import { useContext, useState } from "react";
+import {MENU, activeRoute} from "./MENU";
 import { Button, TextField } from "@mui/material";
 import { Add, AddCircle } from "@mui/icons-material";
+import Link from "next/link";
+import {useRouter} from "next/router";
+import DrwaerContext from "./DrawerContext";
 
 const drawerWidth = 256;
 
@@ -37,7 +40,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: "hidden",
+  // overflowX: "hidden",
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -46,13 +49,12 @@ const closedMixin = (theme: Theme): CSSObject => ({
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  overflowX: "hidden",
+  // overflowX: "hidden",
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
 });
-
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -79,9 +81,22 @@ const DrawerWrapper = styled(MuiDrawer, {
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
+    
     boxSizing: "border-box",
+    "& .MuiPaper-root-MuiDrawer-paper": {
+      overflow: 'visible',
+    },
+    "& .MuiDrawer-docked.MuiDrawer-paper": {
+      overflow: 'visible',
+    },
+    "& .MuiDrawer-docked": {
+      overflow: 'visible',
+      background: 'purple',
+    },
+    
     ...(open && {
       ...openedMixin(theme),
+     
 
       "& .MuiDrawer-paper": {
         borderRadius: "0 8px 8px 0",
@@ -116,7 +131,7 @@ const ListItem = styled(MuiListItem, {
     borderRadius: "8px 0 0 8px",
   },
   "&.Mui-selected:hover": {
-    borderRadius: "8px 0 0 8px",
+    // borderRadius: "8px 0 0 8px",
     backgroundColor: "#F5F7FB",
   },
   "& .MuiListItemIcon-root": {
@@ -135,10 +150,14 @@ const ListItemButton = styled(MuiListItemButton, {
 }));
 
 
+
 export const Drawer = () => {
+  const { open, setOpen } = useContext(DrwaerContext)
   const theme = useTheme();
-  const [open, setOpen] = useState(true);
+  // const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const router = useRouter();
+  
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -156,12 +175,29 @@ export const Drawer = () => {
     setSelectedIndex(index);
   };
 
-
-
   return (
-    <DrawerWrapper variant="permanent" open={open}>
-      <DrawerHeader>
-        
+    <Box sx={{ position:'relative'}}>
+      <IconButton
+        color="default"
+        sx={{
+          maxWidth: 24,
+          maxHeight: 24,
+          background: "#fff",
+          position: "absolute",
+          right: "-12px",
+          top: 70,
+          zIndex: 9999,
+          "&:hover": {
+            boxShadow: "3px -9px 73px .5",
+            background: "#F5F7FB",
+          },
+        }}
+        onClick={handleDrawer}
+      >
+        {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </IconButton>
+    <DrawerWrapper sx={{ overflow: 'visible' }} variant="permanent" open={open}>
+      <DrawerHeader sx={{ overflow: 'visible' }}>
         <IconButton
           size="large"
           sx={{
@@ -190,53 +226,39 @@ export const Drawer = () => {
         )}
       </DrawerHeader>
 
-      <Divider />
+        <Divider />
       <List>
-        {MENU_ITEMS.map(({ label, Component }, index) => (
-          <ListItem
-            sx={{ color: "#878E9F" }}
-            selected={selectedIndex === index}
-            onClick={(event) => handleListItemClick(event, index)}
-            key={label}
-            disablePadding
-          >
-            <ListItemButton>
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                  color: "#878E9F",
-                  '&.Mui-selected:hover > MuiListItemIcon-root"': {
-                    color: "green",
-                  },
-                }}
-              >
-                {<Component />}
-              </ListItemIcon>
-              <ListItemText primary={label} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+        {MENU.map(({ label, path, Component }, index) => (
+          <Link key={index} href={`${path}?isOpen=${open}`} passHref>
+            <ListItem
+              key={index}
+              sx={{ color: "#878E9F" }}
+              selected={activeRoute(path, router.pathname)}
+              // onClick={(event) => handleListItemClick(event, index)}
+              disablePadding
+            >
+              <ListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "#878E9F",
+                    '&.Mui-selected:hover > MuiListItemIcon-root"': {
+                      color: "green",
+                    },
+                  }}
+                >
+                  {<Component />}
+                </ListItemIcon>
+                <ListItemText primary={label} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
       </List>
-      <IconButton
-            color="default"
-            sx={{
-              maxWidth: 24,
-              maxHeight: 24,
-              background: "#fff",
-              position: "absolute",
-              left: "-12px",
-              top: 86,
-              "&:hover": {
-                boxShadow: "3px -9px 73px .5",
-                background: "#F5F7FB",
-              },
-            }}
-            onClick={handleDrawer}
-          >
-            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
+      
     </DrawerWrapper>
+    </Box>
   );
 };

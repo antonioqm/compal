@@ -5,20 +5,13 @@ import Image from 'next/image'
 import { useState } from 'react'
 import Layout from './components/Layout'
 import { Page } from './components/Page'
-import type { ReactElement } from 'react'
 
 
-const Home: NextPage = () => {
+const SealingMachine: NextPage = () => {
   return (
-    <Layout title='Home' >
-      <Typography variant='h1'></Typography>
-      <Page/>
-   </Layout>
+    <Layout title='Home'/> 
+     
   )
 }
 
-export default Home
-
-
-
-
+export default SealingMachine

@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { IconButton } from "@mui/material";
-import { EditIcon, TrashIcon } from "../Page/icons/icons";
+import { EditIcon, TrashIcon } from "../icons/icons";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -27,7 +27,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
       borderBottomRightRadius: 8,
       // display: 'inline-flex',
     },
-    "&:first-child": {
+    "&:first-of-type": {
       borderTopLeftRadius: 8,
       borderBottomLeftRadius: 8,
     },
