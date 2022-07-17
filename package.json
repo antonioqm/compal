@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "next dev -p 3010",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -21,6 +21,7 @@
     "react-hook-form": "^7.33.1",
     "react-imask": "^6.4.2",
     "yup": "^0.32.11",
+    "babel-plugin-inline-react-svg": "^2.0.1",
     "yup-locale-pt": "^0.0.9"
   },
   "devDependencies": {
