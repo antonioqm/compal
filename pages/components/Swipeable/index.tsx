@@ -5,10 +5,12 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import {
   AppBar,
+  Container,
   CssBaseline,
+  Divider,
+  IconButton,
   Toolbar,
   Typography,
-  useScrollTrigger
 } from "@mui/material";
 import { Formik, Form } from "formik";
 import ButtonWrapper from "../FormsUI/Button/ButtonWrapper";
@@ -16,41 +18,16 @@ import TextfieldWrapper from "../FormsUI/TextField/TextFieldWrapper";
 import ToggleBottonWrapper from "../FormsUI/ToggleBotton/ToggleBottonWrapper";
 import styles from "../../../styles/Login.module.scss";
 import { ptShort } from "yup-locale-pt";
+import { useState } from "react";
+import ElevationScroll from "../ElevationScroll";
+import { IconArrowLeft } from "@tabler/icons";
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-  children: React.ReactElement;
-}
-
-function ElevationScroll(props: Props) {
-  const { children, window } = props;
-
-  console.log('children', children)
-  console.log('window', window)
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-    target: window ? window() : undefined,
-  });
-
-  return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
-  });
-}
-
-export default function Swipeable({ ...props }: Props) {
-  
-  const [state, setState] = React.useState(false);
+export default function Swipeable() {
+  const [scrollTarget, setScrollTarget] = useState<any>();
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   Yup.setLocale(ptShort);
   const INITIAL_FORM_STATE = {
-    moistureSensitive: 'no',
+    moistureSensitive: "no",
     partNumber: "sasasa",
     level: "asasas",
     thickness: "2",
@@ -62,7 +39,7 @@ export default function Swipeable({ ...props }: Props) {
   const FORM_VALIDATION = Yup.object().shape({
     moistureSensitive: Yup.string().required(),
     level: Yup.string().required(),
-    partNumber: Yup.string().required().min(3),
+    partNumber: Yup.string().required().min(3).matches(/([\w]{4}-[\d]{4})/, `O pradrão 'AAAA-0000' é esperado.`),
     thickness: Yup.number().positive().required(),
     temperature: Yup.number().positive().required(),
     minimumTime: Yup.number().positive().required(),
@@ -81,7 +58,7 @@ export default function Swipeable({ ...props }: Props) {
         return;
       }
 
-      setState(open);
+      setIsOpenDrawer(open);
     };
 
   return (
@@ -100,13 +77,17 @@ export default function Swipeable({ ...props }: Props) {
           display: "flex",
           zIndex: 9999,
         }}
-        open={state}
+        open={isOpenDrawer}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
         <Box
+          ref={(node) => {
+            if (node) {
+              setScrollTarget(node ? node : undefined);
+            }
+          }}
           sx={{
-            background: "#F5F7FB",
             flexGrow: 1,
             width: 512,
             fontSize: 22,
@@ -114,18 +95,24 @@ export default function Swipeable({ ...props }: Props) {
           }}
         >
           <CssBaseline />
-          <ElevationScroll >
+          <ElevationScroll window={scrollTarget}>
             <AppBar
               elevation={20}
-              position="fixed" 
+              position="fixed"
               sx={{
                 position: "absolute",
                 minHeight: 80,
                 background: "white",
                 right: "auto",
+                px: 0,
               }}
             >
-              <Toolbar sx={{ height: 80 }}>
+              <Toolbar
+                sx={{ px: 0, height: 80, "&.MuiToolbar-root": { p: 2 } }}
+              >
+                <IconButton onClick={toggleDrawer(false)} sx={{ mr: 2 }}>
+                  <IconArrowLeft></IconArrowLeft>
+                </IconButton>
                 <Typography
                   fontWeight={800}
                   color={"#64A70B"}
@@ -139,7 +126,8 @@ export default function Swipeable({ ...props }: Props) {
             </AppBar>
           </ElevationScroll>
 
-          <Box sx={{ p: 6, pt: 15 }}>
+          <Divider sx={{ mt: 10, }} variant="fullWidth"></Divider>
+          <Box sx={{ p: 6, mb: 14 }}>
             <Formik
               initialValues={{
                 ...INITIAL_FORM_STATE,
@@ -160,12 +148,32 @@ export default function Swipeable({ ...props }: Props) {
                     { label: "Não", value: "no" },
                   ]}
                 />
-                <TextfieldWrapper type='number' name={"thickness"} label={"Espessura"} />
-                <TextfieldWrapper type='number' name={"temperature"} label={"Temperatura"} />
-                <TextfieldWrapper type='number' name={"minimumTime"} label={"Tempo mínimo"} />
-                <TextfieldWrapper type='number' name={"maximumExposureTime"} label={"Tempo de exposição máximo"} />
-                <TextfieldWrapper type='number' name={"maximumNumberOfBaking"} label={"Número máximo de baking"} />
-                <ButtonWrapper>enviar</ButtonWrapper>
+                <TextfieldWrapper
+                  type="number"
+                  name={"thickness"}
+                  label={"Espessura"}
+                />
+                <TextfieldWrapper
+                  type="number"
+                  name={"temperature"}
+                  label={"Temperatura"}
+                />
+                <TextfieldWrapper
+                  type="number"
+                  name={"minimumTime"}
+                  label={"Tempo mínimo"}
+                />
+                <TextfieldWrapper
+                  type="number"
+                  name={"maximumExposureTime"}
+                  label={"Tempo de exposição máximo"}
+                />
+                <TextfieldWrapper
+                  type="number"
+                  name={"maximumNumberOfBaking"}
+                  label={"Número máximo de baking"}
+                />
+                <ButtonWrapper fixed>enviar</ButtonWrapper>
               </Form>
             </Formik>
           </Box>

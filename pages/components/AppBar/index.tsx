@@ -6,40 +6,13 @@ import { useRouter } from "next/router";
 import { cloneElement, useContext } from "react";
 import DrawerContext from "../Drawer/DrawerContext";
 import { currentNamePage } from "../../../src/ROUTES";
+import ElevationScroll from "../ElevationScroll";
 
 
 const drawerWidth = 256;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
-}
-
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-  children: React.ReactElement;
-}
-
-
-function ElevationScroll(props: Props) {
-  const { children, window } = props;
-  console.log('children', children)
-  // Note that you normally won't need to set the window ref as useScrollTrigger
-  // will default to window.
-  // This is only being set here because the demo is in an iframe.
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-    target: window ? window() : undefined,
-  });
-
-  return cloneElement(children, {
-    sx: trigger ? {boxShadow: '10px 2px 20px rgba(0,0,0,.1)'} : {boxShadow: '10px 2px 0px rgba(0,0,0,0)'}
-    
-  });
 }
 
 const AppBar = styled(MuiAppBar, {
@@ -65,12 +38,12 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default (props: Props) => {
+export default () => {
   const { open } = useContext(DrawerContext) 
   const router = useRouter()
   const currentPage = currentNamePage(router.pathname)
   return (
-    <ElevationScroll {...props}>
+    <ElevationScroll >
 
     <AppBar position="fixed" open={open}>
       <Toolbar sx={{ height: "100%" }}>

@@ -43,7 +43,7 @@ const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: an
 
   }
   
-  if (meta && meta.touched && meta.error) {
+  if (meta && meta.error) {
     errorsField.error = true;
     errorsField.helperText = meta.error;
   }

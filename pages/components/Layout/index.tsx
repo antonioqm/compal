@@ -34,7 +34,7 @@ const Home = ({ children, title, ...props }: Props) => {
           }}
           >
           <CssBaseline />
-          <AppBar children={<></>}  />
+          <AppBar />
           <Drawer />
           <Box
             component="main"
