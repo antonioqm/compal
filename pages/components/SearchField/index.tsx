@@ -15,8 +15,14 @@ import {
   FilterListRounded,
 } from "@mui/icons-material";
 import { Button, Hidden } from "@mui/material";
+import { useRouter } from "next/router";
+import { currentNamePage } from "src/ROUTES";
 
 export default function index() {
+
+  const router = useRouter()
+
+  const currentPage = currentNamePage(router.pathname)
   return (
     <Paper
       elevation={0}
@@ -36,7 +42,7 @@ export default function index() {
       </IconButton>
       <InputBase
         sx={{ ml: 1, flex: 1 }}
-        placeholder="Buscar por Part Number"
+        placeholder={`Buscar por ${currentPage}`}
         inputProps={{ "aria-label": "Buscar por Part Number" }}
       />
       <Button

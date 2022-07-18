@@ -1,12 +1,13 @@
 import React from 'react';
 import { useFormikContext } from 'formik';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+
 
 const ButtonWrapper = ({
   children,
   ...otherProps
 }:any) => {
-  const { submitForm } = useFormikContext();
+  const { submitForm, isValid, dirty } = useFormikContext();
 
   const handleSubmit = () => {
     submitForm();
@@ -20,7 +21,9 @@ const ButtonWrapper = ({
   }
 
   return (
-    <Button
+
+      <Button
+        disabled={!(isValid && dirty)}
       sx={{ minHeight: 56, color: "white" }}
       variant='contained'
       fullWidth

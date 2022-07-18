@@ -1,6 +1,6 @@
-import {ComponentIcon, LevelIcon, OverIcon, SealingMachineIcon} from '../icons/icons'
-import {PartNumberIcon} from '../icons/icons'
-import { CartIcon } from '../icons/icons'
+import {ComponentIcon, LevelIcon, OverIcon, SealingMachineIcon} from '../pages/components/icons/icons'
+import {PartNumberIcon} from '../pages/components/icons/icons'
+import { CartIcon } from '../pages/components/icons/icons'
 
 
 export const activeRoute = (routeName:string, currentRoute:string):boolean => {
@@ -8,11 +8,11 @@ export const activeRoute = (routeName:string, currentRoute:string):boolean => {
 }
 
 export const currentNamePage = (currentRoute: string): string => {
-  const menuItem = MENU.find(({path}) => path === currentRoute)
+  const menuItem = ROUTES.find(({path}) => path === currentRoute)
   return menuItem ? menuItem.label : 'not found';
 }
 
-export const MENU = [
+export const ROUTES = [
   {
     path: '/',
     label: 'Nível',

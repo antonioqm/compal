@@ -75,6 +75,13 @@ const rows = [
   createData("Eclair", 262, 16.0, 24, 6.0),
   createData("Cupcake", 305, 3.7, 67, 4.3),
   createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
 export default function CustomizedTables() {
@@ -106,8 +113,8 @@ export default function CustomizedTables() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
+          {rows.map((row, index) => (
+            <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row">
                 {row.name}
               </StyledTableCell>

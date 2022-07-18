@@ -9,12 +9,13 @@ import {
   OutlinedInput,
   Slide,
   TextField,
+  Typography,
 } from "@mui/material";
 import { IconEye, IconEyeOff, IconKey } from "@tabler/icons";
 import DomainLabel from "../../Helpers/DomainLalbel";
 
-const TextfieldWrapper = ({ name, label, endAdornment, ...otherProps }: any) => {
-  const [field, meta] = useField(name);
+const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: any) => {
+  const [field, meta, form] = useField(name);
   const { setFieldValue } = useFormikContext();
   const [showPassword, setShowPassword] = useState(false)
   const [showDomain, setShowDomain] = useState(true)
@@ -57,7 +58,7 @@ const TextfieldWrapper = ({ name, label, endAdornment, ...otherProps }: any) => 
         <OutlinedInput
           {...configTextfield}
           id={`outlined-adornment-${name}`}
-          type={showPassword || name !== 'password' ? "text" : "password"}
+          type={showPassword || name !== 'password' ? type : "password"}
           // startAdornment={
           //   <InputAdornment position="start">
           //     <IconButton

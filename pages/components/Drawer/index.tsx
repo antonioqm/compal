@@ -24,12 +24,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Image from "next/image";
 import { useContext, useState } from "react";
-import {MENU, activeRoute} from "./MENU";
+import {ROUTES, activeRoute} from "../../../src/ROUTES";
 import { Button, TextField } from "@mui/material";
 import { Add, AddCircle } from "@mui/icons-material";
 import Link from "next/link";
 import {useRouter} from "next/router";
-import DrwaerContext from "./DrawerContext";
+import DrawerContext from "./DrawerContext";
 
 const drawerWidth = 256;
 
@@ -152,7 +152,7 @@ const ListItemButton = styled(MuiListItemButton, {
 
 
 export const Drawer = () => {
-  const { open, setOpen } = useContext(DrwaerContext)
+  const { open, setOpen } = useContext(DrawerContext)
   const theme = useTheme();
   // const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -183,9 +183,10 @@ export const Drawer = () => {
           maxWidth: 24,
           maxHeight: 24,
           background: "#fff",
-          position: "absolute",
-          right: "-12px",
+          position: "fixed",
+          left: `${(open ? drawerWidth : 64) - 12}px`,
           top: 70,
+          transition: "left 0.2s ease-in",
           zIndex: 9999,
           "&:hover": {
             boxShadow: "3px -9px 73px .5",
@@ -228,7 +229,7 @@ export const Drawer = () => {
 
         <Divider />
       <List>
-        {MENU.map(({ label, path, Component }, index) => (
+        {ROUTES.map(({ label, path, Component }, index) => (
           <Link key={index} href={`${path}?isOpen=${open}`} passHref>
             <ListItem
               key={index}

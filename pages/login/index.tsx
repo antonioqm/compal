@@ -149,7 +149,7 @@ function index() {
                 <ToggleBottonWrapper
                   name="loginType"
                   legend="Como você gostaria de se identificar?"
-                  label="I agree"
+                  data={[{label:'Domínio', value: 'domain'}, {label: 'Local', value: 'local'}]}
                 />
                 <TextfieldWrapper
                   name={"identifier"}

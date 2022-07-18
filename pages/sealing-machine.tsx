@@ -4,7 +4,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
 import Layout from './components/Layout'
-import { Page } from './components/Page'
+import { Main } from './components/Contents'
 
 
 const SealingMachine: NextPage = () => {
