@@ -1,0 +1,14 @@
+import type { NextPage } from "next";
+import Layout from "../../src/components/Layout";
+import Swipeable from "../../src/components/Swipeable";
+
+const over: NextPage = () => {
+  return (
+    <>
+      <Layout title="">
+      </Layout>
+    </>
+  );
+};
+
+export default over;

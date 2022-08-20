@@ -1,46 +1,71 @@
-import {ComponentIcon, LevelIcon, OverIcon, SealingMachineIcon} from '../pages/components/icons/icons'
-import {PartNumberIcon} from '../pages/components/icons/icons'
-import { CartIcon } from '../pages/components/icons/icons'
+import { JSXElementConstructor, ReactElement } from "react";
+import {
+  ComponentIcon,
+  LevelIcon,
+  OverIcon,
+  SealingMachineIcon,
+} from "./components/icons/icons";
+import { PartNumberIcon } from "./components/icons/icons";
+import { CartIcon } from "./components/icons/icons";
+import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
+import { FormInventory } from "../pages/inventory/FormInventory";
+import { FormLevel } from "pages/Level/FormLevel";
 
-
-export const activeRoute = (routeName:string, currentRoute:string):boolean => {
-  return routeName === currentRoute? true : false;
+interface PageRouter {
+  path: string;
+  label: string;
+  IconComponent: JSXElementConstructor<any>;
+  FormComponent: JSXElementConstructor<any>;
 }
+export const activeRoute = (
+  routeName: string,
+  currentRoute: string
+): boolean => {
+  return routeName === currentRoute ? true : false;
+};
 
-export const currentNamePage = (currentRoute: string): string => {
-  const menuItem = ROUTES.find(({path}) => path === currentRoute)
-  return menuItem ? menuItem.label : 'not found';
-}
+export const currentPage = (currentRoute: string): PageRouter | null => {
+  const pageRouter = ROUTES.find(
+    (pageRouter) => pageRouter.path === currentRoute
+  );
+  return pageRouter ? pageRouter : null;
+};
 
-export const ROUTES = [
+export const ROUTES: PageRouter[] = [
   {
-    path: '/',
-    label: 'Nível',
-    Component: LevelIcon
+    path: "/",
+    label: "Nível",
+    IconComponent: LevelIcon,
+    FormComponent: FormLevel,
   },
   {
-    path: '/part-number',
-    label: 'Part Number',
-    Component: PartNumberIcon
+    path: "/part-number",
+    label: "Part Number",
+    IconComponent: PartNumberIcon,
+    FormComponent: FormPartNumber,
   },
   {
-    path: '/over',
-    label: 'Forno',
-    Component: OverIcon
+    path: "/inventory",
+    label: "Inventário",
+    IconComponent: OverIcon,
+    FormComponent: FormInventory,
   },
   {
-    path: '/cart',
-    label: 'Carrinho',
-    Component: CartIcon
+    path: "/feddercar",
+    label: "Feddercar",
+    IconComponent: CartIcon,
+    FormComponent: FormPartNumber,
   },
   {
-    path: '/sealing-machine',
-    label: 'Máquina de Vedação',
-    Component: SealingMachineIcon
+    path: "/sealing-machine",
+    label: "Máquina de Vedação",
+    IconComponent: SealingMachineIcon,
+    FormComponent: FormPartNumber,
   },
   {
-    path: '/component',
-    label: 'Componente',
-    Component: ComponentIcon
+    path: "/component",
+    label: "Componente",
+    IconComponent: ComponentIcon,
+    FormComponent: FormPartNumber,
   },
-]
+];

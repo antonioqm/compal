@@ -23,12 +23,12 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
-import ButtonWrapper from "../components/FormsUI/Button/ButtonWrapper";
-import TextfieldWrapper from "../components/FormsUI/TextField/TextFieldWrapper";
-import ToggleBottonWrapper from "../components/FormsUI/ToggleBotton/ToggleBottonWrapper";
+import ButtonWrapper from "../../src/components/FormsUI/Button/ButtonWrapper";
+import TextfieldWrapper from "../../src/components/FormsUI/TextField/TextFieldWrapper";
+import ToggleBottonWrapper from "../../src/components/FormsUI/ToggleBotton/ToggleBottonWrapper";
 import { IconUser } from "@tabler/icons";
 import { fontSize } from "@mui/system";
-import DomainLabel from "../components/Helpers/DomainLalbel";
+import DomainLabel from "../../src/components/Helpers/DomainLalbel";
 
 function index() {
   Yup.setLocale(ptShort);
