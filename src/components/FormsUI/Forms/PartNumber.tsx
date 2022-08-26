@@ -66,8 +66,8 @@ export const FormPartNumber = ({action, ...props}:Prop) => {
       name="moistureSensitive"
       legend="Sensibilidade à umidade?"
       data={[
-        { label: "Sim", value: "yes" },
-        { label: "Não", value: "no" },
+        { label: "Sim", value: true},
+        { label: "Não", value: false },
       ]}
     />
     <TextfieldWrapper

@@ -4,6 +4,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import {
   AppBar,
+  Chip,
   Divider,
   IconButton,
   Toolbar,
@@ -12,34 +13,34 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import ElevationScroll from "../ElevationScroll";
-import { IconArrowLeft } from "@tabler/icons";
+import { IconArrowLeft, IconPencilPlus } from "@tabler/icons";
 import { Add } from "@mui/icons-material";
 import { currentPage } from "src/ROUTES";
 import { useRouter } from "next/router";
+import ACTION from "../../enums/action";
+import { EditIcon } from "../icons/icons";
 
 interface Prop {
   children?: React.ReactElement | string;
   title?: string;
   buttonOpen?: string;
   tooltipLabel?: string;
-  action?: string;
+  type: "Create" | "Update";
 }
 export default function Swipeable({
   title,
   tooltipLabel,
   buttonOpen,
   children,
-  action,
+  type,
   ...props
 }: Prop) {
   const [scrollTarget, setScrollTarget] = useState<any>();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const router = useRouter();
-  const { IconComponent } = currentPage(router.pathname)!;
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-
       if (
         event &&
         event.type === "keydown" &&
@@ -54,10 +55,8 @@ export default function Swipeable({
 
   return (
     <>
-      {buttonOpen ? (
-        <Button onClick={toggleDrawer(true)}>{buttonOpen}</Button>
-      ) : (
-          <Tooltip title={ tooltipLabel || "Title default"}>
+      {type === "Create" ? (
+        <Tooltip title={tooltipLabel || "Title default"}>
           <Button
             variant="contained"
             color="primary"
@@ -75,7 +74,12 @@ export default function Swipeable({
             <Add sx={{ fontSize: 24, color: "#fff", margin: 0 }} />
           </Button>
         </Tooltip>
+      ) : (
+        <IconButton onClick={toggleDrawer(true)} sx={{ width: 31, color: "#3779FA" }}>
+          <EditIcon />
+        </IconButton>
       )}
+
       <SwipeableDrawer
         anchor={"right"}
         sx={{
@@ -122,6 +126,7 @@ export default function Swipeable({
                 <IconButton onClick={toggleDrawer(false)} sx={{ mr: 2 }}>
                   <IconArrowLeft></IconArrowLeft>
                 </IconButton>
+
                 <Typography
                   fontWeight={800}
                   color={"#64A70B"}
@@ -129,9 +134,15 @@ export default function Swipeable({
                   variant="h6"
                   component="h6"
                 >
-                  { `${action}`}
-                 {<IconComponent />}
-                  { `  ${title}` ?? "Component Modal"} 
+                  <Typography
+                    fontWeight={200}
+                    color={"black"}
+                    variant="h6"
+                    component="span"
+                  >
+                    {`${ACTION[type]} `}
+                  </Typography>
+                  {`${title}` ?? "Component Modal"}
                 </Typography>
               </Toolbar>
             </AppBar>

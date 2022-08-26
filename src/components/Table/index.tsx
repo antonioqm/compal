@@ -8,7 +8,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, IconButton } from "@mui/material";
-import { EditIcon, ExcelIcon, TrashIcon } from "../icons/icons";
+import { ExcelIcon, TrashIcon } from "../icons/icons";
+import Swipeable from "../Swipeable";
+import { currentPage } from "src/ROUTES";
+import { useRouter } from "next/router";
+import { useRecoilValue } from "recoil";
+import {levelsState } from "src/state/atom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -69,91 +74,99 @@ function createData(
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function CustomizedTables() {
+  const listLevel = useRecoilValue(levelsState);
+
+  const router = useRouter();
+  const { FormComponent, label } = currentPage(router.pathname)!;
+
   return (
-    <TableContainer
-      sx={{
-        marginTop: 4,
-        borderRadius: 3,
-        padding: 3,
-        background: "#E7EDF2",
-      }}
-    >
-      <Table
+    <>
+      <TableContainer
         sx={{
-          borderCollapse: "separate",
-          borderSpacing: "0 8px",
+          marginTop: 4,
+          borderRadius: 3,
+          padding: 3,
+          background: "#E7EDF2",
         }}
-        aria-label="customized table"
       >
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>modificado em </StyledTableCell>
-            <StyledTableCell align="right">part number</StyledTableCell>
-            <StyledTableCell align="right">Nível</StyledTableCell>
-            <StyledTableCell align="right">
-              sensibilidade a umidade
-            </StyledTableCell>
-            <StyledTableCell align="right">Espessura</StyledTableCell>
-            <StyledTableCell colSpan={2} align="right">
-              <Button
-                variant="contained"
-                disableElevation
-                color="primary"
-                size="small"
-                sx={{
-                  height: 48,
-                  bgcolor:'transparent',
-                  color: '#878E9F',
-                  border: '1px solid #878E9F ',
-                  '&:hover': {
-                    color: '#fff'
-                  }
-                }}
-                aria-label="Excel"
-              >
-                <ExcelIcon style={{ marginRight: 8 }} /> Excel
-              </Button>
-            </StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row, index) => (
-            <StyledTableRow key={index}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
+        <Table
+          sx={{
+            borderCollapse: "separate",
+            borderSpacing: "0 8px",
+          }}
+          aria-label="customized table"
+        >
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>modificado em </StyledTableCell>
+              <StyledTableCell align="right">part number</StyledTableCell>
+              <StyledTableCell align="right">Nível</StyledTableCell>
+              <StyledTableCell align="right">
+                sensibilidade a umidade
               </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-              <StyledTableCell align="center">
-                <IconButton sx={{ width: 31, color: "#3779FA" }}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton sx={{ width: 31, color: "#F1506D" }}>
-                  <TrashIcon />
-                </IconButton>
+              <StyledTableCell align="right">Espessura</StyledTableCell>
+              <StyledTableCell colSpan={2} align="right">
+                {/* <Button
+                  variant="contained"
+                  disableElevation
+                  color="primary"
+                  size="small"
+                  sx={{
+                    height: 48,
+                    bgcolor: "transparent",
+                    color: "#878E9F",
+                    border: "1px solid #878E9F ",
+                    "&:hover": {
+                      color: "#fff",
+                    },
+                  }}
+                  aria-label="Excel"
+                >
+                  <ExcelIcon style={{ marginRight: 8 }} /> Excel
+                </Button> */}
               </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {listLevel.length > 0 &&
+              listLevel.map((level, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell component="th" scope="row">
+                    <span>{level.backingRequired}</span>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <span>{level.createDate}</span>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <span>{level.id}</span>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <span>{level.levelName}</span>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <span>{level.updateDate}</span>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {/* AQUI ENTRA O SWAPEABLE */}
+                    <>
+                      <Swipeable
+                        type={"Update"}
+                        tooltipLabel={`Atualizar ${label}`}
+                        title={label}
+                      >
+                        {<FormComponent action={'update'} formLevel={{ ...level }}  />}
+                      </Swipeable>
+                      <IconButton sx={{ width: 31, color: "#F1506D" }}>
+                        <TrashIcon />
+                      </IconButton>
+                    </>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }

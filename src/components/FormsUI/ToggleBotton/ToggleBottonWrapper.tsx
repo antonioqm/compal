@@ -11,14 +11,22 @@ const ToggleBottonWrapper = ({ name, data, legend, ...otherProps }: any) => {
   const dataMenu = data
     ? data
     : [
-        { label: "Sim", value: "yes" },
-        { label: "Não", value: "no" },
+        { label: "Sim", value: true },
+        { label: "Não", value: false },
       ];
   const { setFieldValue } = useFormikContext();
   const [field, meta] = useField(name);
-
+  
+  const strToBoolean = (value: string):boolean | string => {
+    if (value === 'true') {
+      return true;
+    } else if (value === 'false') {
+      return false;
+    }
+    return value;
+  }
   const handleChange = (evt: any) => {
-    const { value } = evt.target;
+    const  value  = strToBoolean(evt.target.value);
     setFieldValue(name, value);
   };
 

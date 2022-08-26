@@ -3,12 +3,13 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import { Toolbar, Button, Typography, styled, Box } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { useRouter } from "next/router";
-import { cloneElement, useContext } from "react";
+import { cloneElement, useContext, useEffect } from "react";
 import GlobalContext from "../Drawer/GlobalContext";
 import { currentPage } from "../../ROUTES";
 import ElevationScroll from "../ElevationScroll";
 import Avatar from "./Avatar";
 import Swipeable from "../Swipeable";
+import axios from "axios";
 
 const drawerWidth = 256;
 
@@ -43,12 +44,18 @@ export default () => {
   const { open } = useContext(GlobalContext);
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
+
+
   return (
     <ElevationScroll>
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ height: "100%" }}>
-          <Swipeable action={'Novo'} tooltipLabel={`Adicionar ${label}`} title={label}>
-            {<FormComponent />}
+          <Swipeable
+            type={"Create"}
+            tooltipLabel={`Adicionar ${label}`}
+            title={label}
+          >
+            {<FormComponent  action={"Create"} />}
           </Swipeable>
           <Typography
             sx={{ marginLeft: 2, flexGrow: "1" }}
@@ -59,7 +66,7 @@ export default () => {
             noWrap
             component="h1"
           >
-           {label}
+            {label}
           </Typography>
           <Avatar />
         </Toolbar>

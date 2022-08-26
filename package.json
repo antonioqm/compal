@@ -14,14 +14,16 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.3",
     "@tabler/icons": "^1.72.0",
+    "axios": "^0.27.2",
+    "babel-plugin-inline-react-svg": "^2.0.1",
     "formik": "^2.2.9",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-hook-form": "^7.33.1",
     "react-imask": "^6.4.2",
+    "recoil": "^0.7.5",
     "yup": "^0.32.11",
-    "babel-plugin-inline-react-svg": "^2.0.1",
     "yup-locale-pt": "^0.0.9"
   },
   "devDependencies": {
