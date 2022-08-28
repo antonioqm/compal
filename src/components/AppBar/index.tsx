@@ -1,15 +1,17 @@
 import { Add } from "@mui/icons-material";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { Toolbar, Button, Typography, styled, Box } from "@mui/material";
+import { Toolbar, Button, Typography, styled, Box, Alert, Snackbar } from "@mui/material";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { useRouter } from "next/router";
-import { cloneElement, useContext, useEffect } from "react";
+import { cloneElement, useContext, useEffect, useState } from "react";
 import GlobalContext from "../Drawer/GlobalContext";
 import { currentPage } from "../../ROUTES";
 import ElevationScroll from "../ElevationScroll";
 import Avatar from "./Avatar";
-import Swipeable from "../Swipeable";
+import Swipeable from "../Swipeable/Swipeable";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { ResponseState } from "src/state/atom";
 
 const drawerWidth = 256;
 
@@ -44,7 +46,20 @@ export default () => {
   const { open } = useContext(GlobalContext);
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
+  const { hasError } = useRecoilValue(ResponseState)
+  const [openSnackbar, setSnackbar] = useState<boolean>(hasError) 
 
+  const handleClick = () => {
+    setSnackbar(true);
+  };
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar(false);
+  };
 
   return (
     <ElevationScroll>
@@ -70,7 +85,17 @@ export default () => {
           </Typography>
           <Avatar />
         </Toolbar>
-      </AppBar>
+      <Snackbar   open={openSnackbar} autoHideDuration={6000} onClose={handleClose} >
+            <Alert
+            variant="filled"
+            onClose={handleClose}
+              severity={hasError ? "error" : "success" }
+              sx={{ width: "100%" }}
+            >
+              This is a success message!
+            </Alert>
+      </Snackbar>
+      </AppBar> 
     </ElevationScroll>
   );
 };

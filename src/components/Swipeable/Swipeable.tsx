@@ -5,8 +5,10 @@ import Button from "@mui/material/Button";
 import {
   AppBar,
   Chip,
+  CircularProgress,
   Divider,
   IconButton,
+  Snackbar,
   Toolbar,
   Tooltip,
   Typography,
@@ -19,6 +21,12 @@ import { currentPage } from "src/ROUTES";
 import { useRouter } from "next/router";
 import ACTION from "../../enums/action";
 import { EditIcon } from "../icons/icons";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loadingState, RquestState } from "src/state/atom";
+import Lottie from "lottie-react";
+import checkJSON from "../../lottie/check.json";
+import action from "../../enums/action";
+import { useEffect } from "react";
 
 interface Prop {
   children?: React.ReactElement | string;
@@ -37,7 +45,25 @@ export default function Swipeable({
 }: Prop) {
   const [scrollTarget, setScrollTarget] = useState<any>();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const router = useRouter();
+  const loading = useRecoilValue(loadingState);
+  const [request, setRequest] = useRecoilState(RquestState)
+
+  const handleClickSnackbar = () => {
+    setOpenSnackbar(true && (request === 'success'));
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+    console.log('close')
+  };
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -52,6 +78,12 @@ export default function Swipeable({
 
       setIsOpenDrawer(open);
     };
+  useEffect(() => {
+    setOpenSnackbar((request === 'success' && isOpenDrawer))
+  }, [request])
+
+  
+  
 
   return (
     <>
@@ -75,7 +107,10 @@ export default function Swipeable({
           </Button>
         </Tooltip>
       ) : (
-        <IconButton onClick={toggleDrawer(true)} sx={{ width: 31, color: "#3779FA" }}>
+        <IconButton
+          onClick={toggleDrawer(true)}
+          sx={{ width: 31, color: "#3779FA" }}
+        >
           <EditIcon />
         </IconButton>
       )}
@@ -148,9 +183,50 @@ export default function Swipeable({
             </AppBar>
           </ElevationScroll>
           <Divider sx={{ mt: 10 }} variant="fullWidth"></Divider>
-          <Box sx={{ p: 6, mb: 14 }}>{children}</Box>
+          {/* Loading Status */}
+          {/* {loading && (
+            <Box
+              alignItems={"center"}
+              justifyContent={"center"}
+              sx={{
+                position: "absolute",
+                display: "flex",
+                bgcolor: "white",
+                height: "calc(100% - 186px)",
+                width: "100%",
+                zIndex: 99,
+              }}
+            >
+              <CircularProgress color="primary" />
+            </Box>
+          )} */}
+
+          <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            autoHideDuration={6000}
+            sx={{
+              position: "absolute",
+              height: "calc(100% - 186px)",
+              width: "100%",
+              right: "0px !important",
+              top: "80px !important",
+              bgcolor: "white",
+              display: "flex",
+              zIndex: 99,
+              flexDirection: "column",
+              "& .MuiPaper-root": { flexGrow: 1, height: "100%" ,  bgcolor: "white", boxShadow: 'none'},
+            }}
+            open={ openSnackbar}
+            onClose={handleCloseSnackbar} 
+            action={<Lottie animationData={checkJSON} loop={false} />}
+          />
+
+          {/* Loading Status */}
+
+          <Box sx={{ mx: 6, py: 6, mb: 14 }}>{children}</Box>
         </Box>
       </SwipeableDrawer>
     </>
   );
 }
+

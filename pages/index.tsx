@@ -5,11 +5,10 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Layout from '../src/components/Layout'
 import { Main } from '../src/components/Contents'
-import type { ReactElement } from 'react'
-import api from 'src/api/api'
-import { useRecoilValue, useSetRecoilState, selector } from 'recoil'
-import { listLevelState } from 'src/state/atom'
-import { Level } from './Interfaces/level.interface'
+import { useRecoilState } from 'recoil'
+import { loadingState } from 'src/state/atom'
+import { Axios } from 'src/api/api'
+
 
 
 

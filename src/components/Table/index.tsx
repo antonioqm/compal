@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Button, IconButton } from "@mui/material";
 import { ExcelIcon, TrashIcon } from "../icons/icons";
-import Swipeable from "../Swipeable";
+import Swipeable from "../Swipeable/Swipeable";
 import { currentPage } from "src/ROUTES";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";

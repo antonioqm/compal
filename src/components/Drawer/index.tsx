@@ -229,7 +229,7 @@ export const Drawer = () => {
         <Divider />
       <List>
         {ROUTES.map(({ label, path, IconComponent }, index) => (
-          <Link key={index} href={`${path}?isOpen=${open}`} passHref>
+          <Link key={index} href={`${path}`} passHref>
             <ListItem
               key={index}
               sx={{ color: "#878E9F" }}
