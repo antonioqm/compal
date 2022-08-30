@@ -8,7 +8,7 @@ export function Main() {
   const theme = useTheme();
   return (
     <>
-      <Table />
+      {/* <Table /> */}
     </>
   );
 }
