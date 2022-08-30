@@ -14,7 +14,6 @@ import React from "react";
 import { useRecoilState } from "recoil";
 
 interface LevelProp {
-  id?: number;
   levelName: string;
   maxTimeExposition: number;
   backingRequired: boolean;
@@ -49,7 +48,7 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
     },
   });
 
-  const { updateLevel, createLevel } = useLevelsMutations();
+  const { updateModel, createModel } = useLevelsMutations();
 
   return (
     <>
@@ -60,13 +59,15 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: any) => {
-          // updateLevel<Level>({ endpoint: "nivel", payload: values })
-          action === "Create"
-            ?  await createLevel<Level>({ endpoint: "nivel", payload: values as Level })
-            : await updateLevel<Level>({ endpoint: "nivel", payload: values  as Level });
-        }
-        }
+        onSubmit={async (values: Level) => {
+          const { id } = values;
+          action === "Update" && id
+            ? await updateModel<Level>({
+                endpoint: "nivel",
+                payload: { ...values, id },
+              })
+            : await createModel<Level>({ endpoint: "nivel", payload: values });
+        }}
       >
         <Form className={styles.formWrapper}>
           <TextfieldWrapper name={"levelName"} label={"Nível"} />

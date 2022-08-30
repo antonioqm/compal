@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <RecoilRoot>
           <CssBaseline />
-          <Component {...pageProps} />
+            <Component {...pageProps} />
         </RecoilRoot>
       </ThemeProvider>
     </Suspense>

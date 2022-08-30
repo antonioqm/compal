@@ -1,9 +1,10 @@
 export interface Level {
+  id?: number | undefined;
+  createDate?: string;
+  updateDate?: string;
   backingRequired: boolean;
-  createDate: string;
-  id: number;
   levelName: string;
   maxTimeExposition: number;
-  updateDate: string;
   user?: string | null;
 }
+

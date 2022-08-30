@@ -7,6 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import {
   Button,
   Dialog,
@@ -21,8 +23,8 @@ import { ExcelIcon, TrashIcon } from "../icons/icons";
 import Swipeable from "../Swipeable/Swipeable";
 import { currentPage } from "../../ROUTES";
 import { useRouter } from "next/router";
-import { useRecoilValue } from "recoil";
-import { levelsState } from "../../state/atom";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { filterModel, modelState } from "../../state/atom";
 import { useState, useEffect } from "react";
 import { apiClient } from "../../api/api";
 import { Level } from "../../interfaces/level.interface";
@@ -86,10 +88,12 @@ function createData(
   return { name, calories, fat, carbs, protein };
 }
 
-// export default function CustomizedTables() {
-//   const listLevel = useRecoilValue(levelsState);
-export default function CustomizedTables() {
-  const [listLevel, setListLevel] = useState<Level[]>([]);
+interface DataTable {
+  header?: any[];
+  body: Array<Level>;
+}
+
+export default function TableCompal({header, body}:DataTable) {
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -100,18 +104,15 @@ export default function CustomizedTables() {
     setOpenDialogTrash(false);
   };
 
-  useEffect(() => {
 
-    apiClient.listAll('nivel').then(data => {
-      setListLevel(data)
-     })
 
-  }, [])
+ 
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
   return (
     <>
+      
           <TableContainer
             sx={{
               marginTop: 4,
@@ -147,8 +148,8 @@ export default function CustomizedTables() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {listLevel &&
-                  listLevel.map((level, index) => (
+            {body.length > 0 &&
+                  body.map((level, index) => (
                     <StyledTableRow key={index}>
                       <StyledTableCell component="th" scope="row">
                         <> {level.backingRequired}</>

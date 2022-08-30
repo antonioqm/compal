@@ -5,7 +5,7 @@ import { apiClient } from "../api/api";
 import { Level } from "../interfaces/level.interface";
 
 interface UpdatedModel<T> {
-  payload: T & Payload;
+  payload: T;
   endpoint: string;
 }
 interface Payload {
@@ -29,30 +29,50 @@ export const ResponseState = atom<ResponseError | undefined>({
 })
 
 
-export const levelsState = atom<any[]>({
-  key: 'levels',
+export const modelState = atom<any[]>({
+  key: 'model',
   default: []
 })
 
+export const filterProductsValue = atom({
+  key: "filterProductsValue",
+  default: "",
+});
+
+export const filterModel = selector({
+  key: "filterModel",
+  get: ({ get }) => {
+    const modelsState = get(modelState);
+    const filterProductsValueState = get(filterProductsValue);
+
+    if (filterProductsValueState.length) {
+      return modelsState.filter(
+        (item) => item.levelName.includes(filterProductsValueState.trim()) && item
+      );
+    }
+    return modelState;
+  },
+});
+
 export function useLevelsMutations() {
 
-  const [levels, setLevels] = useRecoilState(levelsState)
+  const [models, setModels] = useRecoilState(modelState)
   const [loading, setLoading] = useRecoilState(loadingState)
   const [request, setResponse] = useRecoilState(ResponseState)
 
 
-  // const createLevel = async (newLevel: any) => {
+  // const createModel = async (newLevel: any) => {
   //   const createdLevel = await apiClient.create(newLevel)
   //   setLevels([...levels, createdLevel])
   // }
 
-  const createLevel = async function <Model>(updatedLevel: UpdatedModel<Model>) {
+  const createModel = async function <Model>(updatedLevel: UpdatedModel<Model>) {
     try {
       const { payload, endpoint } = updatedLevel
       setLoading(true)
       const createdLevel = await apiClient.create(`${endpoint}`, payload)
       setLoading(false)
-      setLevels([createdLevel, ...levels])
+      setModels([createdLevel, ...models])
       setResponse({type: 'success',
         status: 200,
         statusText: '',
@@ -68,19 +88,19 @@ export function useLevelsMutations() {
     }
 
   }
-  const updateLevel = async function <Model>(updatedLevel: UpdatedModel<Model>) {
+  const updateModel = async function <Model>(updatedLevel: UpdatedModel<Model & Payload>) {
     try {
       const { payload, payload: { id }, endpoint } = updatedLevel
       setLoading(true)
-      const newValue = await apiClient.update(`${endpoint}/${id}`, payload)
+      const newValue:(Level & Payload) = await apiClient.update(`${endpoint}/${id}`, payload)
       setLoading(false)
-      const newLevels = levels.map((level) => {
-        if (level.id !== newValue.id) {
-          return level
+      const newModels = models.map((model) => {
+        if (model.id !== newValue.id) {
+          return model
         }
         return payload
       })
-      setLevels(newLevels)
+      setModels(newModels)
       setResponse({type: 'success',
         status: 200,
         statusText: '',
@@ -102,12 +122,15 @@ export function useLevelsMutations() {
 
   }
 
-  const deleteLevel = async (endpoint: string, id: number) => {
+  const deleteModel = async (endpoint: string, id: number) => {
     await apiClient.delete(id)
-    const newLevels = levels.filter((level: Level) => level.id !== id)
-    setLevels(newLevels)
+    const newLevels = models.filter((level: Level) => level.id !== id)
+    setModels(newLevels)
   }
+  
+
+ 
 
 
-  return { createLevel, updateLevel, deleteLevel }
+  return { createModel, updateModel, deleteModel }
 }
