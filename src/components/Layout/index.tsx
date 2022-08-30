@@ -39,10 +39,12 @@ const Home = ({ children, title, ...props }: Props) => {
   };
 
   useEffect(() => {
-    setOpenSnackbar(
-      (response?.type === "success" || response?.type === "error") &&
-        response !== undefined
-    );
+    if (response !== undefined ){
+      setOpenSnackbar(
+        (response?.type === "success" || response?.type === "error") &&
+          response !== undefined
+      );
+    }
   }, [response]);
 
   return (
@@ -52,20 +54,6 @@ const Home = ({ children, title, ...props }: Props) => {
           autoHideDuration={6000}
           open={openSnackbar}
           onClose={handleCloseSnackbar}
-          // sx={{
-          //   position: "absolute",
-          //   height: "calc(100% - 186px)",
-          //   width: "100%",
-          //   right: "0px !important",
-          //   top: "80px !important",
-          //   bgcolor: "white",
-          //   display: "flex",
-          //   zIndex: 99,
-          //   flexDirection: "column",
-          //   "& .MuiPaper-root": { flexGrow: 1, height: "100%" ,  bgcolor: "white", boxShadow: 'none'},
-          // }}
-
-          // action={<Lottie animationData={checkJSON} loop={false} />}
         >
           <Alert
             variant="filled"

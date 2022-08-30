@@ -182,7 +182,7 @@ export default function Swipeable({
 
           {/* Loading Status */}
 
-          <Box sx={{ mx: 6, py: 6, mb: 14 }}>{<FormComponent action={'create'} />}</Box>
+          <Box sx={{ mx: 6, py: 6, mb: 14 }}>{children}</Box>
         </Box>
       </SwipeableDrawer>
     </>

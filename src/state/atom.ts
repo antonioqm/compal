@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { truncate } from "fs";
-import { Level } from "pages/Interfaces/level.interface";
+import { Level } from "src/interfaces/level.interface";
 import { atom, selector, useRecoilState } from "recoil";
 import { apiClient } from "src/api/api";
 
@@ -31,14 +31,7 @@ export const ResponseState = atom<ResponseError>({
 
 export const levelsState = atom<any[]>({
   key: 'levels',
-  default: selector({
-    key: 'levelsLoader',
-    get: async () => {
-      const data = await apiClient.listAll('nivel')
-      return data
-
-    },
-  }),
+  default: []
 })
 
 export function useLevelsMutations() {
@@ -114,6 +107,7 @@ export function useLevelsMutations() {
     const newLevels = levels.filter((level: Level) => level.id !== id)
     setLevels(newLevels)
   }
+
 
   return { createLevel, updateLevel, deleteLevel }
 }

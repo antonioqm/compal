@@ -5,7 +5,7 @@ import ToggleBottonWrapper from "src/components/FormsUI/ToggleBotton/ToggleBotto
 import { useState } from "react";
 import { ptShort } from "yup-locale-pt";
 import * as Yup from "yup";
-import styles from "../../styles/Login.module.scss";
+import styles from "../../../../styles/Login.module.scss";
 import Select from "src/components/FormsUI/Select/SelectWrapper";
 import { Typography } from "@mui/material";
 

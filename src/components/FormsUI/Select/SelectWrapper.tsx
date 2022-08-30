@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import Select  from "@mui/material/Select";
 import { useField, useFormikContext } from "formik";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 
 // import { Container } from './styles';
 

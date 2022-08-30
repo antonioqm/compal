@@ -8,8 +8,8 @@ import * as Yup from "yup";
 import styles from "../../styles/Login.module.scss";
 import Select from "src/components/FormsUI/Select/SelectWrapper";
 import { useLevelsMutations } from "src/state/atom";
-import { Level } from "pages/Interfaces/level.interface";
-import {  Alert, Box, Button, LinearProgress, Snackbar } from "@mui/material";
+import { Level } from "src/interfaces/level.interface";
+import { Alert, Box, Button, LinearProgress, Snackbar } from "@mui/material";
 import React from "react";
 import { useRecoilState } from "recoil";
 
@@ -20,11 +20,9 @@ interface LevelProp {
   backingRequired: boolean;
 }
 interface FormLevelProp {
-  action?: "create" | "read" | "update" | "delete";
+  action?: "Create" | "Update";
   formLevel?: LevelProp;
 }
-
-
 
 export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
   const filedsClean = {
@@ -52,7 +50,7 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
   });
 
   const { updateLevel, createLevel } = useLevelsMutations();
-  
+
   return (
     <>
       <Box sx={{ bgcolor: "orange", height: "100%", width: "100%" }}></Box>
@@ -63,8 +61,9 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
         onSubmit={async (values: Level) => {
-          await createLevel<Level>({ endpoint: "nivel", payload: values });
-          
+          action === "Create"
+            ? await createLevel<Level>({ endpoint: "nivel", payload: values })
+            : await updateLevel<Level>({ endpoint: "nivel", payload: values });
         }}
       >
         <Form className={styles.formWrapper}>
@@ -81,7 +80,9 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
             legend={"Baking Obrigatório"}
           />
 
-          <ButtonWrapper fixed>{`${action === 'create' ? 'Criar' : 'Salvar'}`}</ButtonWrapper>
+          <ButtonWrapper fixed>{`${
+            action === "Create" ? "Criar" : "Atualizar"
+          }`}</ButtonWrapper>
         </Form>
       </Formik>
     </>

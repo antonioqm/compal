@@ -8,8 +8,8 @@ import {
 import { PartNumberIcon } from "./components/icons/icons";
 import { CartIcon } from "./components/icons/icons";
 import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
-import { FormInventory } from "../pages/inventory/FormInventory";
-import { FormLevel } from "pages/level/FormLevel";
+import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
+import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
 
 interface PageRouter {
   path: string;

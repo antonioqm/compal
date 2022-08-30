@@ -7,13 +7,25 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, IconButton } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  NoSsr,
+} from "@mui/material";
 import { ExcelIcon, TrashIcon } from "../icons/icons";
 import Swipeable from "../Swipeable/Swipeable";
 import { currentPage } from "src/ROUTES";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
-import {levelsState } from "src/state/atom";
+import { levelsState } from "src/state/atom";
+import { useState, useEffect } from "react";
+import { apiClient } from "src/api/api";
+import { Level } from "src/interfaces/level.interface";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -74,65 +86,139 @@ function createData(
   return { name, calories, fat, carbs, protein };
 }
 
+// export default function CustomizedTables() {
+//   const listLevel = useRecoilValue(levelsState);
 export default function CustomizedTables() {
-  // const listLevel = useRecoilValue(levelsState);
+  const [listLevel, setListLevel] = useState<Level[]>([]);
+  const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenDialogTrash(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialogTrash(false);
+  };
+
+  useEffect(() => {
+
+    apiClient.listAll('nivel').then(data => {
+      setListLevel(data)
+     })
+
+  }, [])
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
-
   return (
     <>
-      <TableContainer
-        sx={{
-          marginTop: 4,
-          borderRadius: 3,
-          padding: 3,
-          background: "#E7EDF2",
-        }}
-      >
-        <Table
-          sx={{
-            borderCollapse: "separate",
-            borderSpacing: "0 8px",
-          }}
-          aria-label="customized table"
-        >
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>modificado em </StyledTableCell>
-              <StyledTableCell align="right">part number</StyledTableCell>
-              <StyledTableCell align="right">Nível</StyledTableCell>
-              <StyledTableCell align="right">
-                sensibilidade a umidade
-              </StyledTableCell>
-              <StyledTableCell align="right">Espessura</StyledTableCell>
-              <StyledTableCell colSpan={2} align="right">
-                {/* <Button
-                  variant="contained"
-                  disableElevation
-                  color="primary"
-                  size="small"
-                  sx={{
-                    height: 48,
-                    bgcolor: "transparent",
-                    color: "#878E9F",
-                    border: "1px solid #878E9F ",
-                    "&:hover": {
-                      color: "#fff",
-                    },
-                  }}
-                  aria-label="Excel"
-                >
-                  <ExcelIcon style={{ marginRight: 8 }} /> Excel
-                </Button> */}
-              </StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            
-          </TableBody>
-        </Table>
-      </TableContainer>
+          <TableContainer
+            sx={{
+              marginTop: 4,
+              borderRadius: 3,
+              padding: 3,
+              background: "#E7EDF2",
+            }}
+          >
+            <Table
+              sx={{
+                borderCollapse: "separate",
+                borderSpacing: "0 8px",
+              }}
+              aria-label="customized table"
+            >
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>
+                    <>modificado em</>{" "}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <>part number</>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <>Nível</>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <>sensibilidade a umidade</>
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <>Espessura</>
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {listLevel &&
+                  listLevel.map((level, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell component="th" scope="row">
+                        <> {level.backingRequired}</>
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <> {level.createDate}</>
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <> {level.id}</>
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <> {level.levelName}</>
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        <>{level.updateDate}</>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {/* AQUI ENTRA O SWAPEABLE */}
+                        <>
+                          <Swipeable
+                            type={"Update"}
+                            tooltipLabel={`Atualizar ${label}`}
+                            title={label}
+                          >
+                            {
+                              <FormComponent
+                                action={"Update"}
+                                formLevel={{ ...level }}
+                              />
+                            }
+                          </Swipeable>
+                          <IconButton
+                            onClick={handleClickOpen}
+                            sx={{ width: 31, color: "#F1506D" }}
+                          >
+                            <TrashIcon />
+                          </IconButton>
+                        </>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Dialog
+            open={openDialogTrash}
+            onClose={handleCloseDialog}
+            aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{ p: 10 }}
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Use Google's location service?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Let Google help apps determine location. This means sending
+                anonymous location data to Google, even when no apps are
+                running.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog}>
+                Não
+              </Button>
+              <Button color='error' variant="contained" onClick={handleCloseDialog} autoFocus>
+                Remover
+              </Button>
+            </DialogActions>
+          </Dialog>
     </>
   );
 }
