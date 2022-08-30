@@ -7,7 +7,7 @@ import { ptShort } from "yup-locale-pt";
 import * as Yup from "yup";
 import styles from "../../styles/Login.module.scss";
 import Select from "src/components/FormsUI/Select/SelectWrapper";
-import { RquestState, useLevelsMutations } from "src/state/atom";
+import { useLevelsMutations } from "src/state/atom";
 import { Level } from "pages/Interfaces/level.interface";
 import {  Alert, Box, Button, LinearProgress, Snackbar } from "@mui/material";
 import React from "react";
@@ -27,7 +27,6 @@ interface FormLevelProp {
 
 
 export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
-  console.log("testando action", action);
   const filedsClean = {
     levelName: "",
     maxTimeExposition: 0,
@@ -52,8 +51,7 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
     },
   });
 
-  const { updateLevel } = useLevelsMutations();
-  const [request, setRequest] = useRecoilState(RquestState)
+  const { updateLevel, createLevel } = useLevelsMutations();
   
   return (
     <>
@@ -63,9 +61,9 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
           ...INITIAL_FORM_STATE,
         }}
         validationSchema={FORM_VALIDATION}
-        validate={(values: any) => console.log("level is", values)}
+        validate={(values: any) => {}}
         onSubmit={async (values: Level) => {
-          await updateLevel<Level>({ endpoint: "nivel", payload: values });
+          await createLevel<Level>({ endpoint: "nivel", payload: values });
           
         }}
       >
@@ -83,7 +81,7 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
             legend={"Baking Obrigatório"}
           />
 
-          <ButtonWrapper fixed>{"enviar"}</ButtonWrapper>
+          <ButtonWrapper fixed>{`${action === 'create' ? 'Criar' : 'Salvar'}`}</ButtonWrapper>
         </Form>
       </Formik>
     </>

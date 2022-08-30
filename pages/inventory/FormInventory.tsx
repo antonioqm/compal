@@ -96,7 +96,7 @@ export const FormInventory = ({ action, ...props }: Prop) => {
         validate={validate}
         validationSchema={FORM_VALIDATION}
         onSubmit={(values) => {
-          console.log(values, "values print");
+          // console.log(values, "values print");
         }}
       >
         {({

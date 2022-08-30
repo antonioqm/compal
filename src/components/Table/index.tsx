@@ -75,7 +75,7 @@ function createData(
 }
 
 export default function CustomizedTables() {
-  const listLevel = useRecoilValue(levelsState);
+  // const listLevel = useRecoilValue(levelsState);
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
@@ -129,41 +129,7 @@ export default function CustomizedTables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {listLevel.length > 0 &&
-              listLevel.map((level, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell component="th" scope="row">
-                    <span>{level.backingRequired}</span>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <span>{level.createDate}</span>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <span>{level.id}</span>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <span>{level.levelName}</span>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <span>{level.updateDate}</span>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {/* AQUI ENTRA O SWAPEABLE */}
-                    <>
-                      <Swipeable
-                        type={"Update"}
-                        tooltipLabel={`Atualizar ${label}`}
-                        title={label}
-                      >
-                        {<FormComponent action={'update'} formLevel={{ ...level }}  />}
-                      </Swipeable>
-                      <IconButton sx={{ width: 31, color: "#F1506D" }}>
-                        <TrashIcon />
-                      </IconButton>
-                    </>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+            
           </TableBody>
         </Table>
       </TableContainer>
