@@ -1,8 +1,9 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
+// import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import {
+  Box,
   Alert,
   AppBar,
   Chip,
@@ -18,12 +19,12 @@ import { useState } from "react";
 import ElevationScroll from "../ElevationScroll";
 import { IconArrowLeft, IconPencilPlus } from "@tabler/icons";
 import { Add } from "@mui/icons-material";
-import { currentPage } from "src/ROUTES";
+import { currentPage } from "../../ROUTES";
 import { useRouter } from "next/router";
 import ACTION from "../../enums/action";
 import { EditIcon } from "../icons/icons";
 import { useRecoilValue } from "recoil";
-import { loadingState } from "src/state/atom";
+import { loadingState } from "../../state/atom";
 
 interface Prop {
   children?: React.ReactElement | string;
@@ -120,6 +121,7 @@ export default function Swipeable({
             overflowY: "scroll",
           }}
         >
+          <>
           <ElevationScroll window={scrollTarget}>
             <AppBar
               elevation={20}
@@ -183,6 +185,7 @@ export default function Swipeable({
           {/* Loading Status */}
 
           <Box sx={{ mx: 6, py: 6, mb: 14 }}>{children}</Box>
+          </>
         </Box>
       </SwipeableDrawer>
     </>

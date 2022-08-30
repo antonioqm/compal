@@ -3,7 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { createContext, useEffect, useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
-import { ResponseState } from "src/state/atom";
+import { ResponseState } from "../../state/atom";
 import styles from "../../../styles/Home.module.scss";
 import AppBar from "../AppBar";
 import { Drawer } from "../Drawer";
@@ -24,7 +24,7 @@ const Home = ({ children, title, ...props }: Props) => {
   const [response, setResponse] = useRecoilState(ResponseState);
 
   const handleClickSnackbar = () => {
-    setOpenSnackbar(true && response.type === "success");
+    setOpenSnackbar(true && response?.type === "success");
   };
 
   const handleCloseSnackbar = (

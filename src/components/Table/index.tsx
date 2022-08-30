@@ -19,13 +19,13 @@ import {
 } from "@mui/material";
 import { ExcelIcon, TrashIcon } from "../icons/icons";
 import Swipeable from "../Swipeable/Swipeable";
-import { currentPage } from "src/ROUTES";
+import { currentPage } from "../../ROUTES";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
-import { levelsState } from "src/state/atom";
+import { levelsState } from "../../state/atom";
 import { useState, useEffect } from "react";
-import { apiClient } from "src/api/api";
-import { Level } from "src/interfaces/level.interface";
+import { apiClient } from "../../api/api";
+import { Level } from "../../interfaces/level.interface";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

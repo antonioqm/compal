@@ -1,14 +1,14 @@
 import { Formik, Form, useFormik } from "formik";
-import ButtonWrapper from "src/components/FormsUI/Button/ButtonWrapper";
-import TextfieldWrapper from "src/components/FormsUI/TextField/TextFieldWrapper";
-import ToggleBottonWrapper from "src/components/FormsUI/ToggleBotton/ToggleBottonWrapper";
+import ButtonWrapper from "../Button/ButtonWrapper";
+import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
 import { JSXElementConstructor, useState } from "react";
 import { ptShort } from "yup-locale-pt";
 import * as Yup from "yup";
-import styles from "../../styles/Login.module.scss";
-import Select from "src/components/FormsUI/Select/SelectWrapper";
-import { useLevelsMutations } from "src/state/atom";
-import { Level } from "src/interfaces/level.interface";
+import styles from "../../../../styles/Login.module.scss";
+import Select from "../Select/SelectWrapper";
+import { useLevelsMutations } from "../../../state/atom";
+import { Level } from "../../../interfaces/level.interface";
 import { Alert, Box, Button, LinearProgress, Snackbar } from "@mui/material";
 import React from "react";
 import { useRecoilState } from "recoil";
@@ -60,11 +60,13 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: Level) => {
+        onSubmit={async (values: any) => {
+          // updateLevel<Level>({ endpoint: "nivel", payload: values })
           action === "Create"
-            ? await createLevel<Level>({ endpoint: "nivel", payload: values })
-            : await updateLevel<Level>({ endpoint: "nivel", payload: values });
-        }}
+            ?  await createLevel<Level>({ endpoint: "nivel", payload: values as Level })
+            : await updateLevel<Level>({ endpoint: "nivel", payload: values  as Level });
+        }
+        }
       >
         <Form className={styles.formWrapper}>
           <TextfieldWrapper name={"levelName"} label={"Nível"} />

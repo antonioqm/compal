@@ -1,8 +1,8 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { truncate } from "fs";
-import { Level } from "src/interfaces/level.interface";
 import { atom, selector, useRecoilState } from "recoil";
-import { apiClient } from "src/api/api";
+import { apiClient } from "../api/api";
+import { Level } from "../interfaces/level.interface";
 
 interface UpdatedModel<T> {
   payload: T & Payload;
@@ -23,9 +23,9 @@ export const loadingState = atom<boolean>({
   key: 'loading',
   default: false
 })
-export const ResponseState = atom<ResponseError>({
+export const ResponseState = atom<ResponseError | undefined>({
   key: 'response',
-  default: null
+  default: undefined
 })
 
 
@@ -88,7 +88,7 @@ export function useLevelsMutations() {
         message: '',
     })
       
-    } catch (error) {
+    } catch (error: any) {
       setLoading(false)
       setResponse({type: 'error',
         status: error.response.status,

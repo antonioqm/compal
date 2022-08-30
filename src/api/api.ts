@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { loadingState, ResponseState } from 'src/state/atom';
+import { loadingState, ResponseState } from '../state/atom';
 
 export const Axios = axios.create({
   baseURL: 'http://200.129.173.244:5001/v1/',

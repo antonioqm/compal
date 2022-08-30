@@ -1,12 +1,12 @@
 import { Formik, Form, useFormikContext, FieldArray } from "formik";
-import ButtonWrapper from "src/components/FormsUI/Button/ButtonWrapper";
-import TextfieldWrapper from "src/components/FormsUI/TextField/TextFieldWrapper";
-import ToggleBottonWrapper from "src/components/FormsUI/ToggleBotton/ToggleBottonWrapper";
+import ButtonWrapper from "../../../components/FormsUI/Button/ButtonWrapper";
+import TextfieldWrapper from "../../../components/FormsUI/TextField/TextFieldWrapper";
+import ToggleBottonWrapper from "../../../components/FormsUI/ToggleBotton/ToggleBottonWrapper";
 import { useState } from "react";
 import { ptShort } from "yup-locale-pt";
 import * as Yup from "yup";
 import styles from "../../../../styles/Login.module.scss";
-import Select from "src/components/FormsUI/Select/SelectWrapper";
+import Select from "../../../components/FormsUI/Select/SelectWrapper";
 import { Typography } from "@mui/material";
 
 interface Prop {
