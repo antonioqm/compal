@@ -7,8 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
+import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
 import {
   Button,
   Dialog,
@@ -28,6 +28,7 @@ import { filterModel, modelState } from "../../state/atom";
 import { useState, useEffect } from "react";
 import { apiClient } from "../../api/api";
 import { Level } from "../../interfaces/level.interface";
+import { IndeterminateCheckBoxRounded } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -89,11 +90,12 @@ function createData(
 }
 
 interface DataTable {
-  header?: any[];
+  header: any[];
   body: Array<Level>;
+  nameKeys: Array<string>;
 }
 
-export default function TableCompal({header, body}:DataTable) {
+export default function TableCompal({ header, body, nameKeys }: DataTable) {
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -104,122 +106,108 @@ export default function TableCompal({header, body}:DataTable) {
     setOpenDialogTrash(false);
   };
 
-
-
- 
-
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
   return (
     <>
-      
-          <TableContainer
-            sx={{
-              marginTop: 4,
-              borderRadius: 3,
-              padding: 3,
-              background: "#E7EDF2",
-            }}
-          >
-            <Table
-              sx={{
-                borderCollapse: "separate",
-                borderSpacing: "0 8px",
-              }}
-              aria-label="customized table"
-            >
-              <TableHead>
-                <TableRow>
-                  <StyledTableCell>
-                    <>modificado em</>{" "}
+      <TableContainer
+        sx={{
+          marginTop: 4,
+          borderRadius: 3,
+          padding: 3,
+          background: "#E7EDF2",
+        }}
+      >
+        <Table
+          sx={{
+            borderCollapse: "separate",
+            borderSpacing: "0 8px",
+          }}
+          aria-label="customized table"
+        >
+          <TableHead>
+            <TableRow>
+              {header.length > 0 &&
+                header.map((field, index) => (
+                  <StyledTableCell key={field}>
+                    <>{field}</>
                   </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <>part number</>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <>Nível</>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <>sensibilidade a umidade</>
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    <>Espessura</>
-                  </StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+                ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {body.length > 0 &&
-                  body.map((level, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell component="th" scope="row">
-                        <> {level.backingRequired}</>
+              body.map((bodyField:any, index) => (
+                <StyledTableRow key={index}>
+                  {nameKeys.length > 0 &&
+                    nameKeys.map((key, index) => {
+                      if (key !== 'id') {
+                      return <StyledTableCell component="th" scope="row">
+                        <>{`${bodyField[key]}`}</>
                       </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <> {level.createDate}</>
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <> {level.id}</>
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <> {level.levelName}</>
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <>{level.updateDate}</>
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
-                        {/* AQUI ENTRA O SWAPEABLE */}
-                        <>
-                          <Swipeable
-                            type={"Update"}
-                            tooltipLabel={`Atualizar ${label}`}
-                            title={label}
-                          >
-                            {
-                              <FormComponent
-                                action={"Update"}
-                                formLevel={{ ...level }}
-                              />
-                            }
-                          </Swipeable>
-                          <IconButton
-                            onClick={handleClickOpen}
-                            sx={{ width: 31, color: "#F1506D" }}
-                          >
-                            <TrashIcon />
-                          </IconButton>
-                        </>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Dialog
-            open={openDialogTrash}
-            onClose={handleCloseDialog}
-            aria-labelledby="alert-dialog-title"
+                      }
+                      
+                    })}
+                  {/* {JSON.stringify(bodyField)} */}
+                  {/* <StyledTableCell component="th" scope="row">
+                        <> {bodyField.maxTimeExposition}</>
+                      </StyledTableCell> */}
+                  <StyledTableCell align="center">
+                    {/* AQUI ENTRA O SWAPEABLE */}
+                    <>
+                      <Swipeable
+                        type={"Update"}
+                        tooltipLabel={`Atualizar ${label}`}
+                        title={label}
+                      >
+                        {
+                          <FormComponent
+                            action={"Update"}
+                            formLevel={{ ...bodyField }}
+                          />
+                        }
+                      </Swipeable>
+                      <IconButton
+                        onClick={handleClickOpen}
+                        sx={{ width: 31, color: "#F1506D" }}
+                      >
+                        <TrashIcon />
+                      </IconButton>
+                    </>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Dialog
+        open={openDialogTrash}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         sx={{ p: 10 }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Não</Button>
+          <Button
+            color="error"
+            variant="contained"
+            onClick={handleCloseDialog}
+            autoFocus
           >
-            <DialogTitle id="alert-dialog-title">
-              {"Use Google's location service?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Let Google help apps determine location. This means sending
-                anonymous location data to Google, even when no apps are
-                running.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDialog}>
-                Não
-              </Button>
-              <Button color='error' variant="contained" onClick={handleCloseDialog} autoFocus>
-                Remover
-              </Button>
-            </DialogActions>
-          </Dialog>
+            Remover
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
