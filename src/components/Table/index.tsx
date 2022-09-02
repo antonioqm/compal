@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import {
   Button,
-  Dialog,
+  Chip,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -24,11 +24,22 @@ import Swipeable from "../Swipeable/Swipeable";
 import { currentPage } from "../../ROUTES";
 import { useRouter } from "next/router";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { filterModel, modelState } from "../../state/atom";
-import { useState, useEffect } from "react";
+import { filterModel, modelState, useLevelsMutations } from "../../state/atom";
+import { useState, useEffect, ReactNode, ReactComponentElement } from "react";
 import { apiClient } from "../../api/api";
 import { Level } from "../../interfaces/level.interface";
-import { IndeterminateCheckBoxRounded } from "@mui/icons-material";
+import {
+  IndeterminateCheckBoxRounded,
+  TwentyFourMpTwoTone,
+} from "@mui/icons-material";
+import { formatDate } from "../../utils/format";
+import {
+  IconCheck,
+  IconCircle,
+  IconCircleCheck,
+  IconCircleX,
+} from "@tabler/icons";
+import Dialog from "../Dialog/Dialog";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -92,19 +103,29 @@ function createData(
 interface DataTable {
   header: any[];
   body: Array<Level>;
-  nameKeys: Array<string>;
+  nameKeys: Array<any>;
 }
 
 export default function TableCompal({ header, body, nameKeys }: DataTable) {
-  const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
+  const [editing, setEditing] = React.useState<Level>();
+  const { deleteModel } = useLevelsMutations();
 
-  const handleClickOpen = () => {
-    setOpenDialogTrash(true);
-  };
+  // const [open, setOpen] = useState(false);
 
-  const handleCloseDialog = () => {
-    setOpenDialogTrash(false);
+  const handleDelete = async (value:Level) => {
+    console.log("handleDelete", value);
+    if (value.id) {
+      await deleteModel('/nivel', value.id)
+    }
   };
+  // const onClose = () => {
+  //   setOpen(false);
+  //   console.log("onClose", false);
+  // };
+  // const onOpen = () => {
+  //   setOpen(true);
+  //   console.log("onOpen", true);
+  // };
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
@@ -129,30 +150,65 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
             <TableRow>
               {header.length > 0 &&
                 header.map((field, index) => (
-                  <StyledTableCell key={field}>
-                    <>{field}</>
+                  <StyledTableCell key={index}>
+                    <>{field[nameKeys[index].name]}</>
                   </StyledTableCell>
                 ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {body.length > 0 &&
-              body.map((bodyField:any, index) => (
-                <StyledTableRow key={index}>
+              body.map((bodyField: any, index) => (
+                <StyledTableRow key={bodyField.id}>
                   {nameKeys.length > 0 &&
                     nameKeys.map((key, index) => {
-                      if (key !== 'id') {
-                      return <StyledTableCell component="th" scope="row">
-                        <>{`${bodyField[key]}`}</>
-                      </StyledTableCell>
+                      if (key.name !== "id") {
+                        return (
+                          <StyledTableCell
+                            key={`${bodyField.name}${index}`}
+                            component="th"
+                            scope="row"
+                          >
+                            <>
+                              {" "}
+                              {typeof bodyField[key.name] === "boolean" ? (
+                                <Chip
+                                  size="small"
+                                  sx={{
+                                    fontSize: "10px",
+                                    textTransform: "uppercase",
+                                    p: 0,
+                                  }}
+                                  color={
+                                    bodyField[key.name] ? "success" : "error"
+                                  }
+                                  label={bodyField[key.name] ? "sim" : "não"}
+                                  icon={
+                                    bodyField[key.name] ? (
+                                      <IconCircleCheck size={16} />
+                                    ) : (
+                                      <IconCircleX size={16} />
+                                    )
+                                  }
+                                />
+                              ) : (
+                                `${
+                                  bodyField.isMain
+                                    ? "principal" +
+                                      formatDate(bodyField[key.name])
+                                    : formatDate(bodyField[key.name])
+                                }`
+                              )}
+                            </>
+                          </StyledTableCell>
+                        );
                       }
-                      
                     })}
                   {/* {JSON.stringify(bodyField)} */}
                   {/* <StyledTableCell component="th" scope="row">
                         <> {bodyField.maxTimeExposition}</>
                       </StyledTableCell> */}
-                  <StyledTableCell align="center">
+                  <StyledTableCell component="th" scope="row" align="center">
                     {/* AQUI ENTRA O SWAPEABLE */}
                     <>
                       <Swipeable
@@ -167,12 +223,7 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
                           />
                         }
                       </Swipeable>
-                      <IconButton
-                        onClick={handleClickOpen}
-                        sx={{ width: 31, color: "#F1506D" }}
-                      >
-                        <TrashIcon />
-                      </IconButton>
+                      <Dialog onAction={() => handleDelete(bodyField)} id={bodyField.id} />
                     </>
                   </StyledTableCell>
                 </StyledTableRow>
@@ -180,34 +231,6 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog
-        open={openDialogTrash}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={{ p: 10 }}
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>Não</Button>
-          <Button
-            color="error"
-            variant="contained"
-            onClick={handleCloseDialog}
-            autoFocus
-          >
-            Remover
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

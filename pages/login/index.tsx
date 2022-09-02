@@ -142,7 +142,6 @@ function index() {
               }}
               validationSchema={FORM_VALIDATION}
               onSubmit={(values) => {
-                console.log(values, "values print");
               }}
             >
               <Form className={styles.formWrapper}>

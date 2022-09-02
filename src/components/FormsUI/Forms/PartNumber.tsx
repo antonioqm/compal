@@ -56,7 +56,6 @@ export const FormPartNumber = ({action, ...props}:Prop) => {
   }}
   validationSchema={FORM_VALIDATION}
   onSubmit={(values) => {
-    console.log(values, "values print");
   }}
 >
   <Form className={styles.formWrapper}>

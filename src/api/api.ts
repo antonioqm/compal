@@ -21,7 +21,7 @@ export const apiClient = {
     return data;
 
   },
-  delete: async (endpoint: number) => {
+  delete: async (endpoint: string) => {
     const { data } = await Axios.delete(`${endpoint}`)
     return data;
   }

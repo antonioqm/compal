@@ -70,8 +70,9 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
         }}
       >
         <Form className={styles.formWrapper}>
-          <TextfieldWrapper name={"levelName"} label={"Nível"} />
+          <TextfieldWrapper  name={"levelName"} label={"Nível"} />
           <TextfieldWrapper
+            
             type="number"
             inputProps={{ min: 0, step: 1 }}
             name={"maxTimeExposition"}

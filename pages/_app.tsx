@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import { Snackbar, Alert } from "@mui/material";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  console.log("pageProps", pageProps);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <ThemeProvider theme={theme}>

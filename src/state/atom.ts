@@ -109,7 +109,7 @@ export function useLevelsMutations() {
     })
       
     } catch (error: any) {
-      setLoading(false)
+      
       setResponse({type: 'error',
         status: error.response.status,
         statusText: error.response.status,
@@ -123,9 +123,30 @@ export function useLevelsMutations() {
   }
 
   const deleteModel = async (endpoint: string, id: number) => {
-    await apiClient.delete(id)
-    const newLevels = models.filter((level: Level) => level.id !== id)
-    setModels(newLevels)
+    try {
+      setLoading(true)
+      await apiClient.delete(`${endpoint}/${id}`)
+      setLoading(false)
+      const newLevels = models.filter((level: Level) => level.id !== id)
+      setModels(newLevels)
+
+      setResponse({type: 'success',
+        status: 200,
+        statusText: '',
+        data: `O item foi removido`,
+        message: '',
+    })
+      
+    } catch (error: any) {
+      setLoading(false)
+      setResponse({type: 'error',
+        status: error.response.status,
+        statusText: error.response.status,
+        data: error.response.data,
+        message: error.message,
+    })
+      
+    }
   }
   
 
