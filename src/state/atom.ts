@@ -4,7 +4,7 @@ import { atom, selector, useRecoilState } from "recoil";
 import { apiClient } from "../api/api";
 import { Level } from "../interfaces/level.interface";
 
-interface UpdatedModel<T> {
+interface PaylodModel<T> {
   payload: T;
   endpoint: string;
 }
@@ -66,7 +66,7 @@ export function useLevelsMutations() {
   //   setLevels([...levels, createdLevel])
   // }
 
-  const createModel = async function <Model>(updatedLevel: UpdatedModel<Model>) {
+  const createModel = async function <Model>(updatedLevel: PaylodModel<Model>) {
     try {
       const { payload, endpoint } = updatedLevel
       setLoading(true)
@@ -88,7 +88,7 @@ export function useLevelsMutations() {
     }
 
   }
-  const updateModel = async function <Model>(updatedLevel: UpdatedModel<Model & Payload>) {
+  const updateModel = async function <Model>(updatedLevel: PaylodModel<Model & Payload>) {
     try {
       const { payload, payload: { id }, endpoint } = updatedLevel
       setLoading(true)
@@ -122,27 +122,29 @@ export function useLevelsMutations() {
 
   }
 
-  const deleteModel = async (endpoint: string, id: number) => {
+  const deleteModel = async function <Model>(deleteModel: PaylodModel<Model & Payload>) {
     try {
+      const { payload, payload: { id }, endpoint } = deleteModel
       setLoading(true)
       await apiClient.delete(`${endpoint}/${id}`)
       setLoading(false)
-      const newLevels = models.filter((level: Level) => level.id !== id)
-      setModels(newLevels)
+      const removedItem = models.filter((level: Model) => payload.id !== level.id)
+      setModels(removedItem)
 
       setResponse({type: 'success',
         status: 200,
         statusText: '',
-        data: `O item foi removido`,
+        data: `${payload.levelName} foi removido`,
         message: '',
     })
       
     } catch (error: any) {
       setLoading(false)
+      console.log('errroooooo', error)
       setResponse({type: 'error',
-        status: error.response.status,
-        statusText: error.response.status,
-        data: error.response.data,
+        status: error.response?.status ?  error.response?.status : error.code,
+        statusText: error.response?.status,
+        data: error.response?.data,
         message: error.message,
     })
       

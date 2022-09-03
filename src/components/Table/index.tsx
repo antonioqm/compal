@@ -115,7 +115,8 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
   const handleDelete = async (value:Level) => {
     console.log("handleDelete", value);
     if (value.id) {
-      await deleteModel('/nivel', value.id)
+      await deleteModel<Level>({endpoint:'/nivel', payload: {...value, id: value.id}})
+      
     }
   };
   // const onClose = () => {

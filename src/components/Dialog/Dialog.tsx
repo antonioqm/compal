@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React, { ReactNode, useState } from "react";
 import { StringSchema } from "yup";
+import { Level } from "../../interfaces/level.interface";
 import { useLevelsMutations } from "../../state/atom";
 import { TrashIcon } from "../icons/icons";
 
@@ -39,12 +40,12 @@ export default ({id, onAction}:DialogProp) => {
     setOpenDialogTrash(false);
   };
 
-  const handleAction = async (id: number) => {
-    if (id) {
-      await deleteModel('/nivel', id)
-    }
-    setOpenDialogTrash(false);
-  };
+  // const handleAction = async (value: Level) => {
+  //   if (value) {
+  //     await deleteModel<Level>({endpoint:'/nivel', payload: value})
+  //   }
+  //   setOpenDialogTrash(false);
+  // };
 
   return (
     <>
