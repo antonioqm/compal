@@ -24,7 +24,7 @@ import Swipeable from "../Swipeable/Swipeable";
 import { currentPage } from "../../ROUTES";
 import { useRouter } from "next/router";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { filterModel, modelState, useLevelsMutations } from "../../state/atom";
+import { filterModel, loadingState, modelState, useLevelsMutations } from "../../state/atom";
 import { useState, useEffect, ReactNode, ReactComponentElement } from "react";
 import { apiClient } from "../../api/api";
 import { Level } from "../../interfaces/level.interface";
@@ -40,6 +40,7 @@ import {
   IconCircleX,
 } from "@tabler/icons";
 import Dialog from "../Dialog/Dialog";
+import { SkeletonTable } from "../Skeleton/SkeletonTable";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -108,6 +109,7 @@ interface DataTable {
 
 export default function TableCompal({ header, body, nameKeys }: DataTable) {
   const [editing, setEditing] = React.useState<Level>();
+  const [loading, setLoading] = useRecoilState(loadingState)
   const { deleteModel } = useLevelsMutations();
 
   // const [open, setOpen] = useState(false);
@@ -119,119 +121,116 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
       
     }
   };
-  // const onClose = () => {
-  //   setOpen(false);
-  //   console.log("onClose", false);
-  // };
-  // const onOpen = () => {
-  //   setOpen(true);
-  //   console.log("onOpen", true);
-  // };
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
   return (
     <>
-      <TableContainer
-        sx={{
-          marginTop: 4,
-          borderRadius: 3,
-          padding: 3,
-          background: "#E7EDF2",
-        }}
-      >
-        <Table
+      {
+        loading ?
+          <SkeletonTable />
+          :
+          <TableContainer
           sx={{
-            borderCollapse: "separate",
-            borderSpacing: "0 8px",
+            marginTop: 4,
+            borderRadius: 3,
+            padding: 3,
+            background: "#E7EDF2",
           }}
-          aria-label="customized table"
         >
-          <TableHead>
-            <TableRow>
-              {header.length > 0 &&
-                header.map((field, index) => (
-                  <StyledTableCell key={index}>
-                    <>{field[nameKeys[index].name]}</>
-                  </StyledTableCell>
-                ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {body.length > 0 &&
-              body.map((bodyField: any, index) => (
-                <StyledTableRow key={bodyField.id}>
-                  {nameKeys.length > 0 &&
-                    nameKeys.map((key, index) => {
-                      if (key.name !== "id") {
-                        return (
-                          <StyledTableCell
-                            key={`${bodyField.name}${index}`}
-                            component="th"
-                            scope="row"
-                          >
-                            <>
-                              {" "}
-                              {typeof bodyField[key.name] === "boolean" ? (
-                                <Chip
-                                  size="small"
-                                  sx={{
-                                    fontSize: "10px",
-                                    textTransform: "uppercase",
-                                    p: 0,
-                                  }}
-                                  color={
-                                    bodyField[key.name] ? "success" : "error"
-                                  }
-                                  label={bodyField[key.name] ? "sim" : "não"}
-                                  icon={
-                                    bodyField[key.name] ? (
-                                      <IconCircleCheck size={16} />
-                                    ) : (
-                                      <IconCircleX size={16} />
-                                    )
-                                  }
-                                />
-                              ) : (
-                                `${
-                                  bodyField.isMain
+          <Table
+            sx={{
+              borderCollapse: "separate",
+              borderSpacing: "0 8px",
+            }}
+            aria-label="customized table"
+          >
+            <TableHead>
+              <TableRow>
+                {header.length > 0 &&
+                  header.map((field, index) => (
+                    <StyledTableCell key={index}>
+                      <>{field[nameKeys[index].name]}</>
+                    </StyledTableCell>
+                  ))}
+              </TableRow>
+            </TableHead>
+         
+            <TableBody>
+              {body && body.length > 0 &&
+                body.map((bodyField: any, index) => (
+                  <StyledTableRow key={bodyField.id}>
+                    {nameKeys.length > 0 &&
+                      nameKeys.map((key, index) => {
+                        if (key.name !== "id") {
+                          return (
+                            <StyledTableCell
+                              key={`${bodyField.name}${index}`}
+                              component="th"
+                              scope="row"
+                              align={typeof bodyField[key.name] === "number" ? 'center' : 'left'}
+                            >
+                              <>
+                                {" "}
+                                {typeof bodyField[key.name] === "boolean" ? (
+                                  <Chip
+                                    size="small"
+                                    sx={{
+                                      fontSize: "10px",
+                                      textTransform: "uppercase",
+                                      p: 0,
+                                    }}
+                                    color={
+                                      bodyField[key.name] ? "success" : "error"
+                                    }
+                                    label={bodyField[key.name] ? "sim" : "não"}
+                                    icon={
+                                      bodyField[key.name] ? (
+                                        <IconCircleCheck size={16} />
+                                      ) : (
+                                        <IconCircleX size={16} />
+                                      )
+                                    }
+                                  />
+                                ) : (
+                                  `${bodyField.isMain
                                     ? "principal" +
-                                      formatDate(bodyField[key.name])
+                                    formatDate(bodyField[key.name])
                                     : formatDate(bodyField[key.name])
-                                }`
-                              )}
-                            </>
-                          </StyledTableCell>
-                        );
-                      }
-                    })}
-                  {/* {JSON.stringify(bodyField)} */}
-                  {/* <StyledTableCell component="th" scope="row">
+                                  }`
+                                )}
+                              </>
+                            </StyledTableCell>
+                          );
+                        }
+                      })}
+                    {/* {JSON.stringify(bodyField)} */}
+                    {/* <StyledTableCell component="th" scope="row">
                         <> {bodyField.maxTimeExposition}</>
                       </StyledTableCell> */}
-                  <StyledTableCell component="th" scope="row" align="center">
-                    {/* AQUI ENTRA O SWAPEABLE */}
-                    <>
-                      <Swipeable
-                        type={"Update"}
-                        tooltipLabel={`Atualizar ${label}`}
-                        title={label}
-                      >
-                        {
-                          <FormComponent
-                            action={"Update"}
-                            formLevel={{ ...bodyField }}
-                          />
-                        }
-                      </Swipeable>
-                      <Dialog onAction={() => handleDelete(bodyField)} id={bodyField.id} />
-                    </>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                    <StyledTableCell component="th" scope="row" align="center">
+                      {/* AQUI ENTRA O SWAPEABLE */}
+                      <>
+                        <Swipeable
+                          type={"Update"}
+                          tooltipLabel={`Atualizar ${label}`}
+                          title={label}
+                        >
+                          {
+                            <FormComponent
+                              action={"Update"}
+                              formLevel={{ ...bodyField }}
+                            />
+                          }
+                        </Swipeable>
+                        <Dialog onAction={() => handleDelete(bodyField)} id={bodyField.id} />
+                      </>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>}
     </>
   );
 }

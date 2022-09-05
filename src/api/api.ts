@@ -8,20 +8,20 @@ export const Axios = axios.create({
 
 
 export const apiClient = {
-  listAll: async (endpoint: string) => {
+  listAll: async <Resource>(endpoint: string): Promise<Resource> => {
     const { data } = await Axios.get(endpoint)
     return data;
   },
-  create: async (endpoint: string, payload = {}) => {
+  create: async <Resource>(endpoint: string, payload = {}):Promise<Resource>  => {
     const { data } = await Axios.post(endpoint, payload)
     return data;
   },
-  update: async (endpoint: string, payload = {}) => {
+  update: async <Resource>(endpoint: string, payload = {}):Promise<Resource>  => {
     const { data } = await Axios.put(endpoint, payload)
     return data;
 
   },
-  delete: async (endpoint: string) => {
+  delete: async <Resource>(endpoint: string):Promise<Resource>  => {
     const { data } = await Axios.delete(`${endpoint}`)
     return data;
   }

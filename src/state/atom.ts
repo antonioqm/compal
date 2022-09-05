@@ -66,17 +66,38 @@ export function useLevelsMutations() {
   //   setLevels([...levels, createdLevel])
   // }
 
+  const listAllModel = async  <Model>(endpoint:string):Promise<Model> => {
+    try {
+      setLoading(true)
+      const modelList = await apiClient.listAll<Model>(endpoint)
+      setLoading(false)
+      return modelList;
+      
+    } catch (error:any) {
+      setLoading(false)
+      setResponse({type: 'error',
+      status: error.response.status,
+      statusText: error.response.status,
+      data: error.response.data,
+      message: error.message,
+  })
+      console.log('Model error', error)
+      return error
+    }
+
+  }
+
   const createModel = async function <Model>(updatedLevel: PaylodModel<Model>) {
     try {
       const { payload, endpoint } = updatedLevel
       setLoading(true)
-      const createdLevel = await apiClient.create(`${endpoint}`, payload)
+      const createdLevel:(Model & Payload) = await apiClient.create<Model & Payload>(`${endpoint}`, payload)
       setLoading(false)
       setModels([createdLevel, ...models])
       setResponse({type: 'success',
         status: 200,
         statusText: '',
-        data: `Criamos o '${createdLevel.levelName}'!`,
+        data: `Criamos o '${createdLevel.id}'!`,
         message: '',
     })
       
@@ -128,13 +149,13 @@ export function useLevelsMutations() {
       setLoading(true)
       await apiClient.delete(`${endpoint}/${id}`)
       setLoading(false)
-      const removedItem = models.filter((level: Model) => payload.id !== level.id)
+      const removedItem:(Model & Payload)[] = models.filter((level: Model & Payload) => payload.id !== level.id)
       setModels(removedItem)
 
       setResponse({type: 'success',
         status: 200,
         statusText: '',
-        data: `${payload.levelName} foi removido`,
+        data: `${payload.id} foi removido`,
         message: '',
     })
       
@@ -155,5 +176,5 @@ export function useLevelsMutations() {
  
 
 
-  return { createModel, updateModel, deleteModel }
+  return { createModel, updateModel, deleteModel, listAllModel }
 }

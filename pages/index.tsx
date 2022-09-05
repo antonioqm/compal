@@ -3,11 +3,11 @@ import type { NextPage } from 'next'
 import Layout from '../src/components/Layout'
 import { Main } from '../src/components/Contents'
 import Table from '../src/components/Table'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { apiClient } from '../src/api/api'
 import { useRecoilValue, useRecoilState } from 'recoil'
 import { Level } from '../src/interfaces/level.interface'
-import { filterModel, modelState } from '../src/state/atom'
+import { filterModel, modelState, useLevelsMutations } from '../src/state/atom'
 import Dialog from '../src/components/Dialog/Dialog'
 
 
@@ -35,38 +35,19 @@ const Home: NextPage = () => {
 
   const lisLevel:Level[] = useRecoilValue<Level[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
+
+  const {listAllModel } = useLevelsMutations();
+  
   
   const [open, setOpen] = useState(false)
 
-  const actionDialog = () => {
-    console.log('actionDialog')
-  }
-  const onClose = () => {
-    setOpen(false)
-    console.log('onClose', false)
-  }
-  const onOpen = () => {
-    setOpen(true)
-    console.log('onOpen', true)
-  }
-
- 
-
   useEffect(() => {
-    apiClient.listAll('nivel').then(data => {
-      setModel(data)
+    listAllModel<Level[]>('nivel').then(levels => {
+      setModel(levels)
      })
 
   }, [])
 
-
-  const keyFieldsBody = lisLevel.length ? Object.keys(lisLevel[0]) : []
-
-
-
-
-
- 
   return (
     <Layout title='Home' >
       <Typography variant='h1'></Typography>
