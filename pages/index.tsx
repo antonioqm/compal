@@ -1,5 +1,5 @@
 import { Button, Typography } from '@mui/material'
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import Layout from '../src/components/Layout'
 import { Main } from '../src/components/Contents'
 import Table from '../src/components/Table'
@@ -31,7 +31,8 @@ const header = [
   // {'Desativado'},
 ]
 
-const Home: NextPage = () => {  
+
+export default function () {  
 
   const lisLevel:Level[] = useRecoilValue<Level[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
@@ -64,8 +65,22 @@ const Home: NextPage = () => {
   )
 }
 
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-export default Home
+
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
+  
+//   return {
+//     props: {}
+//   }
+}
+
+
 
 
 

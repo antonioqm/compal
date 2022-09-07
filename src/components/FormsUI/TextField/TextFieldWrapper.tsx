@@ -60,24 +60,10 @@ const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: an
           {...configTextfield}
           id={`outlined-adornment-${name}`}
           type={showPassword || name !== 'password' ? type : "password"}
-          // startAdornment={
-          //   <InputAdornment position="start">
-          //     <IconButton
-          //       disabled
-          //       aria-label="toggle password visibility"
-          //       onClick={handleClickShowPassword}
-          //       edge="start"
-
-          //     >
-          //       <IconKey color="#c1c1c1" />
-          //     </IconButton>
-          //   </InputAdornment>
-          // }
-          
+                    
           endAdornment={
             <>
-              {endAdornment}
-            {/* {name === 'password' && 
+            {name === 'password' && 
             <InputAdornment position="end">
               <IconButton
                 aria-label="toggle password visibility"
@@ -87,16 +73,6 @@ const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: an
                 {showPassword ? <IconEyeOff /> : <IconEye />}
               </IconButton>
             </InputAdornment>}
-
-            {showDomain && 
-              <Slide
-                direction="left"
-                in={showDomain}
-              >
-                <InputAdornment position="end">
-                  { <DomainLabel />}
-                </InputAdornment>
-              </Slide>} */}
             
             </>
           }

@@ -15,7 +15,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import styles from "../../styles/Login.module.scss";
 import { useTheme } from "@mui/material/styles";
 import Image from "next/image";
@@ -26,78 +26,40 @@ import { ptShort } from "yup-locale-pt";
 import ButtonWrapper from "../../src/components/FormsUI/Button/ButtonWrapper";
 import TextfieldWrapper from "../../src/components/FormsUI/TextField/TextFieldWrapper";
 import ToggleBottonWrapper from "../../src/components/FormsUI/ToggleBotton/ToggleBottonWrapper";
-import { IconUser } from "@tabler/icons";
+import { IconKey, IconUser, IconUserX } from "@tabler/icons";
 import { fontSize } from "@mui/system";
 import DomainLabel from "../../src/components/Helpers/DomainLalbel";
-
+import { AuthContext } from "../../src/contexts/AuthContext";
+interface Login {
+  email: string;
+  password: string;
+}
 function index() {
   Yup.setLocale(ptShort);
 
-  const theme = useTheme();
-  interface State {
-    password: string;
-    showPassword: boolean;
-    identifier: string;
-    loginType: "local" | "domain";
-    showDomain: boolean;
-  }
-
-  const [values, setValues] = React.useState<State>({
-    password: "",
-    showPassword: false,
-    identifier: "antonio",
-    loginType: "domain",
-    showDomain: true,
-  });
   const containerRef = React.useRef(null);
 
-  const handleChange =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      let newValue = event.target.value;
-      if (values.loginType === "domain") {
-        newValue = newValue.replace(/@$/g, "");
-      }
-      setValues({ ...values, [prop]: newValue });
-    };
-
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleToggleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newLoginType: "local" | "domain" | null
-  ) => {
-    if (newLoginType === "domain" && newLoginType !== null) {
-      setValues({
-        ...values,
-        identifier: values.identifier.replace(/@.+$/g, ""),
-        loginType: newLoginType,
-        showDomain: true,
-      });
-    } else if (newLoginType === "local" && newLoginType !== null) {
-      setValues({
-        ...values,
-        loginType: newLoginType,
-        showDomain: false,
-      });
-    }
-  };
-
   const INITIAL_FORM_STATE = {
-    loginType: "domain",
-    identifier: "",
-    password: "as",
-    showDomain: false
+    email: "admin@admin.com",
+    password: "123456",
   };
+
   const FORM_VALIDATION = Yup.object().shape({
-    loginType: Yup.string().required(),
-    identifier: Yup.string().required().min(3),
-    password: Yup.string().required().min(8)
+    email: Yup.string().required().email(),
+    password: Yup.string().required().min(6),
   });
+
+  const { isAuthenticaton, signIn } = useContext(AuthContext)
+  
+  async function handleSubmite({email, password}:Login){
+    const data = {
+      email,
+      password
+    }
+    await signIn(data)
+  }
+
+
   return (
     <>
       <Box
@@ -141,135 +103,40 @@ function index() {
                 ...INITIAL_FORM_STATE,
               }}
               validationSchema={FORM_VALIDATION}
-              onSubmit={(values) => {
+              onSubmit={({password, email}, actions) => {
+                handleSubmite({password, email})
               }}
             >
               <Form className={styles.formWrapper}>
-                <ToggleBottonWrapper
-                  name="loginType"
-                  legend="Como você gostaria de se identificar?"
-                  data={[{label:'Domínio', value: 'domain'}, {label: 'Local', value: 'local'}]}
+                <TextfieldWrapper
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <IconUser color="#c1c1c1" />
+                    </InputAdornment>
+                  }
+                  name={"email"}
+                  label={"Email"}
                 />
                 <TextfieldWrapper
-                  name={"identifier"}
-                  endAdornment={
-                      <DomainLabel showDomain={values.showDomain}  />
-                    // <>
-
-                    // <Slide
-                    //   direction="left"
-                    //   in={values.showDomain}
-                    //   container={containerRef.current}
-                    // >
-                    //   <InputAdornment position="end">
-                    //     {values.loginType === "domain" && <DomainLabel />}
-                    //   </InputAdornment>
-                    // </Slide>
-                    // </>
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <IconKey color="#c1c1c1" />
+                    </InputAdornment>
                   }
-                  label={"Identificador"}
+                  name={"password"}
+                  label={"Senha"}
                 />
-                <TextfieldWrapper name={"password"} label={"Senha"} />
-                {/* <TextfieldWrapper name={"password"} />
-                <ButtonWrapper>enviar</ButtonWrapper> */}
-
-                {/* <FormControl fullWidth variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-identifier">
-                    Identificador
-                  </InputLabel>
-                  <OutlinedInput
-                    sx={{ pr: 1, overflow: "hidden" }}
-                    id="outlined-adornment-identifier"
-                    type="text"
-                    value={values.identifier}
-                    onChange={handleChange("identifier")}
-                    startAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          disabled
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          edge="start"
-                        >
-                          <IconUser color="#c1c1c1" />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    endAdornment={
-                      values.showDomain && (
-                        <Slide
-                          direction="left"
-                          in={values.showDomain}
-                          container={containerRef.current}
-                        >
-                          <InputAdornment position="end">
-                            {values.loginType === "domain" && <DomainLabel />}
-                          </InputAdornment>
-                        </Slide>
-                      )
-                    }
-                    label="Identificador"
-                  />
-                </FormControl> */}
-                {/* <FormControl fullWidth variant="outlined">
-                  <InputLabel focused htmlFor="outlined-adornment-password">
-                    Senha
-                  </InputLabel>
-                  <OutlinedInput
-                    id="outlined-adornment-password"
-                    type={values.showPassword ? "text" : "password"}
-                    value={values.password}
-                    onChange={handleChange("password")}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <IconButton
-                          disabled
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          edge="start"
-                        >
-                          <IconKey color="#c1c1c1" />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          edge="end"
-                        >
-                          {values.showPassword ? <IconEyeOff /> : <IconEye />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    label="Senha"
-                  />
-                </FormControl> */}
-                {/* <Button
-              sx={{ minHeight: 56, color: "white" }}
-              size="large"
-              disableElevation
-              fullWidth
-              color="primary"
-              variant="contained"
-            >
-              Entrar
-                </Button> */}
-                <ButtonWrapper>enviar</ButtonWrapper>
+                <ButtonWrapper
+                  disableElevation
+                  sx={{ minHeight: 56, color: "white" }}
+                >
+                  enviar
+                </ButtonWrapper>
               </Form>
             </Formik>
           </Paper>
         </Box>
         <Box className={styles.rightContainer} minHeight={"100vh"}></Box>
-        {/* <div className={[styles.logoBG, styles.logoFloating].join(" ")}>
-        <Image
-          src="/logo/compal-symbol-green.svg"
-          alt="Compal Logo"
-          width={240}
-          height={240}
-        ></Image>
-      </div> */}
       </Box>
     </>
   );

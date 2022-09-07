@@ -6,6 +6,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { RecoilRoot, useRecoilState } from "recoil";
 import { Suspense } from "react";
 import { Snackbar, Alert } from "@mui/material";
+import { AuthProvider } from "../src/contexts/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -13,7 +14,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <RecoilRoot>
           <CssBaseline />
+          <AuthProvider>
             <Component {...pageProps} />
+          </AuthProvider>
         </RecoilRoot>
       </ThemeProvider>
     </Suspense>

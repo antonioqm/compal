@@ -8,6 +8,27 @@ interface PaylodModel<T> {
   payload: T;
   endpoint: string;
 }
+
+interface User {
+
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  status: boolean;
+  roles: any[];
+
+}
+
+interface CreateTokenResponse {
+  user: User;
+  token: string;
+}
+interface CreateTokenRequest {
+  email: string;
+  password: string;
+}
+
 interface Payload {
   id: number;
 }
@@ -66,6 +87,20 @@ export function useLevelsMutations() {
   //   setLevels([...levels, createdLevel])
   // }
 
+  const getSignIn = async (payload:CreateTokenRequest):Promise<CreateTokenResponse> => {
+    try {
+      setLoading(true)
+      const userWithToken = await apiClient.create<CreateTokenResponse>('account/login', payload)
+      setLoading(false)
+      return userWithToken;
+      
+    } catch (error:any) {
+      
+      console.log('LOgin error', error)
+      return error
+    }
+
+  }
   const listAllModel = async  <Model>(endpoint:string):Promise<Model> => {
     try {
       setLoading(true)
@@ -176,5 +211,5 @@ export function useLevelsMutations() {
  
 
 
-  return { createModel, updateModel, deleteModel, listAllModel }
+  return { createModel, updateModel, deleteModel, listAllModel, getSignIn }
 }
