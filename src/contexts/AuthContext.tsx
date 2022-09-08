@@ -1,21 +1,21 @@
-import { createContext, ReactNode, useState } from "react";
-import { apiClient } from "../api/api";
-import { api } from "../services/api";
+import Router  from "next/router";
+import { createContext, ReactNode, useState, useEffect } from "react";
+import { apiClient, api } from "../api/api";
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import jwtDecode,  {JwtPayload } from "jwt-decode";
 
 
-type UserTokenResponse =  {
-  user: User;
+export type User = {
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    password: string;
+    status: boolean;
+    roles: any[];
+  };
   token: string;
-}
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  status: boolean;
-  roles: any[];
-}
+};
 
 type SignInCredentials = {
   password: string;
@@ -23,6 +23,7 @@ type SignInCredentials = {
 };
 type AuthContextData = {
   signIn(credentials: SignInCredentials): Promise<void>;
+  user?: User;
   isAuthenticaton: boolean;
 };
 
@@ -30,27 +31,55 @@ type AuthProvideProps = {
   children: ReactNode;
 };
 
+export function signOut() {
+  destroyCookie(undefined, 'nextAuth.token')
+  Router.push('/')
+} 
 export const AuthContext = createContext({} as AuthContextData);
 
-
 export function AuthProvider({ children }: AuthProvideProps) {
-  const isAuthenticaton = false;
-  const [user, setUser] = useState<UserTokenResponse>()
+  const [user, setUser] = useState<User>();
+  const isAuthenticaton = !!user;
+  
+  useEffect(() => {
+    const { 'nextAuth.token': token } = parseCookies()
+    if (token) {
+
+      apiClient.getCurrentUser()
+        .then(response => {
+          const decoded = jwtDecode<any>(token)
+          console.log('decoded', decoded.name!)
+        setUser(user)
+        }).catch(() => {
+          signOut()
+      })
+    }
+  },[])
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
-      const response = await  apiClient.create("account/login", {
+      const userResponse = await apiClient.create<User>("account/login", {
         email,
-        password
+        password,
       });
-      console.log(response);
+      const { token } = userResponse;
+
+      setCookie(undefined, `nextAuth.token`, token, {
+        maxAge: 60 * 60 * 24 * 30, //1 month
+        path: '/'
+      })
+      setUser(userResponse)
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+      Router.push('/')
+      console.log('User-->', userResponse);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, isAuthenticaton }}>
+    <AuthContext.Provider value={{ signIn, isAuthenticaton, user }}>
       {children}
     </AuthContext.Provider>
   );

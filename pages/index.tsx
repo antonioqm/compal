@@ -43,8 +43,8 @@ export default function () {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    listAllModel<Level[]>('nivel').then(levels => {
-      setModel(levels)
+    listAllModel<{result: Level[]}>('nivel/?orderBy=levelName').then(({result}) => {
+      setModel(result)
      })
 
   }, [])
@@ -65,20 +65,17 @@ export default function () {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
 
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      }
-    }
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       }
+//     }
   
-//   return {
-//     props: {}
-//   }
-}
+// }
 
 
 

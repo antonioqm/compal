@@ -1,7 +1,8 @@
 import { Logout } from "@mui/icons-material";
 import { Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import { cyan } from '@mui/material/colors';
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../contexts/AuthContext";
 
 export default () => {
 
@@ -14,10 +15,12 @@ export default () => {
     setAnchorEl(null);
   };
 
+  const {user} = useContext(AuthContext)
+
   return (
     <>
     <Box sx={{ flexDirection: "row", display: "flex", alignItems: "center" }}>
-        <Typography color={'#878E9F'} fontSize={12} variant="overline">Antonio Queiroz</Typography>
+        <Typography color={'#878E9F'} fontSize={12} variant="overline">{user?.user?.name}</Typography>
         <Tooltip title="Configuração de conta">
           <IconButton
             onClick={handleClick}

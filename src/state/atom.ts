@@ -36,7 +36,7 @@ interface ResponseError {
   type: 'success' | 'error';
   status: number;
   statusText: string;
-  data: string;
+  data?: string;
   message: string;
 }
 
@@ -111,10 +111,10 @@ export function useLevelsMutations() {
     } catch (error:any) {
       setLoading(false)
       setResponse({type: 'error',
-      status: error.response.status,
-      statusText: error.response.status,
-      data: error.response.data,
-      message: error.message,
+      status: error?.response?.status,
+      statusText: error?.response?.status,
+      // data: error?.response?.data,
+      message: error?.message,
   })
       console.log('Model error', error)
       return error
