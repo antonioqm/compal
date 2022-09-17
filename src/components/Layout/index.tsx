@@ -1,10 +1,9 @@
 import { Alert, Box, Snackbar } from "@mui/material";
 import Head from "next/head";
-import Image from "next/image";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
-import { ResponseState } from "../../state/atom";
 import styles from "../../../styles/Home.module.scss";
+import { ResponseState } from "../../state/atom";
 import AppBar from "../AppBar";
 import { Drawer } from "../Drawer";
 import GlobalContext from "../Drawer/GlobalContext";
@@ -51,7 +50,7 @@ const Home = ({ children, title, ...props }: Props) => {
     <GlobalContext.Provider value={value}>
       <div className={styles.container}>
         <Snackbar
-          autoHideDuration={6000}
+          autoHideDuration={1000}
           open={openSnackbar}
           onClose={handleCloseSnackbar}
         >

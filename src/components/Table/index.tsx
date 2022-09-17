@@ -1,4 +1,6 @@
-import * as React from "react";
+import {
+  Chip
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -6,41 +8,21 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Skeleton from "@mui/material/Skeleton";
 import {
-  Button,
-  Chip,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
-  NoSsr,
-} from "@mui/material";
-import { ExcelIcon, TrashIcon } from "../icons/icons";
-import Swipeable from "../Swipeable/Swipeable";
-import { currentPage } from "../../ROUTES";
-import { useRouter } from "next/router";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { filterModel, loadingState, modelState, useLevelsMutations } from "../../state/atom";
-import { useState, useEffect, ReactNode, ReactComponentElement } from "react";
-import { apiClient } from "../../api/api";
-import { Level } from "../../interfaces/level.interface";
-import {
-  IndeterminateCheckBoxRounded,
-  TwentyFourMpTwoTone,
-} from "@mui/icons-material";
-import { formatDate } from "../../utils/format";
-import {
-  IconCheck,
-  IconCircle,
   IconCircleCheck,
-  IconCircleX,
+  IconCircleX
 } from "@tabler/icons";
+import { useRouter } from "next/router";
+import * as React from "react";
+import { useRecoilState } from "recoil";
+import { Level } from "../../interfaces/level.interface";
+import { Thickness } from "../../interfaces/thickness.interface";
+import { currentPage } from "../../ROUTES";
+import { loadingState, useLevelsMutations } from "../../state/atom";
+import { formatDate } from "../../utils/format";
 import Dialog from "../Dialog/Dialog";
 import { SkeletonTable } from "../Skeleton/SkeletonTable";
+import Swipeable from "../Swipeable/Swipeable";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -91,19 +73,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // border: '4px solid blue'
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
 
 interface DataTable {
   header: any[];
-  body: Array<Level>;
+  body: Array<Level | Thickness>;
   nameKeys: Array<any>;
 }
 
@@ -126,10 +99,7 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
   const { FormComponent, label } = currentPage(router.pathname)!;
   return (
     <>
-      {
-        loading ?
-          <SkeletonTable />
-          :
+      {loading ? <SkeletonTable /> :
           <TableContainer
           sx={{
             marginTop: 4,
@@ -219,7 +189,7 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
                           {
                             <FormComponent
                               action={"Update"}
-                              formLevel={{ ...bodyField }}
+                              data={{ ...bodyField }}
                             />
                           }
                         </Swipeable>

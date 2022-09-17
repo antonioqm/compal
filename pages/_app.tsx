@@ -10,7 +10,6 @@ import { AuthProvider } from "../src/contexts/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
       <ThemeProvider theme={theme}>
         <RecoilRoot>
           <CssBaseline />
@@ -19,7 +18,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           </AuthProvider>
         </RecoilRoot>
       </ThemeProvider>
-    </Suspense>
   );
 }
 

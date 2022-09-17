@@ -5,6 +5,7 @@ export interface Level {
   backingRequired: boolean;
   levelName: string;
   maxTimeExposition: number;
+  criticalExposureTime: number;
   user?: string | null;
 }
 

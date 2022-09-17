@@ -1,42 +1,41 @@
-import { Formik, Form, useFormik } from "formik";
+import { Box } from "@mui/material";
+import { Form, Formik, useFormik } from "formik";
+import * as Yup from "yup";
+import { ptShort } from "yup-locale-pt";
+import styles from "../../../../styles/Login.module.scss";
+import { Level } from "../../../interfaces/level.interface";
+import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
 import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
-import { JSXElementConstructor, useState } from "react";
-import { ptShort } from "yup-locale-pt";
-import * as Yup from "yup";
-import styles from "../../../../styles/Login.module.scss";
-import Select from "../Select/SelectWrapper";
-import { useLevelsMutations } from "../../../state/atom";
-import { Level } from "../../../interfaces/level.interface";
-import { Alert, Box, Button, LinearProgress, Snackbar } from "@mui/material";
-import React from "react";
-import { useRecoilState } from "recoil";
 
 interface LevelProp {
   levelName: string;
   maxTimeExposition: number;
+  criticalExposureTime: number;
   backingRequired: boolean;
+
 }
 interface FormLevelProp {
   action?: "Create" | "Update";
-  formLevel?: LevelProp;
+  data?: LevelProp;
 }
 
-export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
+export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
   const filedsClean = {
     levelName: "",
     maxTimeExposition: 0,
+    criticalExposureTime: 0,
     backingRequired: true,
   };
 
   Yup.setLocale(ptShort);
-  const INITIAL_FORM_STATE = formLevel ? formLevel : filedsClean;
+  const INITIAL_FORM_STATE = data ? data : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    levelName: Yup.string().required(),
-    maxTimeExposition: Yup.number().required(),
-    // criticalExposureTime: Yup.number(),
+    levelName: Yup.string().required().min(6),
+    maxTimeExposition: Yup.number().required().moreThan(0),
+    criticalExposureTime: Yup.number().required().moreThan(0),
     backingRequired: Yup.boolean().required(),
   });
 
@@ -59,7 +58,7 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: Level) => {
+        onSubmit={async (values: Level ) => {
           const { id } = values;
           action === "Update" && id
             ? await updateModel<Level>({
@@ -77,6 +76,13 @@ export const FormLevel = ({ action, formLevel, ...props }: FormLevelProp) => {
             inputProps={{ min: 0, step: 1 }}
             name={"maxTimeExposition"}
             label={"Tempo Máximo de Exposição (Horas)"}
+          />
+          <TextfieldWrapper
+            
+            type="number"
+            inputProps={{ min: 0, step: 1 }}
+            name={"criticalExposureTime"}
+            label={"Tempo Crítico de Exposição (Horas)"}
           />
           {/* <TextfieldWrapper type='number' inputProps={{  min: 0.00, step: .05  }} name={"criticalExposureTime"} label={"Tempo Crítico de Exposição (Horas)"} /> */}
           <ToggleBottonWrapper

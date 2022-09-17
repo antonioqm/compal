@@ -1,18 +1,30 @@
-import LevelImage from '../../../public/icons/level.svg'
-import PartNumberImage from '../../../public/icons/partNumber.svg'
-import OverImage from '../../../public/icons/over.svg'
 import CartImage from '../../../public/icons/cart.svg'
-import SealingMachineImage from '../../../public/icons/sealingMachine.svg'
 import ComponentImage from '../../../public/icons/component.svg'
 import EditImage from '../../../public/icons/edit.svg'
-import TrashImage from '../../../public/icons/trash.svg'
 import ExcelImage from '../../../public/icons/excel.svg'
+import InventoryImage from '../../../public/icons/inventory.svg'
+import ItemsImage from '../../../public/icons/items.svg'
+import LevelImage from '../../../public/icons/level.svg'
+import OverImage from '../../../public/icons/over.svg'
+import PartNumberImage from '../../../public/icons/partNumber.svg'
+import SealingMachineImage from '../../../public/icons/sealingMachine.svg'
+import ThicknessImage from '../../../public/icons/thickness.svg'
+import TrashImage from '../../../public/icons/trash.svg'
 
+export const ThicknessIcon = ({...props}) => {
+  return <ThicknessImage {...props} />
+}
+export const InventoryIcon = ({...props}) => {
+  return <InventoryImage {...props} />
+}
 export const LevelIcon = ({...props}) => {
   return <LevelImage {...props} />
 }
 export const PartNumberIcon = ({...props}) => {
   return <PartNumberImage {...props} />
+}
+export const ItemsIcon = ({...props}) => {
+  return <ItemsImage {...props} />
 }
 export const OverIcon = ({...props}) => {
   return <OverImage {...props} />

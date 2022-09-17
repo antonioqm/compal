@@ -49,6 +49,8 @@ export function AuthProvider({ children }: AuthProvideProps) {
         .then(response => {
           const decoded = jwtDecode<any>(token)
           console.log('decoded', decoded.name!)
+          console.log('process.cwd()', process.cwd())
+          console.log('process--->', process.browser)
         setUser(user)
         }).catch(() => {
           signOut()
@@ -75,7 +77,7 @@ export function AuthProvider({ children }: AuthProvideProps) {
       console.log('User-->', userResponse);
     } catch (error) {
       console.log(error);
-    }
+    } 
   }
 
   return (

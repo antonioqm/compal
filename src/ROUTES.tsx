@@ -1,15 +1,15 @@
-import { JSXElementConstructor, ReactElement } from "react";
+import { JSXElementConstructor } from "react";
 import {
-  ComponentIcon,
-  LevelIcon,
-  OverIcon,
-  SealingMachineIcon,
+  ComponentIcon, InventoryIcon, ItemsIcon,
+  LevelIcon, SealingMachineIcon,
+  ThicknessIcon
 } from "./components/icons/icons";
-import { PartNumberIcon } from "./components/icons/icons";
-import { CartIcon } from "./components/icons/icons";
-import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
+
 import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
 import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
+import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
+import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
+import { CartIcon, PartNumberIcon } from "./components/icons/icons";
 
 interface PageRouter {
   path: string;
@@ -25,18 +25,29 @@ export const activeRoute = (
 };
 
 export const currentPage = (currentRoute: string): PageRouter | null => {
-  const pageRouter = ROUTES.find(
-    (pageRouter) => pageRouter.path === currentRoute
-  );
-  return pageRouter ? pageRouter : null;
+  try {
+    const pageRouter = ROUTES.find(
+      (pageRouter) => pageRouter.path === currentRoute
+    );
+    return pageRouter ? pageRouter : null;
+    
+  } catch (err) {
+    return null;
+  }
 };
 
 export const ROUTES: PageRouter[] = [
   {
-    path: "/",
+    path: "/nivel",
     label: "Nível",
     IconComponent: LevelIcon,
     FormComponent: FormLevel,
+  },
+  {
+    path: "/espessura",
+    label: "Espessura",
+    IconComponent: ThicknessIcon,
+    FormComponent: FormThickness,
   },
   {
     path: "/part-number",
@@ -45,9 +56,15 @@ export const ROUTES: PageRouter[] = [
     FormComponent: FormPartNumber,
   },
   {
+    path: "/itens",
+    label: "Itens",
+    IconComponent: ItemsIcon,
+    FormComponent: FormInventory,
+  },
+  {
     path: "/inventory",
     label: "Inventário",
-    IconComponent: OverIcon,
+    IconComponent: InventoryIcon,
     FormComponent: FormInventory,
   },
   {

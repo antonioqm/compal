@@ -46,7 +46,7 @@ const ButtonWrapper = ({ fixed, children, ...otherProps }: Prop) => {
       >
         <Button
           {...otherProps}
-          sx={{height: 56}}
+          sx={{height: 56, color: 'white'}}
           disabled={!isValid}
           variant="contained"
           fullWidth
