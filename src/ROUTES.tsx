@@ -1,15 +1,14 @@
 import { JSXElementConstructor } from "react";
 import {
-  ComponentIcon, InventoryIcon, ItemsIcon,
-  LevelIcon, SealingMachineIcon,
-  ThicknessIcon
+  InventoryIcon, ItemsIcon,
+  LevelIcon, ThicknessIcon
 } from "./components/icons/icons";
 
 import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
 import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
 import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
 import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
-import { CartIcon, PartNumberIcon } from "./components/icons/icons";
+import { PartNumberIcon } from "./components/icons/icons";
 
 interface PageRouter {
   path: string;
@@ -67,22 +66,22 @@ export const ROUTES: PageRouter[] = [
     IconComponent: InventoryIcon,
     FormComponent: FormInventory,
   },
-  {
-    path: "/feddercar",
-    label: "Feddercar",
-    IconComponent: CartIcon,
-    FormComponent: FormPartNumber,
-  },
-  {
-    path: "/sealing-machine",
-    label: "Máquina de Vedação",
-    IconComponent: SealingMachineIcon,
-    FormComponent: FormPartNumber,
-  },
-  {
-    path: "/component",
-    label: "Componente",
-    IconComponent: ComponentIcon,
-    FormComponent: FormPartNumber,
-  },
+  // {
+  //   path: "/feddercar",
+  //   label: "Feddercar",
+  //   IconComponent: CartIcon,
+  //   FormComponent: FormPartNumber,
+  // },
+  // {
+  //   path: "/sealing-machine",
+  //   label: "Máquina de Vedação",
+  //   IconComponent: SealingMachineIcon,
+  //   FormComponent: FormPartNumber,
+  // },
+  // {
+  //   path: "/component",
+  //   label: "Componente",
+  //   IconComponent: ComponentIcon,
+  //   FormComponent: FormPartNumber,
+  // },
 ];

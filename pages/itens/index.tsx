@@ -1,8 +1,4 @@
-import { ArrowCircleDown } from "@mui/icons-material";
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Chip,
   Fade,
   TableBody,
@@ -92,25 +88,8 @@ export default function () {
           {listItem &&
             listItem.length > 0 &&
             listItem.map((item: ItemResponse, index) => (
-              <Accordion
-                key={item.id}
-                expanded={expanded === "panel1"}
-                onChange={handleChange("panel1")}
-              >
-                <AccordionSummary
-                  expandIcon={<ArrowCircleDown />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                    General settings
-                  </Typography>
-                  <Typography sx={{ color: "text.secondary" }}>
-                    I am an accordion
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <TableRow>
+             
+                  <TableRow key={item.id}>
                     <TableCell component="th" scope="row">
                       {item.codeLabel}
                     </TableCell>
@@ -200,11 +179,13 @@ export default function () {
                             />
                           </div>
                         }
-                      </Fade>
+                  </Fade>
+                  
+                  
+                      
                     </TableCell>
-                  </TableRow>
-                </AccordionDetails>
-              </Accordion>
+              
+              </TableRow>
             ))}
         </TableBody>
       </Table>

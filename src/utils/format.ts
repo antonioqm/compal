@@ -10,7 +10,7 @@ function isDate(value: any) {
 export const formatDate = (dateString: any) => {
   if (isDate(dateString)) {
     let date = new Date(dateString)
-    return date.toLocaleDateString('pt-BR', { year: '2-digit', month: 'short', day: 'numeric' })
+    return date.toLocaleDateString('pt-BR', { year: 'numeric', month: 'short', day: 'numeric' }).replace(' de ', '')
   }
   return dateString;
 
