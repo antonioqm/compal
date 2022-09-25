@@ -6,6 +6,7 @@ import {
 
 import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
 import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
+import { FormLabel } from "./components/FormsUI/Forms/FormLabel";
 import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
 import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
 import { PartNumberIcon } from "./components/icons/icons";
@@ -65,6 +66,13 @@ export const ROUTES: PageRouter[] = [
     label: "Inventário",
     IconComponent: InventoryIcon,
     FormComponent: FormInventory,
+  },
+
+  {
+    path: "/etiqueta",
+    label: "Etiqueta",
+    IconComponent: InventoryIcon,
+    FormComponent: FormLabel,
   },
   // {
   //   path: "/feddercar",
