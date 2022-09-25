@@ -2,12 +2,11 @@ import {
   FormControl,
   FormHelperText,
   InputLabel,
-  MenuItem,
-  OutlinedInput,
+  MenuItem
 } from "@mui/material";
-import Select  from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import { useField, useFormikContext } from "formik";
-import React, {useState } from "react";
+import { useState } from "react";
 
 // import { Container } from './styles';
 
@@ -16,6 +15,7 @@ export default ({
   label,
   type,
   items,
+  defaultValue,
   endAdornment,
   ...otherProps
 }: any) => {
@@ -27,14 +27,12 @@ export default ({
 
   const handleChange = (evt: any) => {
     const { value } = evt.target;
+    console.log("hanfleChange", value)
     setSelected(value)
     console.log(value)
     setFieldValue(name, value);
   };
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
   const configSelect = {
     ...field,
@@ -54,7 +52,7 @@ export default ({
     errorsField.helperText = meta.error;
   }
 
-
+  console.log("in select: ", defaultValue)
   return (
     <>
      <FormControl fullWidth variant="outlined">
@@ -64,6 +62,7 @@ export default ({
        
         <Select
           {...otherProps}
+          defaultValue={defaultValue}
           {...configSelect}>
           {
             items.map((value:any ) => {

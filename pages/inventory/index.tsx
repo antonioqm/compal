@@ -16,17 +16,10 @@ import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
 import InventoryResponse from "../../src/interfaces/inventory.interface";
 import { currentPage } from "../../src/ROUTES";
-import {
-  useLevelsMutations
-} from "../../src/state/atom";
+import { useLevelsMutations } from "../../src/state/atom";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
-const header = [
-  "Código",
-  "Descrição",
-  "Temperatura",
-  "Tipo",
-];
+const header = ["Código", "Descrição", "Temperatura", "Tipo"];
 
 export default function () {
   // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
@@ -42,7 +35,7 @@ export default function () {
     console.log("handleDelete", value);
   };
 
-  const [listItem, setListItem] = useState<InventoryResponse[]>([])
+  const [listItem, setListItem] = useState<InventoryResponse[]>([]);
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -78,49 +71,44 @@ export default function () {
           {listItem &&
             listItem.length > 0 &&
             listItem.map((inventory: InventoryResponse, index) => (
-             
-                  <TableRow key={inventory.id}>
-                    <TableCell component="th" scope="row">
-                      {inventory.codeInventory}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {inventory.description}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {inventory.temperature}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {inventory.typeInventory && inventory.typeInventory.name}
-                    </TableCell>
-                    
-                    <TableCell component="th" scope="row">
-                      {/* <Fade in={hoverAction}> */}
+              <TableRow key={inventory.id}>
+                <TableCell component="th" scope="row">
+                  {inventory.codeInventory}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {inventory.description}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {inventory.temperature}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {inventory.typeInventory && inventory.typeInventory.name}
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  {/* <Fade in={hoverAction}> */}
+                  {
+                    <div>
+                      <Swipeable
+                        type={"Update"}
+                        tooltipLabel={`Atualizar ${label}`}
+                        title={label}
+                      >
                         {
-                          <div>
-                            <Swipeable
-                              type={"Update"}
-                              tooltipLabel={`Atualizar ${label}`}
-                              title={label}
-                            >
-                              {
-                                <FormComponent
-                                  action={"Update"}
-                                  data={{ ...inventory }}
-                                />
-                              }
-                            </Swipeable>
-                            <Dialog
-                              onAction={() => handleDelete(inventory)}
-                              id={inventory.id}
-                            />
-                          </div>
+                          <FormComponent
+                            action={"Update"}
+                            data={{ ...inventory }}
+                          />
                         }
+                      </Swipeable>
+                      <Dialog
+                        onAction={() => handleDelete(inventory)}
+                        id={inventory.id}
+                      />
+                    </div>
+                  }
                   {/* </Fade> */}
-                  
-                  
-                      
-                    </TableCell>
-              
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>

@@ -1,30 +1,24 @@
 import * as React from "react";
 // import Box from "@mui/material/Box";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
-import {
-  Box,
-  Alert,
-  AppBar,
-  Chip,
-  CircularProgress,
-  Divider,
-  IconButton,
-  Snackbar,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import ElevationScroll from "../ElevationScroll";
-import { IconArrowLeft, IconPencilPlus } from "@tabler/icons";
 import { Add } from "@mui/icons-material";
-import { currentPage } from "../../ROUTES";
+import {
+  AppBar, Box, CircularProgress,
+  Divider,
+  IconButton, Toolbar,
+  Tooltip,
+  Typography
+} from "@mui/material";
+import Button from "@mui/material/Button";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import { IconArrowLeft } from "@tabler/icons";
 import { useRouter } from "next/router";
-import ACTION from "../../enums/action";
-import { EditIcon } from "../icons/icons";
+import { useState } from "react";
 import { useRecoilValue } from "recoil";
+import ACTION from "../../enums/action";
+import { currentPage } from "../../ROUTES";
 import { loadingState } from "../../state/atom";
+import ElevationScroll from "../ElevationScroll";
+import { EditIcon } from "../icons/icons";
 
 interface Prop {
   children?: React.ReactElement | string;
@@ -50,6 +44,7 @@ export default function Swipeable({
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      console.log("Aqui")
       if (
         event &&
         event.type === "keydown" &&
