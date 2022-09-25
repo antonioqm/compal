@@ -25,14 +25,19 @@ export interface InventoryTypes{
     id: number,
 		description: string,
 		temperatureAllowed: boolean,
-		temperatureRequired: boolean
+		temperatureRequired: boolean,
+}
+
+export interface InventoryTypesList{
+  id: number,
+  name: string
 }
 
 
 export const FormInventory = ({ action, ...props }: Prop) => {
   const {listAllModel } = useLevelsMutations();
   const [disabledTemperature, setDisabledTemperature] = useState<boolean>(true);
-  const [inventoryTypes, setInventoryTypes] = useState<InventoryTypes[]>([]);
+  const [inventoryTypesList, setInventoryTypesList] = useState<InventoryTypesList[]>([]);
    
   Yup.setLocale(ptShort);
   const INITIAL_FORM_STATE = {
@@ -42,43 +47,7 @@ export const FormInventory = ({ action, ...props }: Prop) => {
     temperature: "",
   };
 
-  const typeTemperatues = [
-    {
-      id: 1,
-      name: "40 ºC",
-    },
-    {
-      id: 2,
-      name: "90 ºC",
-    },
-    {
-      id: 3,
-      name: "125 ºC",
-    },
-  ];
-  const typeItems = [
-    {
-      id: 1,
-      name: "Dry Box",
-    },
-    {
-      id: 2,
-      name: "Dry Pack",
-    },
-    {
-      id: 3,
-      name: "Feeder Car",
-    },
-    {
-      id: 4,
-      name: "Forno",
-    },
-    {
-      id: 5,
-      name: "Máquina de Bandeja",
-    },
-  ];
-
+  
   const FORM_VALIDATION = Yup.object().shape({
 
   });
@@ -92,8 +61,16 @@ export const FormInventory = ({ action, ...props }: Prop) => {
   // };
 
   useEffect(() => {
-    listAllModel<{ result: InventoryTypes[] }>('inventario/tipos').then(({ result }) => {
-      setInventoryTypes(result);
+    listAllModel<InventoryTypes[]>('inventario/tipos').then((result) => {
+      console.log(result);
+      const newInventorytypeslist = result.map(type => {
+        return {
+          name: type.description,
+          id: type.id
+        }
+      })
+      setInventoryTypesList(newInventorytypeslist);
+
      })
 
   }, [])
@@ -121,7 +98,7 @@ export const FormInventory = ({ action, ...props }: Prop) => {
           <Form className={styles.formWrapper}>
             <Select
               disabled={false}
-              items={inventoryTypes}
+              items={inventoryTypesList}
               name={"typeInventoryId"}
               label={"Tipo"}
             />
