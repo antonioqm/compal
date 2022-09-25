@@ -63,6 +63,7 @@ export const filterProductsValue = atom({
 export const filterModel = selector({
   key: "filterModel",
   get: ({ get }) => {
+    
     const modelsState = get(modelState);
     const filterProductsValueState = get(filterProductsValue);
 

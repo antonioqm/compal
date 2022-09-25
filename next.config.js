@@ -13,10 +13,10 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  images: {
-    loader: 'imgix',
-    path: '/'
-  },
+  //images: {
+  //  loader: 'imgix',
+  //  path: '/'
+  //},
 }
 
 module.exports = nextConfig
