@@ -1,11 +1,12 @@
-export interface InventoryResponse {
-  id?: number | undefined;
-  type: string;
-  title: string;
-  status: number;
-  detail: string;
-  additionalProp1: string;
-  additionalProp2: string;
-  additionalProp3: string;
+export default interface InventoryResponse {
+  id: number;
+  codeInventory: string;
+  description: string;
+  temperature: number;
+  typeInventory: TypeInventoryReponse;
   
+}
+export interface TypeInventoryReponse{
+  id: number;
+  name: string;
 }

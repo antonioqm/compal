@@ -1,86 +1,146 @@
-import { Typography } from '@mui/material'
-import type { GetServerSideProps } from 'next'
-import { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { setupApiClient } from '../../src/api/api'
-import Layout from '../../src/components/Layout'
-import Table from '../../src/components/Table'
-import { InventoryResponse } from '../../src/interfaces/inventory.interface'
-import { filterModel, modelState, useLevelsMutations } from '../../src/state/atom'
-import { withSSRAuth } from '../../src/utils/withSSRAuth'
-
-
-const keyFields = [
-  {name: 'codeInventory'},
-  {name: 'description'} ,
-  {name: 'tipo'},
-
-]
+import {
+  Chip,
+  Fade,
+  TableBody,
+  TableHead,
+  TableRow as TableRowMui,
+  Typography
+} from "@mui/material";
+import { IconCircleCheck, IconCircleX } from "@tabler/icons";
+import type { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { setupApiClient } from "../../src/api/api";
+import Dialog from "../../src/components/Dialog/Dialog";
+import Layout from "../../src/components/Layout";
+import { ProgressBar } from "../../src/components/Progress/Progress";
+import Swipeable from "../../src/components/Swipeable/Swipeable";
+import Table from "../../src/components/Table/Table";
+import { TableCell } from "../../src/components/Table/TableCell";
+import { TableRow } from "../../src/components/Table/TableRow";
+import InventoryResponse from "../../src/interfaces/inventory.interface";
+import { currentPage } from "../../src/ROUTES";
+import {
+  filterModel,
+  modelState,
+  useLevelsMutations
+} from "../../src/state/atom";
+import { formatDate } from "../../src/utils/format";
+import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = [
-  {codeInventory: 'Código'},
-  {description: 'Descrição'},
-  {tipo: 'Tipo' },
- 
-]
+  "Código",
+  "Descrição",
+  "Tipo",
+];
 
-export default function () {  
-
-  const listInventory:InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
+export default function () {
+  const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
+  const [hoverAction, setHoverAction] = useState<boolean>(false);
 
-  const {listAllModel } = useLevelsMutations();
-  
-  
-  const [open, setOpen] = useState(false)
+  const router = useRouter();
+  const { FormComponent, label } = currentPage(router.pathname)!;
 
-  const transformInventory = (Inventorys: InventoryResponse[]): any => {
-    const transformedInventory = Inventorys.map((inventorys: InventoryResponse) => {
-      console.log(inventorys.typeInventory.name)
-      return {...inventorys,tipo: inventorys.typeInventory?.name}
-    })
+  const { listAllModel } = useLevelsMutations();
 
-    return transformedInventory
-  }
+  const handleDelete = async (value: InventoryResponse) => {
+    console.log("handleDelete", value);
+  };
+
+  const [expanded, setExpanded] = useState<string | false>(false);
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   useEffect(() => {
-    listAllModel<{ result: InventoryResponse[] }>('inventario?orderByDesc=true&page=1&size=10&orderBy=CodeInventory').then(({ result }) => {
-     
-      const newresult = transformInventory(result)
-      
-      setModel(newresult)
-     })
-
-  }, [])
+    listAllModel<{ result: InventoryResponse[] }>(
+      "inventario?orderByDesc=true&page=1&size=10&orderBy=CodeInventory"
+    ).then(({ result }) => {
+      setModel(result);
+    });
+  }, []);
 
   return (
-    <Layout title='Home' >
-      <Typography variant='h1'></Typography>
-      <Table
-        header={header}
-        body={listInventory}
-        nameKeys={keyFields}
-      />
-      
-   </Layout>
-  )
+    <Layout title="Home">
+      <Typography variant="h1"></Typography>
+      <Table>
+        <TableHead>
+          <TableRowMui sx={{ boxShadow: "none", background: "transparent" }}>
+            {header.length > 0 &&
+              header.map((field, index) => (
+                <TableCell key={index}>
+                  <>{field}</>
+                </TableCell>
+              ))}
+          </TableRowMui>
+        </TableHead>
+        {/* Body */}
+        <TableBody>
+          {listItem &&
+            listItem.length > 0 &&
+            listItem.map((inventory: InventoryResponse, index) => (
+             
+                  <TableRow key={inventory.id}>
+                    <TableCell component="th" scope="row">
+                      {inventory.codeInventory}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {inventory.description}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {inventory.typeInventory.name}
+                    </TableCell>
+                    
+                    <TableCell component="th" scope="row">
+                      <Fade in={hoverAction}>
+                        {
+                          <div>
+                            <Swipeable
+                              type={"Update"}
+                              tooltipLabel={`Atualizar ${label}`}
+                              title={label}
+                            >
+                              {
+                                <FormComponent
+                                  action={"Update"}
+                                  data={{ ...inventory }}
+                                />
+                              }
+                            </Swipeable>
+                            <Dialog
+                              onAction={() => handleDelete(inventory)}
+                              id={inventory.id}
+                            />
+                          </div>
+                        }
+                  </Fade>
+                  
+                  
+                      
+                    </TableCell>
+              
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+    </Layout>
+  );
 }
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth(async (ctx) => {
+export const getServerSideProps: GetServerSideProps = withSSRAuth(
+  async (ctx) => {
+    const apiClient = setupApiClient(ctx);
 
-  const apiClient = setupApiClient(ctx)
-
-  await apiClient.get('account/currentUser')
+    await apiClient.get("account/currentUser");
     return {
-      props: {
-       
-     }
-    }
-  
-})
+      props: {},
+    };
+  }
+);
 
-
-
-
-
-
+// Só exposto abaixo de 100%;
+// Acima de 100% excelente;
