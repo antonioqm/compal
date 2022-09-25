@@ -1,20 +1,15 @@
 import {
-  Chip,
-  Fade,
   TableBody,
   TableHead,
   TableRow as TableRowMui,
   Typography
 } from "@mui/material";
-import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { setupApiClient } from "../../src/api/api";
 import Dialog from "../../src/components/Dialog/Dialog";
 import Layout from "../../src/components/Layout";
-import { ProgressBar } from "../../src/components/Progress/Progress";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
@@ -22,11 +17,8 @@ import { TableRow } from "../../src/components/Table/TableRow";
 import InventoryResponse from "../../src/interfaces/inventory.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
-  filterModel,
-  modelState,
   useLevelsMutations
 } from "../../src/state/atom";
-import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = [
@@ -36,8 +28,8 @@ const header = [
 ];
 
 export default function () {
-  const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
-  const [model, setModel] = useRecoilState(modelState);
+  // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
+  // const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
@@ -48,6 +40,8 @@ export default function () {
   const handleDelete = async (value: InventoryResponse) => {
     console.log("handleDelete", value);
   };
+
+  const [listItem, setListItem] = useState<InventoryResponse[]>([])
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -60,7 +54,7 @@ export default function () {
     listAllModel<{ result: InventoryResponse[] }>(
       "inventario?orderByDesc=true&page=1&size=10&orderBy=CodeInventory"
     ).then(({ result }) => {
-      setModel(result);
+      setListItem(result);
     });
   }, []);
 
@@ -92,11 +86,11 @@ export default function () {
                       {inventory.description}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {inventory.typeInventory.name}
+                      {inventory.typeInventory && inventory.typeInventory.name}
                     </TableCell>
                     
                     <TableCell component="th" scope="row">
-                      <Fade in={hoverAction}>
+                      {/* <Fade in={hoverAction}> */}
                         {
                           <div>
                             <Swipeable
@@ -117,7 +111,7 @@ export default function () {
                             />
                           </div>
                         }
-                  </Fade>
+                  {/* </Fade> */}
                   
                   
                       
