@@ -1,9 +1,11 @@
 import {
+  Chip,
   TableBody,
   TableHead,
   TableRow as TableRowMui,
   Typography
 } from "@mui/material";
+import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -14,7 +16,7 @@ import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
-import InventoryResponse from "../../src/interfaces/inventory.interface";
+import EtiquetaResponse from "../../src/interfaces/etiqueta.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
   useLevelsMutations
@@ -22,10 +24,10 @@ import {
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = [
-  "Código",
-  "Descrição",
-  "Temperatura",
-  "Tipo",
+  "Quantidade",
+  "Código Inicial",
+  "Código Final",
+  "Impresso",
 ];
 
 export default function () {
@@ -34,15 +36,15 @@ export default function () {
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
+  const { FormLabel, label } = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
-  const handleDelete = async (value: InventoryResponse) => {
+  const handleDelete = async (value: EtiquetaResponse) => {
     console.log("handleDelete", value);
   };
 
-  const [listItem, setListItem] = useState<InventoryResponse[]>([])
+  const [listItem, setListItem] = useState<EtiquetaResponse[]>([])
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -52,8 +54,8 @@ export default function () {
     };
 
   useEffect(() => {
-    listAllModel<{ result: InventoryResponse[] }>(
-      "inventario?orderByDesc=true&page=1&size=10&orderBy=CodeInventory"
+    listAllModel<{ result: EtiquetaResponse[] }>(
+      "/etiquetas?orderByDesc=true&page=1&size=10&orderBy=StartCode"
     ).then(({ result }) => {
       setListItem(result);
     });
@@ -77,20 +79,36 @@ export default function () {
         <TableBody>
           {listItem &&
             listItem.length > 0 &&
-            listItem.map((inventory: InventoryResponse, index) => (
+            listItem.map((etiqueta: EtiquetaResponse, index) => (
              
-                  <TableRow key={inventory.id}>
+                  <TableRow key={etiqueta.id}>
                     <TableCell component="th" scope="row">
-                      {inventory.codeInventory}
+                      {etiqueta.quantity}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {inventory.description}
+                      {etiqueta.startCode}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {inventory.temperature}
+                      {etiqueta.endCode}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {inventory.typeInventory && inventory.typeInventory.name}
+                      <Chip
+                        size="small"
+                        sx={{
+                          fontSize: "10px",
+                          textTransform: "uppercase",
+                          p: 0,
+                        }}
+                        color={etiqueta.printed ? "success" : "error"}
+                        label={etiqueta.printed ? "sim" : "não"}
+                        icon={
+                          etiqueta.printed ? (
+                            <IconCircleCheck size={16} />
+                          ) : (
+                            <IconCircleX size={16} />
+                          )
+                        }
+                      />
                     </TableCell>
                     
                     <TableCell component="th" scope="row">
@@ -103,15 +121,15 @@ export default function () {
                               title={label}
                             >
                               {
-                                <FormComponent
+                                <FormLabel
                                   action={"Update"}
-                                  data={{ ...inventory }}
+                                  data={{ ...etiqueta }}
                                 />
                               }
                             </Swipeable>
                             <Dialog
-                              onAction={() => handleDelete(inventory)}
-                              id={inventory.id}
+                              onAction={() => handleDelete(etiqueta)}
+                              id={etiqueta.id}
                             />
                           </div>
                         }
