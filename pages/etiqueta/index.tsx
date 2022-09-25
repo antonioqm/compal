@@ -21,9 +21,12 @@ import { currentPage } from "../../src/ROUTES";
 import {
   useLevelsMutations
 } from "../../src/state/atom";
+import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = [
+  "Data",
+  "Responsável",
   "Quantidade",
   "Código Inicial",
   "Código Final",
@@ -82,6 +85,12 @@ export default function () {
             listItem.map((etiqueta: EtiquetaResponse, index) => (
              
                   <TableRow key={etiqueta.id}>
+                    <TableCell component="th" scope="row">
+                      {formatDate(etiqueta.createDate)}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {etiqueta.user}
+                    </TableCell>
                     <TableCell component="th" scope="row">
                       {etiqueta.quantity}
                     </TableCell>

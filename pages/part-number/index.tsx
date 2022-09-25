@@ -7,92 +7,69 @@ import {
 } from "@mui/material";
 import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
 import { setupApiClient } from "../../src/api/api";
+import Dialog from "../../src/components/Dialog/Dialog";
 import Layout from "../../src/components/Layout";
-import { ProgressBar } from "../../src/components/Progress/Progress";
+import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
-import ItemResponse from "../../src/interfaces/item.interface";
+import PartNumberResponse from "../../src/interfaces/partnumber.interface";
+import { currentPage } from "../../src/ROUTES";
 import {
-  filterModel,
-  modelState,
   useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
-
-
-const keyFields = [
-  { name: "codeLabel", isMain: true },
-  { name: "percentExposition" },
-  { name: "Tempo de exposição" },
-  // {name: 'level'} ,
-  // {name: 'minTimeBaking40'},
-  // {name: 'minTimeBaking90'},
-  // { name: 'minTimeBaking125' },
-];
-
-// {
-//   "id": 2,
-//   "codeLabel": "000001",
-//   "createdDate": "2022-09-08T19:57:36.2531668",
-//   "feederCar": "CAR01",
-//   "responsibleForExposition": "admin",
-//   "expositionInMinutes": 657,
-//   "maxExpositionTime": 10,
-//   "percentExposition": 65.64,
-//   "used": true,
-//   "inventory": {
-//       "id": 1,
-//       "typeInventoryId": 3,
-//       "codeInventory": "CAR01",
-//       "description": "Feeder Car 01",
-//       "temperature": 0
-//   }
-// }
-
 const header = [
   "Código",
-  "Criado em",
-  "Feeder Car",
-  "Responsável pela exposição",
-  "Exposição em minutos",
-  "Tempo máximo de exposição",
-  "Percentual de exposição",
-  "Usado",
-  // "inventory": {
-  //     "id": 1,
-  //     "typeInventoryId": 3,
-  //     "codeInventory": "CAR01",
-  //     "description": "Feeder Car 01",
-  //     "temperature": 0
+  "Sensibilidade à umidade",
+  "Espessura",
+  "Temperatura",
+  "Número max de Backing",
+  "Tempo mínimo",
+  "Tempo máximo",
+  "Nível",
 ];
 
 export default function () {
-  const listItem: ItemResponse[] = useRecoilValue<ItemResponse[]>(filterModel);
-  const [model, setModel] = useRecoilState(modelState);
+  // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
+  // const [model, setModel] = useRecoilState(modelState);
+  const [hoverAction, setHoverAction] = useState<boolean>(false);
+
+  const router = useRouter();
+  const { FormLabel, label } = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
-  const [open, setOpen] = useState(false);
+  const handleDelete = async (value: PartNumberResponse) => {
+    console.log("handleDelete", value);
+  };
+
+  const [listItem, setListItem] = useState<PartNumberResponse[]>([])
+
+  const [expanded, setExpanded] = useState<string | false>(false);
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   useEffect(() => {
-    listAllModel<{ result: ItemResponse[] }>(
-      "itens-expostos?orderByDesc=true&page=1&size=10&orderBy=CodeLabel"
+    listAllModel<{ result: PartNumberResponse[] }>(
+      "/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10"
     ).then(({ result }) => {
-      setModel(result);
+      setListItem(result);
     });
   }, []);
 
   return (
     <Layout title="Home">
       <Typography variant="h1"></Typography>
-      <Table
-      >
+      <Table>
         <TableHead>
           <TableRowMui sx={{ boxShadow: "none", background: "transparent" }}>
             {header.length > 0 &&
@@ -107,75 +84,78 @@ export default function () {
         <TableBody>
           {listItem &&
             listItem.length > 0 &&
-            listItem.map((item: ItemResponse, index) => (
-              <TableRow key={item.id}>
-                <TableCell component="th" scope="row">
-                  {item.codeLabel}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {formatDate(item.createdDate)}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.feederCar}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.responsibleForExposition}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.expositionInMinutes}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.maxExpositionTime}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <span
-                    style={{
-                      padding: 2,
-                      background: "rgb(0 0 0 / 5%)",
-                      borderRadius: 16,
-                      height: 24,
-                      display: "flex",
-                      width: "100%",
-                    }}
-                  >
-                    <span style={{ padding: '0 8px' }}>
-                      {Math.ceil(
-                        item.percentExposition < 100
-                          ? item.percentExposition
-                          : 100
-                      )}
-                      %
-                    </span>
-                    <ProgressBar
-                      style={{ flexGrow: 1, minWidth: 80 }}
-                      variant="determinate"
-                      value={
-                        item.percentExposition < 100
-                          ? item.percentExposition
-                          : 97
-                      }
-                    />
-                  </span>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <Chip
-                    size="small"
-                    sx={{
-                      fontSize: "10px",
-                      textTransform: "uppercase",
-                      p: 0,
-                    }}
-                    color={item.used ? "success" : "error"}
-                    label={item.used ? "sim" : "não"}
-                    icon={
-                      item.used ? (
-                        <IconCircleCheck size={16} />
-                      ) : (
-                        <IconCircleX size={16} />
-                      )
-                    }
-                  />
-                </TableCell>
+            listItem.map((partnumber: PartNumberResponse, index) => (
+             
+                  <TableRow key={partnumber.id}>
+                    <TableCell component="th" scope="row">
+                      {partnumber.codePartNumber}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      <Chip
+                        size="small"
+                        sx={{
+                          fontSize: "10px",
+                          textTransform: "uppercase",
+                          p: 0,
+                        }}
+                        color={partnumber.humiditySensitivity ? "success" : "error"}
+                        label={partnumber.humiditySensitivity ? "sim" : "não"}
+                        icon={
+                          partnumber.humiditySensitivity ? (
+                            <IconCircleCheck size={16} />
+                          ) : (
+                            <IconCircleX size={16} />
+                          )
+                        }
+                      />
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {partnumber.thickness}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {partnumber.temperature}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {partnumber.numberMaxBacking}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {partnumber.minimumTime}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {partnumber.maxTimeExposure}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {partnumber.level}
+                    </TableCell>
+                    
+                    <TableCell component="th" scope="row">
+                      {/* <Fade in={hoverAction}> */}
+                        {
+                          <div>
+                            <Swipeable
+                              type={"Update"}
+                              tooltipLabel={`Atualizar ${label}`}
+                              title={label}
+                            >
+                              {
+                                <FormLabel
+                                  action={"Update"}
+                                  data={{ ...partnumber }}
+                                />
+                              }
+                            </Swipeable>
+                            <Dialog
+                              onAction={() => handleDelete(partnumber)}
+                              id={partnumber.id}
+                            />
+                          </div>
+                        }
+                  {/* </Fade> */}
+                  
+                  
+                      
+                    </TableCell>
+              
               </TableRow>
             ))}
         </TableBody>
@@ -188,10 +168,12 @@ export const getServerSideProps: GetServerSideProps = withSSRAuth(
   async (ctx) => {
     const apiClient = setupApiClient(ctx);
 
-    const response = await apiClient.get("account/currentUser");
+    await apiClient.get("account/currentUser");
     return {
       props: {},
     };
   }
 );
 
+// Só exposto abaixo de 100%;
+// Acima de 100% excelente;

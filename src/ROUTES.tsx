@@ -8,6 +8,7 @@ import { FormLabel } from "./components/FormsUI/Forms/FormLabel";
 import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
 import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
 import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
+import { FormProducao } from "./components/FormsUI/Forms/FormProducao";
 
 
 
@@ -73,6 +74,13 @@ export const ROUTES: PageRouter[] = [
     label: "Etiqueta",
     IconComponent: LabelIcon,
     FormComponent: FormLabel,
+  },
+
+  {
+    path: "/linha-producao",
+    label: "Linha de produção",
+    IconComponent: LabelIcon,
+    FormComponent: FormProducao,
   },
   // {
   //   path: "/feddercar",
