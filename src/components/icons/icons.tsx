@@ -4,6 +4,7 @@ import EditImage from '../../../public/icons/edit.svg'
 import ExcelImage from '../../../public/icons/excel.svg'
 import InventoryImage from '../../../public/icons/inventory.svg'
 import ItemsImage from '../../../public/icons/items.svg'
+import LabelImage from '../../../public/icons/label.svg'
 import LevelImage from '../../../public/icons/level.svg'
 import OverImage from '../../../public/icons/over.svg'
 import PartNumberImage from '../../../public/icons/partNumber.svg'
@@ -16,6 +17,9 @@ export const ThicknessIcon = ({...props}) => {
 }
 export const InventoryIcon = ({...props}) => {
   return <InventoryImage {...props} />
+}
+export const LabelIcon = ({...props}) => {
+  return <LabelImage {...props} />
 }
 export const LevelIcon = ({...props}) => {
   return <LevelImage {...props} />

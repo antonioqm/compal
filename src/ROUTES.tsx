@@ -1,15 +1,14 @@
 import { JSXElementConstructor } from "react";
 import {
-  InventoryIcon, ItemsIcon,
-  LevelIcon, ThicknessIcon
+  InventoryIcon, ItemsIcon, LabelIcon, LevelIcon, PartNumberIcon, ThicknessIcon
 } from "./components/icons/icons";
 
 import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
-import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
 import { FormLabel } from "./components/FormsUI/Forms/FormLabel";
+import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
 import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
 import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
-import { PartNumberIcon } from "./components/icons/icons";
+
 
 interface PageRouter {
   path: string;
@@ -71,7 +70,7 @@ export const ROUTES: PageRouter[] = [
   {
     path: "/etiqueta",
     label: "Etiqueta",
-    IconComponent: InventoryIcon,
+    IconComponent: LabelIcon,
     FormComponent: FormLabel,
   },
   // {
