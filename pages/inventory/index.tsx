@@ -24,6 +24,7 @@ import { withSSRAuth } from "../../src/utils/withSSRAuth";
 const header = [
   "Código",
   "Descrição",
+  "Temperatura",
   "Tipo",
 ];
 
@@ -84,6 +85,9 @@ export default function () {
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {inventory.description}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {inventory.temperature}
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {inventory.typeInventory && inventory.typeInventory.name}

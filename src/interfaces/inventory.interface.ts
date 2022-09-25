@@ -6,6 +6,7 @@ export default interface InventoryResponse {
   typeInventory: TypeInventoryReponse;
   
 }
+
 export interface TypeInventoryReponse{
   id: number;
   name: string;
