@@ -1,5 +1,5 @@
 import { Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
@@ -10,50 +10,59 @@ import Select from "../Select/SelectWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
 
 export interface Inventory {
-  typeInventory: {
-    id: number;
-    name: string;
-  };
+  id?: number;
+  typeInventoryId: number | string;
   codeInventory: string;
   description: string;
-  temperature: number | null;
+  temperature: number | string;
+}
+
+export interface DataProp {
+  id: number;
+  typeInventory: InventorySelectList;
+  codeInventory: string;
+  description: string;
+  temperature: number | string;
 }
 interface Prop {
-  action?: "create" | "read" | "update" | "delete";
-  data?: Inventory;
+  action?: "Create" | "Update";
+  data?: DataProp;
 }
 export interface InventorySelectList {
   id: number;
   name: string;
 }
 
-
 export const FormInventory = ({ action, data, ...props }: Prop) => {
   const { listAllModel, updateModel, createModel } = useLevelsMutations();
-  const [disabledTemperature, setDisabledTemperature] = useState<boolean>(true);
+  const [disabledTemperature, setDisabledTemperature] = useState<boolean>((false));
   const [inventorySelectList, setInventorySelectList] = useState<
     InventorySelectList[]
   >([]);
   const [inventoryTenperatureList, setInventoryTenperatureList] = useState<
     any[]
   >([]);
-  const FORNO = 4
+  const FORNO = 4;
+  const selectRefTypeInventory = useRef(null);
+  const selectRefTemperature = useRef(null);
   Yup.setLocale(ptShort);
 
-  const filedsClean: Inventory = {
+  let INITIAL_FORM_STATE: Inventory = {
     codeInventory: "",
     description: "",
-    temperature: null,
-    typeInventory: {
-      id: 5,
-      name: "Máquina de Bandeja",
-    },
+    temperature: "",
+    typeInventoryId: "",
   };
-  const INITIAL_FORM_STATE = data ? data : filedsClean;
+
+  if (data) {
+    const { typeInventory, ...dataLessTypeInventory } = data;
+    INITIAL_FORM_STATE = { typeInventoryId: typeInventory.id, ...dataLessTypeInventory}
+  }
+
+
   // console.log("data in form", data)
   useEffect(() => {
     apiClient.listAll<any[]>("inventario/tipos").then((result) => {
-      console.log(result);
       const newInventorySelectlist = result.map((type) => {
         return {
           name: type.description,
@@ -64,43 +73,49 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
     });
   }, []);
 
-
   useEffect(() => {
-    apiClient.listAll<InventorySelectList[]>("inventario/temperaturas").then((result) => {
-      console.log("temperature", result);
-      setInventoryTenperatureList(result);
-    });
+    apiClient
+      .listAll<InventorySelectList[]>("inventario/temperaturas")
+      .then((result) => {
+        setInventoryTenperatureList(result);
+      });
   }, []);
 
   const FORM_VALIDATION = Yup.object().shape({
-    type: Yup.number().required(),
     codeInventory: Yup.string().required(),
-    line: Yup.string().required(),
     description: Yup.string().required(),
-    temperature: Yup.number(),
+    typeInventoryId: Yup.number(),
+    temperature: Yup.number().when('typeInventoryId', (typeInventoryId, schema) => {
+      return  typeInventoryId === 4 ? schema.required() : schema.notRequired()
+    }),
   });
 
-  const validate = (values: any) => {
-    console.log("mudou values", values)
+  const validateTemperature = (values: Inventory) => {
     if (values.typeInventoryId === FORNO) {
       setDisabledTemperature(false);
     } else {
       setDisabledTemperature(true);
-      values.temperature = 0
+      values.temperature = "";
     }
   };
-  console.log("data in form inventory", data);
-  console.log("initial in form inventory", INITIAL_FORM_STATE);
+
   return (
     <>
       <Formik
         initialValues={{
           ...INITIAL_FORM_STATE,
         }}
-        validate={validate}
+        validate={validateTemperature}
         validationSchema={FORM_VALIDATION}
-        onSubmit={(values) => {
-          // console.log(values, "values print");
+        onSubmit={async (values: Inventory ) => {
+          
+          const { id } = values;
+          action === "Update" && id
+            ? await updateModel<Inventory>({
+                endpoint: "inventario",
+                payload: { ...values, id },
+              })
+            : await createModel<Inventory>({ endpoint: "nivel", payload: values });
         }}
       >
         {({
@@ -114,7 +129,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
         }) => (
           <Form className={styles.formWrapper}>
             <Select
-              disabled={false}
+              ref={selectRefTypeInventory}
               items={inventorySelectList}
               name={"typeInventoryId"}
               label={"Tipo"}
@@ -123,16 +138,25 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
 
             <TextfieldWrapper name={"codeInventory"} label={"Código"} />
 
-            <TextfieldWrapper name={"description"} label={"Descrição"} />
+            <TextfieldWrapper
+              minRows={3}
+              maxRows={6}
+              multiline
+              name={"description"}
+              label={"Descrição"}
+            />
 
             <Select
+              ref={selectRefTemperature}
               disabled={disabledTemperature}
               items={inventoryTenperatureList}
               name={"temperature"}
               label={"Temperatura"}
             />
 
-            <ButtonWrapper fixed>{"enviar"}</ButtonWrapper>
+            <ButtonWrapper fixed>{`${
+              action === "Create" ? "Criar" : "Atualizar"
+            }`}</ButtonWrapper>
           </Form>
         )}
       </Formik>

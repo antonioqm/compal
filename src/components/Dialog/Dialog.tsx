@@ -1,15 +1,9 @@
 import {
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
   Button,
-  Dialog,
-  IconButton,
+  Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, IconButton
 } from "@mui/material";
-import React, { ReactNode, useState } from "react";
-import { StringSchema } from "yup";
-import { Level } from "../../interfaces/level.interface";
+import React, { useState } from "react";
 import { useLevelsMutations } from "../../state/atom";
 import { TrashIcon } from "../icons/icons";
 
@@ -29,11 +23,9 @@ export default ({id, onAction}:DialogProp) => {
 
   const onClose = () => {
     setOpen(false);
-    console.log("onClose", false);
   };
   const onOpen = () => {
     setOpen(true);
-    console.log("onOpen", true);
   };
 
   const handleCloseDialog = () => {
