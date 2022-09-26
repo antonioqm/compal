@@ -7,6 +7,7 @@ import {
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { setupApiClient } from "../../src/api/api";
 import Dialog from "../../src/components/Dialog/Dialog";
 import { FormProducao } from "../../src/components/FormsUI/Forms/FormProducao";
@@ -18,6 +19,7 @@ import { TableRow } from "../../src/components/Table/TableRow";
 import ProducaoResponse from "../../src/interfaces/producao.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
+  ResponseState,
   useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
@@ -30,22 +32,20 @@ const header = [
   ];
 
 export default function () {
-  // const listItem: ProducaoResponse[] = useRecoilValue<ProducaoResponse[]>(filterModel);
-  // const [model, setModel] = useRecoilState(modelState);
+  const { listAllModel } = useLevelsMutations();
+  const [changes,] = useRecoilState(ResponseState)
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
-  
   const { FormComponent, label } = currentPage(router.pathname)!;
+  
 
-  const { listAllModel } = useLevelsMutations();
 
   const handleDelete = async (value: ProducaoResponse) => {
     console.log("handleDelete", value);
   };
 
   const [listItem, setListItem] = useState<ProducaoResponse[]>([])
-
   const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange =
@@ -60,6 +60,16 @@ export default function () {
       setListItem(result);
     });
   }, []);
+
+  useEffect(() => {
+    if (changes?.type === "success") {
+      listAllModel<ProducaoResponse[]>(
+        "linhaProducao"
+      ).then((result) => {
+        setListItem(result);
+      });
+    }
+  }, [changes]);
 
   return (
     <Layout title="Home">
