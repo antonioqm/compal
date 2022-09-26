@@ -66,7 +66,6 @@ export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
         const itemSelect = result.map((item:Level) => {
           return { id: item.id!, name: item.levelName}
         })
-        console.log(itemSelect)
         setListLevel(itemSelect)
       }
       );
