@@ -4,3 +4,9 @@ export default interface ProducaoResponse {
 	createDate: string,
 	updateDate: string
 }
+
+export default interface Producao {
+    
+	lineName: string,
+	
+}

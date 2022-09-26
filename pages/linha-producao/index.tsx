@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setupApiClient } from "../../src/api/api";
 import Dialog from "../../src/components/Dialog/Dialog";
+import { FormProducao } from "../../src/components/FormsUI/Forms/FormProducao";
 import Layout from "../../src/components/Layout";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
@@ -34,7 +35,8 @@ export default function () {
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
-  const { FormProducao, label } = currentPage(router.pathname)!;
+  
+  const { FormComponent, label } = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
@@ -89,6 +91,30 @@ export default function () {
                     <TableCell component="th" scope="row">
                     {formatDate(linhaproducao.updateDate)}
                     </TableCell>
+                    <TableCell component="th" scope="row">
+                  {/* <Fade in={hoverAction}> */}
+                  {
+                    <div>
+                      <Swipeable
+                        type={"Update"}
+                        tooltipLabel={`Atualizar ${label}`}
+                        title={label}
+                      >
+                        {
+                          <FormProducao
+                            action={"Update"}
+                            data={{ ...linhaproducao }}
+                          />
+                        }
+                      </Swipeable>
+                      <Dialog
+                        onAction={() => handleDelete(linhaproducao)}
+                        id={linhaproducao.id}
+                      />
+                    </div>
+                  }
+                  {/* </Fade> */}
+                </TableCell>
               
               </TableRow>
             ))}

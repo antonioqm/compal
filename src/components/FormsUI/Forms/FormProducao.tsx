@@ -1,118 +1,79 @@
-import { Formik, Form, useFormikContext, FieldArray } from "formik";
-import ButtonWrapper from "../../../components/FormsUI/Button/ButtonWrapper";
-import TextfieldWrapper from "../../../components/FormsUI/TextField/TextFieldWrapper";
-import ToggleBottonWrapper from "../../../components/FormsUI/ToggleBotton/ToggleBottonWrapper";
-import { useEffect, useState } from "react";
-import { ptShort } from "yup-locale-pt";
+import { Form, Formik, useFormik } from "formik";
+import { Box } from "@mui/material";
 import * as Yup from "yup";
+import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
-import Select from "../../../components/FormsUI/Select/SelectWrapper";
-import { Typography } from "@mui/material";
+import { apiClient } from "../../../api/api";
 import { useLevelsMutations } from "../../../state/atom";
-
-interface Prop {
-  action?: "create" | "read" | "update" | "delete";
+import ButtonWrapper from "../Button/ButtonWrapper";
+import Select from "../Select/SelectWrapper";
+import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import Producao from "../../../interfaces/producao.interface";
+import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
+export interface ProducaoProp {
+  id?: number,
+  lineName: string,
+  createDate: string,
+  updateDate: string
 }
-
-export interface Producao {
-  typeProducaoId: number;
-  codeProducao: string;
-  description: string;
-  temperature: number;
-}
-
-export interface ProducaoTypes{
-    id: number,
-		description: string,
-		temperatureAllowed: boolean,
-		temperatureRequired: boolean,
-}
-
-export interface ProducaoTypesList{
-  id: number,
-  name: string
+interface FormProducaoPropProp {
+  action?: "Create" | "Update";
+  data?: ProducaoProp;
 }
 
 
-export const FormProducao = ({ action, ...props }: Prop) => {
-  const {listAllModel } = useLevelsMutations();
-  const [disabledTemperature, setDisabledTemperature] = useState<boolean>(true);
-  const [ProducaoTypesList, setProducaoTypesList] = useState<ProducaoTypesList[]>([]);
-   
-  Yup.setLocale(ptShort);
-  const INITIAL_FORM_STATE = {
-    typeProducaoId: "",
-    codeProducao: "",
-    description: "",
-    temperature: "",
+export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) => {
+  const filedsClean = {
+    lineName: "",
   };
+ 
+  Yup.setLocale(ptShort);
 
-  
+  const INITIAL_FORM_STATE = data ? data : filedsClean;
+
   const FORM_VALIDATION = Yup.object().shape({
-
+    lineName: Yup.string().required().min(2),
   });
 
-  // const validate = (values: Producao) => {
-  //   if (Number(values.type) === 4) {
-  //     setDisabledTemperature(false);
-  //   } else {
-  //     setDisabledTemperature(true);
-  //   }
-  // };
-
-  useEffect(() => {
-    listAllModel<ProducaoTypes[]>('inventario/tipos').then((result) => {
-      console.log(result);
-      const newProducaotypeslist = result.map(type => {
-        return {
-          name: type.description,
-          id: type.id
-        }
-      })
-      setProducaoTypesList(newProducaotypeslist);
-
-     })
-
-  }, [])
+  const formik = useFormik({
+    initialValues: INITIAL_FORM_STATE,
+    validationSchema: FORM_VALIDATION,
+    onSubmit: (values: any) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
+  // console.log("data in form", data)
+  
+  const { updateModel, createModel } = useLevelsMutations();
+  
   return (
     <>
+      <Box sx={{ bgcolor: "orange", height: "100%", width: "100%" }}></Box>
       <Formik
         initialValues={{
           ...INITIAL_FORM_STATE,
         }}
-        validate={(values: any) => {}}
         validationSchema={FORM_VALIDATION}
-        onSubmit={(values) => {
-          // console.log(values, "values print");
+        validate={(values: any) => {}}
+        onSubmit={async (values: Producao ) => {
+          const { id } = values;
+          action === "Update" && id
+            ? await updateModel<Producao>({
+                endpoint: "linhaProducao",
+                payload: { ...values, id },
+              })
+            : await createModel<Producao>({ endpoint: "linhaProducao", payload: values });
         }}
       >
-        {({
-          values,
-          errors,
-          isSubmitting,
-          isValid,
-          setValues,
-          setFieldValue,
-          resetForm
-        }) => (
-          <Form className={styles.formWrapper}>
-            <Select
-              disabled={false}
-              items={ProducaoTypesList}
-              name={"typeProducaoId"}
-              label={"Tipo"}
-            />
-           
-
-            <TextfieldWrapper name={"codeProducao"} label={"Código"} />
-            <TextfieldWrapper name={"description"} label={"Descrição"} />
-            <TextfieldWrapper name={"temperature"} label={"Temperatura"} type="number" />
-
+        <Form className={styles.formWrapper}>
+          <TextfieldWrapper  name={"lineName"} label={"Nome"} />
           
-
-            <ButtonWrapper fixed>{"enviar"}</ButtonWrapper>
-          </Form>
-        )}
+          {/* <TextfieldWrapper type='number' inputProps={{  min: 0.00, step: .05  }} name={"criticalExposureTime"} label={"Tempo Crítico de Exposição (Horas)"} /> */}
+          
+          <ButtonWrapper fixed>{`${
+            action === "Create" ? "Criar" : "Atualizar"
+          }`}</ButtonWrapper>
+        </Form>
       </Formik>
     </>
   );
