@@ -31,13 +31,13 @@ const header = [
   "ATUALIZADO EM",
   ];
 
-export default function () {
+export default function LinhaProducao() {
   const { listAllModel } = useLevelsMutations();
   const [changes,] = useRecoilState(ResponseState)
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
+  const Route = currentPage(router.pathname)!;
   
 
 
@@ -107,8 +107,8 @@ export default function () {
                     <div>
                       <Swipeable
                         type={"Update"}
-                        tooltipLabel={`Atualizar ${label}`}
-                        title={label}
+                        tooltipLabel={`Atualizar ${Route?.label}`}
+                        title={Route?.label}
                       >
                         {
                           <FormProducao

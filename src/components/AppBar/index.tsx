@@ -41,10 +41,10 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default () => {
+export default function Appbar() {
   const { open } = useContext(GlobalContext);
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
+  const Route = currentPage(router.pathname)!;
 
   return (
     <ElevationScroll>
@@ -52,10 +52,10 @@ export default () => {
         <Toolbar sx={{ height: "100%" }}>
           <Swipeable
             type={"Create"}
-            tooltipLabel={`Adicionar ${label}`}
-            title={label}
+            tooltipLabel={`Adicionar ${Route?.label}`}
+            title={Route?.label}
           >
-            {<FormComponent  action={"Create"} />}
+            {Route && <Route.FormComponent  action={"Create"} />}
           </Swipeable>
           <Typography
             sx={{ marginLeft: 2, flexGrow: "1" }}
@@ -66,7 +66,7 @@ export default () => {
             noWrap
             component="h1"
           >
-            {label}
+            {Route?.label}
           </Typography>
           <Avatar />
         </Toolbar>

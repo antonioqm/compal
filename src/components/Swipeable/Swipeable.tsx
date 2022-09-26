@@ -36,7 +36,6 @@ export default function Swipeable({
   ...props
 }: Prop) {
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
   const [scrollTarget, setScrollTarget] = useState<any>();
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const loading = useRecoilValue(loadingState);

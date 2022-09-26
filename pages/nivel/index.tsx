@@ -34,7 +34,7 @@ const header = [
   // {'Desativado'},
 ];
 
-export default function () {
+export default function Nivel() {
   const lisLevel: Level[] = useRecoilValue<Level[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
 

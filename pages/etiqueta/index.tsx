@@ -33,7 +33,7 @@ const header = [
   "Impresso",
 ];
 
-export default function () {
+export default function Etiqueta() {
   // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   // const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);

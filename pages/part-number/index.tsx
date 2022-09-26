@@ -35,7 +35,7 @@ const header = [
   "Nível",
 ];
 
-export default function () {
+export default function PartNumber() {
   // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   // const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);

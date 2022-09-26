@@ -26,7 +26,6 @@ export default function ({ children }: DataTable) {
   };
 
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
   return (
     <>
       {loading ? <SkeletonTable /> :

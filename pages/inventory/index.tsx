@@ -21,14 +21,9 @@ import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = ["Código", "Descrição", "Temperatura", "Tipo"];
 
-export default function () {
-  // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
-  // const [model, setModel] = useRecoilState(modelState);
-  const [hoverAction, setHoverAction] = useState<boolean>(false);
-
+export default function Inventory() {
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
-
+  const Route = currentPage(router.pathname)!;
   const { listAllModel } = useLevelsMutations();
 
   const handleDelete = async (value: InventoryResponse) => {
@@ -91,11 +86,12 @@ export default function () {
                     <div>
                       <Swipeable
                         type={"Update"}
-                        tooltipLabel={`Atualizar ${label}`}
-                        title={label}
+                        tooltipLabel={`Atualizar ${Route?.label}`}
+                        title={Route?.label}
                       >
                         {
-                          <FormComponent
+                          Route &&
+                          <Route.FormComponent
                             action={"Update"}
                             data={{ ...inventory }}
                           />

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
@@ -13,7 +14,7 @@ import { ExcelIcon } from "../icons/icons";
 export default function index() {
   const router = useRouter();
 
-  const { label } = currentPage(router.pathname)!;
+  const Route = currentPage(router.pathname)!;
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
       <Paper
@@ -35,10 +36,10 @@ export default function index() {
         </IconButton>
         <InputBase
           sx={{ ml: 1, flex: 1 }}
-          placeholder={`Buscar por ${label}`}
+          placeholder={`Buscar por ${Route?.label}`}
           inputProps={{ "aria-label": "Buscar por Part Number" }}
         />
-        <Filter title={`Filtrar ${label}`} />
+        <Filter title={`Filtrar ${Route?.label}`} />
 
         {/* <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" /> */}
         <Button

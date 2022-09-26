@@ -40,13 +40,13 @@ const header = [
   "Usado",
 ];
 
-export default function () {
+export default function Itens() {
   const listItem: ItemResponse[] = useRecoilValue<ItemResponse[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
+  const Route = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
@@ -163,11 +163,12 @@ export default function () {
                           <div>
                             <Swipeable
                               type={"Update"}
-                              tooltipLabel={`Atualizar ${label}`}
-                              title={label}
+                              tooltipLabel={`Atualizar ${Route?.label}`}
+                              title={Route?.label}
                             >
-                              {
-                                <FormComponent
+                          {
+                            Route &&
+                                <Route.FormComponent
                                   action={"Update"}
                                   data={{ ...item }}
                                 />

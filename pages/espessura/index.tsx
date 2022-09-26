@@ -29,7 +29,7 @@ const header = [
 
 
 
-export default function () {  
+export default function Espessura() {  
 
   const listThickness:Thickness[] = useRecoilValue<Thickness[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);

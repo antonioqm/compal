@@ -96,7 +96,8 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
   };
 
   const router = useRouter();
-  const { FormComponent, label } = currentPage(router.pathname)!;
+  const Route = currentPage(router.pathname)!;
+
   return (
     <>
       {loading ? <SkeletonTable /> :
@@ -183,11 +184,12 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
                       <>
                         <Swipeable
                           type={"Update"}
-                          tooltipLabel={`Atualizar ${label}`}
-                          title={label}
+                          tooltipLabel={`Atualizar ${Route?.label}`}
+                          title={Route?.label}
                         >
                           {
-                            <FormComponent
+                            Route &&
+                            <Route.FormComponent
                               action={"Update"}
                               data={{ ...bodyField }}
                             />
