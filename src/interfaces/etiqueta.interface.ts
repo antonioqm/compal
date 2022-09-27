@@ -8,3 +8,10 @@ export default interface EtiquetaResponse {
   updateDate: string,
   user?: string | null;
 }
+
+
+export interface Label {
+    
+	quantity: number,
+	
+}
