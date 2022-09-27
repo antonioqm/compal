@@ -1,14 +1,12 @@
 import { JSXElementConstructor } from "react";
-import {
-  InventoryIcon, ItemsIcon, LabelIcon, LevelIcon, PartNumberIcon, ThicknessIcon
-} from "./components/icons/icons";
+import { InventoryIcon, ItemsIcon, LabelIcon, LevelIcon, PartNumberIcon, ThicknessIcon } from "./components/icons/icons";
 
 import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
 import { FormLabel } from "./components/FormsUI/Forms/FormLabel";
 import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
+import { FormProducao } from "./components/FormsUI/Forms/FormProducao";
 import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
 import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
-import { FormProducao } from "./components/FormsUI/Forms/FormProducao";
 
 
 
@@ -81,23 +79,5 @@ export const ROUTES: PageRouter[] = [
     label: "Linha de produção",
     IconComponent: LabelIcon,
     FormComponent: FormProducao,
-  },
-  // {
-  //   path: "/feddercar",
-  //   label: "Feddercar",
-  //   IconComponent: CartIcon,
-  //   FormComponent: FormPartNumber,
-  // },
-  // {
-  //   path: "/sealing-machine",
-  //   label: "Máquina de Vedação",
-  //   IconComponent: SealingMachineIcon,
-  //   FormComponent: FormPartNumber,
-  // },
-  // {
-  //   path: "/component",
-  //   label: "Componente",
-  //   IconComponent: ComponentIcon,
-  //   FormComponent: FormPartNumber,
-  // },
+  }
 ];
