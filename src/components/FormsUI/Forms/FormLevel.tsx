@@ -33,7 +33,7 @@ export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
   const INITIAL_FORM_STATE = data ? data : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    levelName: Yup.string().required().min(6),
+    levelName: Yup.string().required(),
     maxTimeExposition: Yup.number().required().moreThan(0),
     criticalExposureTime: Yup.number().required().moreThan(0),
     backingRequired: Yup.boolean().required(),
