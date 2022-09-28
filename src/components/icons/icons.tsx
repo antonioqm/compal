@@ -8,6 +8,7 @@ import LabelImage from '../../../public/icons/label.svg'
 import LevelImage from '../../../public/icons/level.svg'
 import OverImage from '../../../public/icons/over.svg'
 import PartNumberImage from '../../../public/icons/partNumber.svg'
+import ProductionImage from '../../../public/icons/production.svg'
 import SealingMachineImage from '../../../public/icons/sealingMachine.svg'
 import ThicknessImage from '../../../public/icons/thickness.svg'
 import TrashImage from '../../../public/icons/trash.svg'
@@ -20,6 +21,9 @@ export const InventoryIcon = ({...props}) => {
 }
 export const LabelIcon = ({...props}) => {
   return <LabelImage {...props} />
+}
+export const ProductionIcon = ({...props}) => {
+  return <ProductionImage {...props} />
 }
 export const LevelIcon = ({...props}) => {
   return <LevelImage {...props} />

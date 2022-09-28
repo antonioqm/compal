@@ -8,7 +8,7 @@ import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setupApiClient } from "../../src/api/api";
-import Dialog from "../../src/components/Dialog/Dialog";
+import DialogRemove from "../../src/components/DialogRemove/DialogRemove";
 import Layout from "../../src/components/Layout";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
@@ -97,7 +97,7 @@ export default function Inventory() {
                           />
                         }
                       </Swipeable>
-                      <Dialog
+                      <DialogRemove
                         onAction={() => handleDelete(inventory)}
                         id={inventory.id}
                       />

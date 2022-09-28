@@ -10,7 +10,7 @@ import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setupApiClient } from "../../src/api/api";
-import Dialog from "../../src/components/Dialog/Dialog";
+import DialogRemove from "../../src/components/DialogRemove/DialogRemove";
 import Layout from "../../src/components/Layout";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
@@ -21,7 +21,6 @@ import { currentPage } from "../../src/ROUTES";
 import {
   useLevelsMutations
 } from "../../src/state/atom";
-import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = [
@@ -144,7 +143,7 @@ export default function PartNumber() {
                                 />
                               }
                             </Swipeable>
-                            <Dialog
+                            <DialogRemove
                               onAction={() => handleDelete(partnumber)}
                               id={partnumber.id}
                             />

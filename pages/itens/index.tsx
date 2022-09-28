@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { setupApiClient } from "../../src/api/api";
-import Dialog from "../../src/components/Dialog/Dialog";
+import DialogRemove from "../../src/components/DialogRemove/DialogRemove";
 import Layout from "../../src/components/Layout";
 import { ProgressBar } from "../../src/components/Progress/Progress";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
@@ -174,7 +174,7 @@ export default function Itens() {
                                 />
                               }
                             </Swipeable>
-                            <Dialog
+                            <DialogRemove
                               onAction={() => handleDelete(item)}
                               id={item.id}
                             />
