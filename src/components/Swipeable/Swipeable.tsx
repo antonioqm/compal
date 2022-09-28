@@ -15,7 +15,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import ACTION from "../../enums/action";
-import { currentPage } from "../../ROUTES";
 import { loadingState } from "../../state/atom";
 import ElevationScroll from "../ElevationScroll";
 import { EditIcon } from "../icons/icons";
@@ -25,7 +24,7 @@ interface Prop {
   title?: string;
   buttonOpen?: string;
   tooltipLabel?: string;
-  type: "Create" | "Update";
+  type: "Create" | "Update" | "Print";
 }
 export default function Swipeable({
   title,

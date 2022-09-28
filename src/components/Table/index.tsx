@@ -20,7 +20,7 @@ import { Thickness } from "../../interfaces/thickness.interface";
 import { currentPage } from "../../ROUTES";
 import { loadingState, useLevelsMutations } from "../../state/atom";
 import { formatDate } from "../../utils/format";
-import Dialog from "../Dialog/Dialog";
+import DialogRemove from "../DialogRemove/DialogRemove";
 import { SkeletonTable } from "../Skeleton/SkeletonTable";
 import Swipeable from "../Swipeable/Swipeable";
 
@@ -195,7 +195,7 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
                             />
                           }
                         </Swipeable>
-                        <Dialog onAction={() => handleDelete(bodyField)} id={bodyField.id} />
+                        <DialogRemove onAction={() => handleDelete(bodyField)} id={bodyField.id} />
                       </>
                     </StyledTableCell>
                   </StyledTableRow>

@@ -1,10 +1,8 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import { useRecoilState } from 'recoil';
-import { loadingState, ResponseState } from '../state/atom';
-import { parseCookies, setCookie } from 'nookies';
+import axios, { AxiosError } from 'axios';
 import jwt_decode, { JwtPayload } from "jwt-decode";
-import { signOut, User } from '../contexts/AuthContext';
 import { GetServerSidePropsContext } from 'next';
+import { parseCookies, setCookie } from 'nookies';
+import { signOut, User } from '../contexts/AuthContext';
 import { AuthTokenError } from '../services/errors/AuthTokenError';
 
 let isRefreshing = false;
@@ -111,7 +109,7 @@ export function setupApiClient(ctx:GetServerSidePropsContext | undefined = undef
 export const api = setupApiClient()
 
 export const apiClient = {
-  listAll: async <Resource>(endpoint: string): Promise<Resource> => {
+  listAll: async <Resource = any>(endpoint: string): Promise<Resource> => {
     const { data } = await api.get(endpoint)
     return data;
   },
@@ -119,17 +117,21 @@ export const apiClient = {
     const data = await api.get('account/currentuser')
     return data;
   },
-  create: async <Resource>(endpoint: string, payload = {}): Promise<Resource> => {
+  create: async <Resource = any>(endpoint: string, payload = {}): Promise<Resource> => {
     const { data } = await api.post(endpoint, payload)
     return data;
   },
-  update: async <Resource>(endpoint: string, payload = {}): Promise<Resource> => {
+  update: async <Resource = any>(endpoint: string, payload = {}): Promise<Resource> => {
     const { data } = await api.put(endpoint, payload)
     return data;
 
   },
-  delete: async <Resource>(endpoint: string): Promise<Resource> => {
+  delete: async <Resource = any>(endpoint: string): Promise<Resource> => {
     const { data } = await api.delete(`${endpoint}`)
+    return data;
+  },
+  get: async <Resource = any>(endpoint: string): Promise<Resource> => {
+    const { data } = await api.get(`${endpoint}`)
     return data;
   }
 }

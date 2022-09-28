@@ -1,6 +1,7 @@
 enum ACTION {
   Create = 'Criar',
-  Update = 'Editar'
+  Update = 'Editar',
+  Print = 'Imprimir',
 }
 
 export default ACTION

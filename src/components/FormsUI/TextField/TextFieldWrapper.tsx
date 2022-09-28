@@ -1,18 +1,14 @@
-import React, { useState } from "react";
-import { useField, useFormikContext } from "formik";
 import {
   FormControl,
   FormHelperText,
   IconButton,
   InputAdornment,
-  InputLabel,
-  OutlinedInput,
-  Slide,
-  TextField,
-  Typography,
+  InputLabel, OutlinedInput
 } from "@mui/material";
-import { IconEye, IconEyeOff, IconKey } from "@tabler/icons";
-import DomainLabel from "../../Helpers/DomainLalbel";
+import { IconEye, IconEyeOff } from "@tabler/icons";
+import { useField, useFormikContext } from "formik";
+import { useState } from "react";
+
 
 const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: any) => {
   const [field, meta, form] = useField(name);
@@ -53,10 +49,13 @@ const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: an
   return (
     <>
       <FormControl fullWidth variant="outlined">
-        <InputLabel focused htmlFor={`outlined-adornment-${name}`}>
+        <InputLabel sx={{ '&.MuiFormLabel-root-MuiInputLabel-root.Mui-disabled': {color: 'red'} }} focused htmlFor={`outlined-adornment-${name}`}>
           {label}
         </InputLabel>
         <OutlinedInput
+          sx={{
+            "&.Mui-disabled": { color: '#c0c0c0'},
+          }}
           {...configTextfield}
           id={`outlined-adornment-${name}`}
           type={showPassword || name !== 'password' ? type : "password"}

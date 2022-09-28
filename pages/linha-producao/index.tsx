@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { setupApiClient } from "../../src/api/api";
-import Dialog from "../../src/components/Dialog/Dialog";
+import DialogRemove from "../../src/components/DialogRemove/DialogRemove";
 import { FormProducao } from "../../src/components/FormsUI/Forms/FormProducao";
 import Layout from "../../src/components/Layout";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
@@ -117,7 +117,7 @@ export default function LinhaProducao() {
                           />
                         }
                       </Swipeable>
-                      <Dialog
+                      <DialogRemove
                         onAction={() => handleDelete(linhaproducao)}
                         id={linhaproducao.id}
                       />
