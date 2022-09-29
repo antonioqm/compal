@@ -9,6 +9,7 @@ import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { setupApiClient } from "../../src/api/api";
 import DialogPrinter from "../../src/components/DialogPrinter/DialogPrinter";
 import Layout from "../../src/components/Layout";
@@ -18,6 +19,7 @@ import { TableRow } from "../../src/components/Table/TableRow";
 import EtiquetaResponse from "../../src/interfaces/etiqueta.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
+  ResponseState,
   useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
@@ -35,12 +37,13 @@ const header = [
 export default function Etiqueta() {
   // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   // const [model, setModel] = useRecoilState(modelState);
+  const [changes,] = useRecoilState(ResponseState)
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
 
-  const { listAllModel } = useLevelsMutations();
+  const { listAllModel,  } = useLevelsMutations();
 
   const handleDelete = async (value: EtiquetaResponse) => {
     console.log("handleDelete", value);
@@ -54,14 +57,24 @@ export default function Etiqueta() {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
-
-  useEffect(() => {
+  
+  async function getEtiquetas(): Promise<void> {
     listAllModel<{ result: EtiquetaResponse[] }>(
       "/etiquetas?orderByDesc=true&page=1&size=10&orderBy=StartCode"
     ).then(({ result }) => {
       setListItem(result);
     });
+  }
+
+  useEffect(() => {
+    getEtiquetas();
   }, []);
+
+  useEffect(() => {
+    if (changes?.type === "success") {
+      getEtiquetas()
+    }
+  }, [changes]);
 
   return (
     <Layout title="Home">

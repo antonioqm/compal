@@ -1,4 +1,4 @@
-export default interface EtiquetaResponse {
+export default interface HistoryResponse {
   id: number,
   quantity: number,
   startCode: string,
@@ -10,6 +10,7 @@ export default interface EtiquetaResponse {
 }
 
 
-export interface Label {
-	quantity: number,
+export interface History {
+  partNumber: string,
+  codeLabel: string
 }
