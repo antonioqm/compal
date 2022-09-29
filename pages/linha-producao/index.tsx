@@ -18,6 +18,7 @@ import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
 import ProducaoResponse from "../../src/interfaces/producao.interface";
 import { currentPage } from "../../src/ROUTES";
+
 import {
   ResponseState,
   useLevelsMutations
@@ -40,9 +41,13 @@ export default function LinhaProducao() {
   const Route = currentPage(router.pathname)!;
   
 
-
-  const handleDelete = async (value: ProducaoResponse) => {
-    console.log("handleDelete", value);
+  const { deleteModel } = useLevelsMutations();
+  const handleDelete = async (value:ProducaoResponse) => {
+    
+    if (value.id) {
+      await deleteModel<ProducaoResponse>({endpoint:'/linhaProducao', payload: {...value, id: value.id}})
+      
+    }
   };
 
   const [listItem, setListItem] = useState<ProducaoResponse[]>([])

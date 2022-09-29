@@ -88,9 +88,9 @@ export default function TableCompal({ header, body, nameKeys }: DataTable) {
   // const [open, setOpen] = useState(false);
 
   const handleDelete = async (value:Level) => {
-    console.log("handleDelete", value);
+    
     if (value.id) {
-      await deleteModel<Level>({endpoint:'/nivel', payload: {...value, id: value.id}})
+      await deleteModel<Level>({endpoint:Route.path, payload: {...value, id: value.id}})
       
     }
   };
