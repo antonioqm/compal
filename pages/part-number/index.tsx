@@ -3,35 +3,34 @@ import {
   TableBody,
   TableHead,
   TableRow as TableRowMui,
-  Typography
-} from "@mui/material";
-import { IconCircleCheck, IconCircleX } from "@tabler/icons";
-import type { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { setupApiClient } from "../../src/api/api";
-import DialogRemove from "../../src/components/DialogRemove/DialogRemove";
-import Layout from "../../src/components/Layout";
-import Swipeable from "../../src/components/Swipeable/Swipeable";
-import Table from "../../src/components/Table/Table";
-import { TableCell } from "../../src/components/Table/TableCell";
-import { TableRow } from "../../src/components/Table/TableRow";
-import PartNumberResponse from "../../src/interfaces/partnumber.interface";
-import { currentPage } from "../../src/ROUTES";
-import {
-  useLevelsMutations
-} from "../../src/state/atom";
-import { withSSRAuth } from "../../src/utils/withSSRAuth";
+  Typography,
+} from '@mui/material';
+import { IconCircleCheck, IconCircleX } from '@tabler/icons';
+import type { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { setupApiClient } from '../../src/api/api';
+import DialogHistory from '../../src/components/DialogHistory/DialogHistory';
+import DialogRemove from '../../src/components/DialogRemove/DialogRemove';
+import Layout from '../../src/components/Layout';
+import Swipeable from '../../src/components/Swipeable/Swipeable';
+import Table from '../../src/components/Table/Table';
+import { TableCell } from '../../src/components/Table/TableCell';
+import { TableRow } from '../../src/components/Table/TableRow';
+import PartNumberResponse from '../../src/interfaces/partnumber.interface';
+import { currentPage } from '../../src/ROUTES';
+import { useLevelsMutations } from '../../src/state/atom';
+import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
 const header = [
-  "Código",
-  "Sensibilidade à umidade",
-  "Espessura",
-  "Temperatura",
-  "Número max de Backing",
-  "Tempo mínimo",
-  "Tempo máximo",
-  "Nível",
+  'Código',
+  'Sensibilidade à umidade',
+  'Espessura',
+  'Temperatura',
+  'Número max de Backing',
+  'Tempo mínimo',
+  'Tempo máximo',
+  'Nível',
 ];
 
 export default function PartNumber() {
@@ -45,10 +44,10 @@ export default function PartNumber() {
   const { listAllModel } = useLevelsMutations();
 
   const handleDelete = async (value: PartNumberResponse) => {
-    console.log("handleDelete", value);
+    console.log('handleDelete', value);
   };
 
-  const [listItem, setListItem] = useState<PartNumberResponse[]>([])
+  const [listItem, setListItem] = useState<PartNumberResponse[]>([]);
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -59,7 +58,7 @@ export default function PartNumber() {
 
   useEffect(() => {
     listAllModel<{ result: PartNumberResponse[] }>(
-      "/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10"
+      '/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10'
     ).then(({ result }) => {
       setListItem(result);
     });
@@ -70,7 +69,7 @@ export default function PartNumber() {
       <Typography variant="h1"></Typography>
       <Table>
         <TableHead>
-          <TableRowMui sx={{ boxShadow: "none", background: "transparent" }}>
+          <TableRowMui sx={{ boxShadow: 'none', background: 'transparent' }}>
             {header.length > 0 &&
               header.map((field, index) => (
                 <TableCell key={index}>
@@ -84,77 +83,71 @@ export default function PartNumber() {
           {listItem &&
             listItem.length > 0 &&
             listItem.map((partnumber: PartNumberResponse, index) => (
-             
-                  <TableRow key={partnumber.id}>
-                    <TableCell component="th" scope="row">
-                      {partnumber.codePartNumber}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Chip
-                        size="small"
-                        sx={{
-                          fontSize: "10px",
-                          textTransform: "uppercase",
-                          p: 0,
-                        }}
-                        color={partnumber.humiditySensitivity ? "success" : "error"}
-                        label={partnumber.humiditySensitivity ? "sim" : "não"}
-                        icon={
-                          partnumber.humiditySensitivity ? (
-                            <IconCircleCheck size={16} />
-                          ) : (
-                            <IconCircleX size={16} />
-                          )
-                        }
-                      />
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {partnumber.thickness}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {partnumber.temperature}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {partnumber.numberMaxBacking}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {partnumber.minimumTime}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {partnumber.maxTimeExposure}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {partnumber.level}
-                    </TableCell>
-                    
-                    <TableCell component="th" scope="row">
-                      {/* <Fade in={hoverAction}> */}
+              <TableRow key={partnumber.id}>
+                <TableCell component="th" scope="row">
+                  {partnumber.codePartNumber}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <Chip
+                    size="small"
+                    sx={{
+                      fontSize: '10px',
+                      textTransform: 'uppercase',
+                      p: 0,
+                    }}
+                    color={partnumber.humiditySensitivity ? 'success' : 'error'}
+                    label={partnumber.humiditySensitivity ? 'sim' : 'não'}
+                    icon={
+                      partnumber.humiditySensitivity ? (
+                        <IconCircleCheck size={16} />
+                      ) : (
+                        <IconCircleX size={16} />
+                      )
+                    }
+                  />
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {partnumber.thickness}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {partnumber.temperature}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {partnumber.numberMaxBacking}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {partnumber.minimumTime}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {partnumber.maxTimeExposure}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {partnumber.level}
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  {/* <Fade in={hoverAction}> */}
+                  {
+                    <div>
+                      <Swipeable
+                        type={'Update'}
+                        tooltipLabel={`Atualizar ${label}`}
+                        title={label}
+                      >
                         {
-                          <div>
-                            <Swipeable
-                              type={"Update"}
-                              tooltipLabel={`Atualizar ${label}`}
-                              title={label}
-                            >
-                              {
-                                <FormLabel
-                                  action={"Update"}
-                                  data={{ ...partnumber }}
-                                />
-                              }
-                            </Swipeable>
-                            <DialogRemove
-                              onAction={() => handleDelete(partnumber)}
-                              id={partnumber.id}
-                            />
-                          </div>
+                          <FormLabel
+                            action={'Update'}
+                            data={{ ...partnumber }}
+                          />
                         }
-                  {/* </Fade> */}
-                  
-                  
-                      
-                    </TableCell>
-              
+                      </Swipeable>
+                      <DialogRemove
+                        onAction={() => handleDelete(partnumber)}
+                        id={partnumber.id}
+                      />
+                    </div>
+                  }
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
@@ -167,7 +160,7 @@ export const getServerSideProps: GetServerSideProps = withSSRAuth(
   async (ctx) => {
     const apiClient = setupApiClient(ctx);
 
-    await apiClient.get("account/currentUser");
+    await apiClient.get('account/currentUser');
     return {
       props: {},
     };

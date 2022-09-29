@@ -1,6 +1,7 @@
 export default interface ItemResponse {
   id: number;
-  codeLabel: number;
+  codeLabel: string;
+  partNumber: string
   createdDate: string;
   feederCar: string;
   responsibleForExposition: string;

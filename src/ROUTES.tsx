@@ -4,6 +4,7 @@ import { InventoryIcon, ItemsIcon, LabelIcon, LevelIcon, PartNumberIcon, Product
 import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
 import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
 import { FormPrinter } from "./components/FormsUI/Forms/FormPrinter";
+import { FormLabel } from "./components/FormsUI/Forms/FormLabel";
 import { FormProducao } from "./components/FormsUI/Forms/FormProducao";
 import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
 import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
@@ -13,6 +14,7 @@ import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
 interface PageRouter {
   path: string;
   label: string;
+  addButton?: boolean;
   IconComponent: JSXElementConstructor<any>;
   FormComponent: JSXElementConstructor<any>;
 }
@@ -39,18 +41,21 @@ export const ROUTES: PageRouter[] = [
   {
     path: "/nivel",
     label: "Nível",
+    addButton: true,
     IconComponent: LevelIcon,
     FormComponent: FormLevel,
   },
   {
     path: "/espessura",
     label: "Espessura",
+    addButton: true,
     IconComponent: ThicknessIcon,
     FormComponent: FormThickness,
   },
   {
     path: "/part-number",
     label: "Part Number",
+    addButton: true,
     IconComponent: PartNumberIcon,
     FormComponent: FormPartNumber,
   },
@@ -63,6 +68,7 @@ export const ROUTES: PageRouter[] = [
   {
     path: "/inventory",
     label: "Inventário",
+    addButton: true,
     IconComponent: InventoryIcon,
     FormComponent: FormInventory,
   },
@@ -70,13 +76,15 @@ export const ROUTES: PageRouter[] = [
   {
     path: "/etiqueta",
     label: "Etiqueta",
+    addButton: true,
     IconComponent: LabelIcon,
-    FormComponent: FormPrinter,
+    FormComponent: FormLabel,
   },
 
   {
     path: "/linha-producao",
     label: "Linha de produção",
+    addButton: true,
     IconComponent: ProductionIcon,
     FormComponent: FormProducao,
   }
