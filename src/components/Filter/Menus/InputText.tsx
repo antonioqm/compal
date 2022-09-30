@@ -4,7 +4,8 @@ import { useFormik } from "formik";
 import * as React from "react";
 import * as yup from "yup";
 import { ptShort } from "yup-locale-pt";
-import Param from "../Param.interface";
+import Param from "../interfaces/Param.interface";
+
 
 interface InputProps {
   label?: string;

@@ -27,6 +27,7 @@ const Filter = ({ endpoint, items }: FilterProps) => {
 
   return (
     <>
+      {urlParams}
       <Stack direction={"row"} spacing={2}>
         {items.map((item, index) => {
           if ((item.type === "text")) {
@@ -50,8 +51,6 @@ const Filter = ({ endpoint, items }: FilterProps) => {
             );
           }
         })}
-        {/* <Input label="Temperatura" name={"temperature"} onUpdate={changeParams} /> */}
-        {/* <Boolean label="Exposto" name={"exposo"} onUpdate={changeParams} /> */}
       </Stack>
     </>
   );

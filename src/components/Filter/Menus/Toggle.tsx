@@ -8,10 +8,7 @@ import {
 } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import * as React from "react";
-import * as yup from "yup";
-import { ptShort } from "yup-locale-pt";
-import Param from "../Param.interface";
-
+import Param from "../interfaces/Param.interface";
 interface BooleanProps {
   label?: string;
   name: string;
@@ -36,19 +33,13 @@ export default function ({
     newValue: string
   ) => {
     setTerm(newValue);
+    onUpdate({name: name, value:newValue}) 
     handleClose();
-    newValue !== '' && newValue != null && onUpdate({name, value:newValue}) 
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  yup.setLocale(ptShort);
-
-  const validationSchema = yup.object({
-    termInput: yup.string().required(),
-  });
 
   return (
     <div>
