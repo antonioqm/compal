@@ -5,7 +5,6 @@ interface testeValue {
 }
 
 export const ProgressBar = styled(LinearProgress)((props: any) => {
-  console.log('any', props)
   const value = props.value
   return {
     top: 2,

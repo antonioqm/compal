@@ -7,7 +7,6 @@ import { ResponseState } from "../../state/atom";
 import AppBar from "../AppBar";
 import { Drawer } from "../Drawer";
 import GlobalContext from "../Drawer/GlobalContext";
-import SearchField from "../SearchField";
 
 type Props = {
   title: string;
@@ -91,7 +90,7 @@ const Home = ({ children, title, ...props }: Props) => {
               pb: 5,
             }}
           >
-            <SearchField />
+            {/* <SearchField /> */}
             {children && children}
           </Box>
         </Box>

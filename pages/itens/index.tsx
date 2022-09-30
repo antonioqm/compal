@@ -3,8 +3,7 @@ import {
   Fade,
   TableBody,
   TableHead,
-  TableRow as TableRowMui,
-  Typography
+  TableRow as TableRowMui
 } from "@mui/material";
 import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from "next";
@@ -13,6 +12,8 @@ import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { setupApiClient } from "../../src/api/api";
 import DialogRemove from "../../src/components/DialogRemove/DialogRemove";
+import Filter from "../../src/components/Filter/Filter";
+import { Item } from "../../src/components/Filter/interfaces/Item.interface";
 import Layout from "../../src/components/Layout";
 import { ProgressBar } from "../../src/components/Progress/Progress";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
@@ -39,6 +40,21 @@ const header = [
   "Percentual de exposição",
   "Usado",
 ];
+
+const itemsFilter: Item[] = [
+  { name: 'feederCar',
+    label: 'Feeder Car',
+    type: 'text'
+  },
+  { name: 'codeLabel',
+    label: 'Código',
+    type: 'text'
+  },
+  { name: 'used',
+    label: 'Usado',
+    type: 'radio'
+  },
+]
 
 export default function Itens() {
   const listItem: ItemResponse[] = useRecoilValue<ItemResponse[]>(filterModel);
@@ -71,7 +87,8 @@ export default function Itens() {
 
   return (
     <Layout title="Home">
-      <Typography variant="h1"></Typography>
+      <Filter items={itemsFilter}  endpoint='itens-expostos' />
+
       <Table>
         <TableHead>
           <TableRowMui sx={{ boxShadow: "none", background: "transparent" }}>

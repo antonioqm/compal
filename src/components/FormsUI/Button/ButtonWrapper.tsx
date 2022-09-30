@@ -8,8 +8,9 @@ import React from "react";
 interface Prop extends ButtonProps {
   fixed?: boolean;
   children?: React.ReactElement | string;
+  height?: number;
 }
-const ButtonWrapper = ({ fixed, children, ...otherProps }: Prop) => {
+const ButtonWrapper = ({ height = 56, fixed, children, ...otherProps }: Prop) => {
   const { submitForm, isValid } = useFormikContext();
 
   const handleSubmit = () => {
@@ -43,7 +44,7 @@ const ButtonWrapper = ({ fixed, children, ...otherProps }: Prop) => {
       >
         <Button
           {...otherProps}
-          sx={{height: 56, color: 'white'}}
+          sx={{height: height, color: 'white'}}
           disabled={!isValid}
           variant="contained"
           fullWidth

@@ -1,15 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import * as React from "react";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import { FilterList } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import Paper from "@mui/material/Paper";
 import { useRouter } from "next/router";
 import { currentPage } from "../../ROUTES";
 import Filter from "./Filter";
-import { ExcelIcon } from "../icons/icons";
 
 export default function index() {
   const router = useRouter();
@@ -41,7 +38,6 @@ export default function index() {
         />
         <Filter title={`Filtrar ${Route?.label}`} />
 
-        {/* <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" /> */}
         <Button
           variant="contained"
           disableElevation
@@ -55,7 +51,6 @@ export default function index() {
           aria-label="search"
         >
           Buscar
-          {/* <SearchIcon /> */}
         </Button>
       </Paper>
     </Box>
