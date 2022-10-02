@@ -1,4 +1,6 @@
 import {
+  Pagination,
+  Stack,
   TableBody,
   TableHead,
   TableRow as TableRowMui,
@@ -14,23 +16,25 @@ import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
-import InventoryResponse from "../../src/interfaces/inventory.interface";
+import { InventoryModel, InventoryResponse } from "../../src/interfaces/inventory.interface";
 import { currentPage } from "../../src/ROUTES";
 import { useLevelsMutations } from "../../src/state/atom";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
-
 const header = ["Código", "Descrição", "Temperatura", "Tipo"];
 
 export default function Inventory() {
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
   const { listAllModel } = useLevelsMutations();
+  const [page, setPage] = useState<number>(1);
 
-  const handleDelete = async (value: InventoryResponse) => {
+
+  const handleDelete = async (value: InventoryModel) => {
     console.log("handleDelete", value);
   };
 
-  const [listItem, setListItem] = useState<InventoryResponse[]>([]);
+  const [listInventory, setListInventory] = useState<InventoryModel[]>([]);
+  const [inventoryResponse, setInventoryResponse] = useState<InventoryResponse>();
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -39,13 +43,19 @@ export default function Inventory() {
       setExpanded(isExpanded ? panel : false);
     };
 
+  const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage)
+}
+
+
   useEffect(() => {
-    listAllModel<{ result: InventoryResponse[] }>(
-      "inventario?orderByDesc=true&page=1&size=10&orderBy=CodeInventory"
-    ).then(({ result }) => {
-      setListItem(result);
+    listAllModel<InventoryResponse>(
+      `inventario?orderByDesc=true&page=${page}&size=10&orderBy=CodeInventory`
+    ).then((inventoeyResponse) => {
+      setInventoryResponse(inventoeyResponse);
+      setListInventory(inventoeyResponse.result);
     });
-  }, []);
+  }, [page]);
 
   return (
     <Layout title="Home">
@@ -63,9 +73,9 @@ export default function Inventory() {
         </TableHead>
         {/* Body */}
         <TableBody>
-          {listItem &&
-            listItem.length > 0 &&
-            listItem.map((inventory: InventoryResponse, index) => (
+          {listInventory &&
+            listInventory.length > 0 &&
+            listInventory.map((inventory: InventoryModel, index) => (
               <TableRow key={inventory.id}>
                 <TableCell component="th" scope="row">
                   {inventory.codeInventory}
@@ -89,13 +99,12 @@ export default function Inventory() {
                         tooltipLabel={`Atualizar ${Route?.label}`}
                         title={Route?.label}
                       >
-                        {
-                          Route &&
+                        {Route && (
                           <Route.FormComponent
                             action={"Update"}
                             data={{ ...inventory }}
                           />
-                        }
+                        )}
                       </Swipeable>
                       <DialogRemove
                         onAction={() => handleDelete(inventory)}
@@ -109,6 +118,23 @@ export default function Inventory() {
             ))}
         </TableBody>
       </Table>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        top={20}
+        marginTop={4}
+      >
+        {inventoryResponse && inventoryResponse?.totalPages > 0 && (
+          <Pagination
+            shape="rounded"
+            onChange={handlePage}
+            count={inventoryResponse?.totalPages}
+            siblingCount={0}
+            boundaryCount={2}
+          />
+        )}
+      </Stack>
     </Layout>
   );
 }

@@ -1,16 +1,16 @@
 import {
   Chip,
   Fade,
+  Pagination,
+  Stack,
   TableBody,
   TableHead,
   TableRow as TableRowMui
 } from "@mui/material";
 import { IconCircleCheck, IconCircleX } from "@tabler/icons";
-import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { setupApiClient } from "../../src/api/api";
 import DialogRemove from "../../src/components/DialogRemove/DialogRemove";
 import Filter from "../../src/components/Filter/Filter";
 import { Item } from "../../src/components/Filter/interfaces/Item.interface";
@@ -20,7 +20,7 @@ import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
-import ItemResponse from "../../src/interfaces/item.interface";
+import { ItemModel, ItemResponse } from "../../src/interfaces/item.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
   filterModel,
@@ -28,7 +28,6 @@ import {
   useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
-import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = [
   "Código",
@@ -40,6 +39,8 @@ const header = [
   "Percentual de exposição",
   "Usado",
 ];
+
+
 
 const itemsFilter: Item[] = [
   { name: 'feederCar',
@@ -54,19 +55,26 @@ const itemsFilter: Item[] = [
     label: 'Usado',
     type: 'radio'
   },
+  { name: 'temperature',
+    label: 'Temperatura',
+    type: 'slider'
+  },
 ]
 
 export default function Itens() {
-  const listItem: ItemResponse[] = useRecoilValue<ItemResponse[]>(filterModel);
+  const listItem: ItemModel[] = useRecoilValue<ItemModel[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
+  const [itemResponse, setItemResponse] = useState<ItemResponse>();
   const [hoverAction, setHoverAction] = useState<boolean>(false);
+  const [urlFilter, setUrlFilter] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
 
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
-  const handleDelete = async (value: ItemResponse) => {
+  const handleDelete = async (value: ItemModel) => {
     console.log("handleDelete", value);
   };
 
@@ -76,18 +84,28 @@ export default function Itens() {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
+  
+  const updateUrlFilters = (url: string) => {
+    setUrlFilter(url)
+  }
 
+  const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
+      setPage(newPage)
+  }
+
+  
   useEffect(() => {
-    listAllModel<{ result: ItemResponse[] }>(
-      "itens-expostos?orderByDesc=true&page=1&size=10&orderBy=CodeLabel"
-    ).then(({ result }) => {
-      setModel(result);
+    listAllModel<ItemResponse>(
+      `itens-expostos?orderByDesc=true&page=${page}&size=10&orderBy=CodeLabel&${urlFilter}`
+    ).then((itemResponse) => {
+      setItemResponse(itemResponse)
+      setModel(itemResponse.result);
     });
-  }, []);
+  }, [urlFilter, page]);
 
   return (
     <Layout title="Home">
-      <Filter items={itemsFilter}  endpoint='itens-expostos' />
+      <Filter onChangeFilter={updateUrlFilters} items={itemsFilter}  endpoint='itens-expostos' />
 
       <Table>
         <TableHead>
@@ -104,7 +122,7 @@ export default function Itens() {
         <TableBody>
           {listItem &&
             listItem.length > 0 &&
-            listItem.map((item: ItemResponse, index) => (
+            listItem.map((item: ItemModel, index) => (
              
                   <TableRow key={item.id}>
                     <TableCell component="th" scope="row">
@@ -207,20 +225,15 @@ export default function Itens() {
             ))}
         </TableBody>
       </Table>
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} top={20} marginTop={4}>
+
+      {(itemResponse && itemResponse?.totalPages > 1)  &&  <Pagination shape="rounded" onChange={handlePage} count={itemResponse?.totalPages} siblingCount={0} boundaryCount={2} />}
+      </Stack>
+
     </Layout>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth(
-  async (ctx) => {
-    const apiClient = setupApiClient(ctx);
-
-    await apiClient.get("account/currentUser");
-    return {
-      props: {},
-    };
-  }
-);
 
 // Só exposto abaixo de 100%;
 // Acima de 100% excelente;

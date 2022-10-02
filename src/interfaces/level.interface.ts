@@ -1,4 +1,7 @@
-export interface Level {
+import { ResponseList } from "./listResponse.interface";
+
+export  type LevelResponse =  ResponseList<LevelModel>
+export interface LevelModel {
   id?: number | undefined;
   createDate?: string;
   updateDate?: string;

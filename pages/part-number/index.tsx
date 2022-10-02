@@ -40,7 +40,7 @@ export default function PartNumber() {
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
   const router = useRouter();
-  const { FormLabel, label } = currentPage(router.pathname)!;
+  const { FormComponent, label } = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
@@ -137,7 +137,7 @@ export default function PartNumber() {
                               title={label}
                             >
                               {
-                                <FormLabel
+                                <FormComponent
                                   action={"Update"}
                                   data={{ ...partnumber }}
                                 />

@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilState } from "recoil";
-import { Level } from "../../interfaces/level.interface";
+import { LevelModel } from "../../interfaces/level.interface";
 import { Thickness } from "../../interfaces/thickness.interface";
 import { currentPage } from "../../ROUTES";
 import { loadingState, useLevelsMutations } from "../../state/atom";
@@ -76,21 +76,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 interface DataTable {
   header: any[];
-  body: Array<Level | Thickness>;
+  body: Array<LevelModel | Thickness>;
   nameKeys: Array<any>;
+  endpoint: string
 }
 
-export default function TableCompal({ header, body, nameKeys }: DataTable) {
-  const [editing, setEditing] = React.useState<Level>();
+export default function TableCompal({ endpoint, header, body, nameKeys }: DataTable) {
+  const [editing, setEditing] = React.useState<LevelModel>();
   const [loading, setLoading] = useRecoilState(loadingState)
   const { deleteModel } = useLevelsMutations();
 
   // const [open, setOpen] = useState(false);
 
-  const handleDelete = async (value:Level) => {
+  const handleDelete = async (value:LevelModel) => {
     console.log("handleDelete", value);
     if (value.id) {
-      await deleteModel<Level>({endpoint:'/nivel', payload: {...value, id: value.id}})
+      await deleteModel<LevelModel>({endpoint:'/'+endpoint, payload: {...value, id: value.id}})
       
     }
   };

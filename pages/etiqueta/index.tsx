@@ -1,5 +1,7 @@
 import {
   Chip,
+  Pagination,
+  Stack,
   TableBody,
   TableHead,
   TableRow as TableRowMui,
@@ -15,7 +17,7 @@ import Layout from "../../src/components/Layout";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
-import EtiquetaResponse from "../../src/interfaces/etiqueta.interface";
+import { LabelModel, LabelResponse } from "../../src/interfaces/label.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
   useLevelsMutations
@@ -33,35 +35,46 @@ const header = [
 ];
 
 export default function Etiqueta() {
-  // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
+  // const listLabel: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   // const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
-  const handleDelete = async (value: EtiquetaResponse) => {
+  const handleDelete = async (value: LabelModel) => {
     console.log("handleDelete", value);
   };
 
-  const [listItem, setListItem] = useState<EtiquetaResponse[]>([])
+  const [listLabel, setListLabel] = useState<LabelModel[]>([])
+  const [labelResponse, setLabelResponse] = useState<LabelResponse>();
+
 
   const [expanded, setExpanded] = useState<string | false>(false);
+  const [page, setPage] = useState<number>(1);
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
+  
+    const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
+      setPage(newPage)
+    }
 
   useEffect(() => {
-    listAllModel<{ result: EtiquetaResponse[] }>(
+    listAllModel<LabelResponse>(
       "/etiquetas?orderByDesc=true&page=1&size=10&orderBy=StartCode"
-    ).then(({ result }) => {
-      setListItem(result);
+    ).then((response) => {
+      setTotalPages(Math.ceil(response.totalItems / response.pageSize))
+      setLabelResponse(response)
+      setListLabel(response.result);
     });
-  }, []);
+  }, [page]);
 
   return (
     <Layout title="Home">
@@ -79,9 +92,9 @@ export default function Etiqueta() {
         </TableHead>
         {/* Body */}
         <TableBody>
-          {listItem &&
-            listItem.length > 0 &&
-            listItem.map((etiqueta: EtiquetaResponse, index) => (
+          {listLabel &&
+            listLabel.length > 0 &&
+            listLabel.map((etiqueta: LabelModel, index) => (
              
                   <TableRow key={etiqueta.id}>
                     <TableCell component="th" scope="row">
@@ -141,6 +154,10 @@ export default function Etiqueta() {
             ))}
         </TableBody>
       </Table>
+      
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} top={20} marginTop={4}>
+      {((labelResponse && totalPages > 1)) &&  <Pagination shape="rounded" onChange={handlePage} count={totalPages} siblingCount={0} boundaryCount={2} />}
+      </Stack>
     </Layout>
   );
 }

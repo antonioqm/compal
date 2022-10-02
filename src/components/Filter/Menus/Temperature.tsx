@@ -1,4 +1,8 @@
-import { Button, Chip, Stack, TextField } from "@mui/material";
+
+
+
+
+import { Button, Chip, FormHelperText, Slider, Stack } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import { useFormik } from "formik";
 import * as React from "react";
@@ -13,6 +17,23 @@ interface InputProps {
   defaultValue?: string | number;
   onUpdate: (e:Param) => void
 }
+
+const marks = [
+  {
+    value: 40,
+    label: "40°C",
+  },
+  {
+    value: 90,
+    label: "90°C",
+  },
+  {
+    value: 125,
+    label: "125°C",
+  },
+];
+
+
 export default function ({
   label = "Nome do campo",
   defaultValue = "defaultValue",
@@ -26,6 +47,10 @@ export default function ({
     setAnchorEl(event.currentTarget);
   };
 
+  function valuetext(value: number) {
+    return `${value}°C`;
+  }  
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -34,19 +59,19 @@ export default function ({
   yup.setLocale(ptShort);
 
   const validationSchema = yup.object({
-    termInput: yup.string().required(),
+    temperature: yup.number().required(),
   });
 
   const formik = useFormik({
     initialValues: {
-      termInput: "",
+      temperature: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      if (values.termInput && values.termInput !== defaultValue) {
-        setTerm(`${values.termInput}`);
+      if (values.temperature && values.temperature !== defaultValue) {
+        setTerm(`${values.temperature}ºC`);
         // formik.resetForm()
-        const param: Param = { name: name, value: values.termInput }
+        const param: Param = { name: name, value: values.temperature }
         onUpdate(param)
       } else {
         setTerm('');
@@ -65,6 +90,7 @@ export default function ({
 
   return (
     <div>
+
       <Stack direction="row" spacing={1}>
         <Chip
           size="small"
@@ -101,7 +127,11 @@ export default function ({
         // }}
       >
         {/* <Typography variant="overline">Digite o termo</Typography> */}
-
+        <FormHelperText>
+          {label}
+        </FormHelperText>
+        
+        
         <form
           style={{
             display: "flex",
@@ -111,21 +141,59 @@ export default function ({
           onSubmit={formik.handleSubmit}
           onReset={formik.handleReset}
         >
-          <TextField
-            fullWidth
-            sx={{
-              maxHeight: 32,
-              my: 1,
-              "& .MuiOutlinedInput-input": { padding: 1.5 },
+          <Slider
+              sx={{
+                minWidth: 180,
+                "& .MuiSlider-colorPrimary": { height: 16 },
+                "& .MuiSlider-track": {
+                  height: 16,
+                  background: "#fff",
+                  border: "2px solid rgba(255,166,0,1)",
+                },
+                "& .MuiSlider-rail": {
+                  height: 16,
+                  opacity: 1,
+                  background:
+                    "linear-gradient(90deg, rgba(255,166,0,1) 20%, rgba(252,0,0,1) 100%)",
+                },
+                "& .MuiSlider-thumb:before": {
+                  background: "#fff",
+                  border: "4px solid #e7c4c4",
+                },
+                "& .MuiSlider-mark": {
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "rgba(255,166,0,1)",
+                },
+                "& .MuiSlider-markActive": {
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "rgba(255,166,0,1)",
+                },
+                "& .MuiSlider-markLabel": { fontSize: 10 },
+                "& .MuiSlider-valueLabelOpen": {
+                  borderRadius: 2,
+                  background: "#e7edf1",
+                  color: "#000",
+                },
             }}
-            id="termInput"
-            name="termInput"
-            label={label}
-            value={formik.values.termInput}
-            onChange={formik.handleChange}
-            error={formik.touched.termInput && Boolean(formik.errors.termInput)}
-            helperText={formik.touched.termInput && formik.errors.termInput}
+              // value={Number(formik.values.temperature)}
+              aria-label="Custom marks"
+              defaultValue={40}
+              getAriaValueText={valuetext}
+              step={null}
+              valueLabelDisplay="off"
+              max={200}
+              min={0}
+              name={name}
+              marks={marks}
+              onChange={formik.handleChange}
+              // error={formik.touched.temperature && Boolean(formik.errors.temperature)}
+              // helperText={formik.touched.temperature && formik.errors.temperature}
           />
+         
           <Stack
             sx={{ marginTop: 2 }}
             width={"100%"}

@@ -1,4 +1,8 @@
-export default interface InventoryResponse {
+
+import { ResponseList } from "./listResponse.interface";
+
+export  type InventoryResponse =  ResponseList<InventoryModel>
+export interface InventoryModel {
   id: number;
   codeInventory: string;
   description: string;

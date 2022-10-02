@@ -1,5 +1,5 @@
 export interface Item {
   label: string;
   name: string;
-  type: 'radio' | 'text';
+  type: 'radio' | 'text' | 'slider';
 }

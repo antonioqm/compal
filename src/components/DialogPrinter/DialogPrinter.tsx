@@ -3,14 +3,14 @@ import {
 } from "@mui/material";
 import { IconPrinter } from "@tabler/icons";
 import React, { useState } from "react";
-import EtiquetaResponse from "../../interfaces/etiqueta.interface";
+import { LabelModel } from "../../interfaces/label.interface";
 import { useLevelsMutations } from "../../state/atom";
 import { FormPrinter } from "../FormsUI/Forms/FormPrinter";
 
 interface DialogPrintergProp {
   onAction: () => void;
   id: number;
-  etiqueta: EtiquetaResponse;
+  etiqueta: LabelModel;
 }
 export default ({id, etiqueta, onAction}:DialogPrintergProp) => {
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);

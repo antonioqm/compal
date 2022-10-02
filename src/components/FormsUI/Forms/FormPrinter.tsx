@@ -4,14 +4,14 @@ import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { apiClient } from "../../../api/api";
-import EtiquetaResponse from "../../../interfaces/etiqueta.interface";
+import { LabelModel } from "../../../interfaces/label.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
 import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
 
 interface PrintProps {
-  etiqueta: EtiquetaResponse;
+  etiqueta: LabelModel;
 }
 
 interface EtiquetaRequest {
@@ -43,16 +43,6 @@ export const FormPrinter = ({etiqueta}:PrintProps) => {
     start: Yup.number(),
     end: Yup.number().required(),
   });
-
-
-  // const FORM_VALIDATION = Yup.object().shape({
-  //   codeInventory: Yup.string().required(),
-  //   description: Yup.string().required(),
-  //   typeInventoryId: Yup.number(),
-  //   temperature: Yup.number().when('typeInventoryId', (typeInventoryId, schema) => {
-  //     return  typeInventoryId === 4 ? schema.required() : schema.notRequired()
-  //   }),
-  // });
 
   const validateStartEnd = (values: EtiquetaRequest) => {
     if (values.printerInterval as boolean) {
@@ -97,9 +87,8 @@ export const FormPrinter = ({etiqueta}:PrintProps) => {
                 { label: "Intervalo", value: false },
               ]}
             />
-            <TextfieldWrapper type="number"   inputProps={{ min: 1, step: 1 }} disabled={disabledStart} name={"start"} label={"Inicial"} />
-            <TextfieldWrapper type="number"   inputProps={{ min: 1, step: 1 }} disabled={disabledEnd} name={"end"} label={"Final"} />
-
+            <TextfieldWrapper type="number"  inputProps={{ min: 1, step: 1, max: values.end }} disabled={disabledStart} name={"start"} label={"Inicial"} />
+            <TextfieldWrapper type="number"  inputProps={{ min: 1, step: 1, max: values.end }} disabled={disabledEnd} name={"end"}  label={"Final"} />
             <ButtonWrapper fixed>Imprimir</ButtonWrapper>
           </Form>
         )}

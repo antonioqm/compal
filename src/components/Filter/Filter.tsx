@@ -5,29 +5,32 @@ import { updateParams } from "./helpes/updateParams";
 import { Item } from "./interfaces/Item.interface";
 import Param from "./interfaces/Param.interface";
 import Input from "./Menus/InputText";
+import Temperature from "./Menus/Temperature";
 import Toggle from "./Menus/Toggle";
 
 
 interface FilterProps {
   endpoint: string;
   items: Item[];
+  onChangeFilter: (url: string) => void
 }
 
-const Filter = ({ endpoint, items }: FilterProps) => {
+const Filter = ({ onChangeFilter, endpoint, items }: FilterProps) => {
   const [params, setParams] = useState<Param[]>([]);
   const [urlParams, setUrlParams] = useState<string>("");
 
   const changeParams = async (param: Param) => {
     const updatedParams = await updateParams(param, params);
     const newUrlParams = await createUrlParams(updatedParams);
+    onChangeFilter(newUrlParams)
 
     setUrlParams(newUrlParams);
     setParams(updatedParams);
+
   };
 
   return (
     <>
-      {urlParams}
       <Stack direction={"row"} spacing={2}>
         {items.map((item, index) => {
           if ((item.type === "text")) {
@@ -44,6 +47,16 @@ const Filter = ({ endpoint, items }: FilterProps) => {
             return (
               <Toggle
                 key={`Toggle-${item.name}-${index}`}
+                label={item.label}
+                name={item.name}
+                onUpdate={changeParams}
+              />
+            );
+          }
+          if (item.type === "slider") {
+            return (
+              <Temperature
+                key={`Slider-${item.name}-${index}`}
                 label={item.label}
                 name={item.name}
                 onUpdate={changeParams}

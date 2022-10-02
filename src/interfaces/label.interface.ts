@@ -1,4 +1,7 @@
-export default interface EtiquetaResponse {
+import { ResponseList } from "./listResponse.interface";
+
+export type LabelResponse =  ResponseList<LabelModel>
+export interface LabelModel {
   id: number,
   quantity: number,
   startCode: string,
