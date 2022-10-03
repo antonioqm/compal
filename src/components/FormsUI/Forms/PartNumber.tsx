@@ -1,11 +1,10 @@
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+import { ptShort } from "yup-locale-pt";
+import styles from "../../../../styles/Login.module.scss";
 import ButtonWrapper from "../../../components/FormsUI/Button/ButtonWrapper";
 import TextfieldWrapper from "../../../components/FormsUI/TextField/TextFieldWrapper";
 import ToggleBottonWrapper from "../../../components/FormsUI/ToggleBotton/ToggleBottonWrapper";
-import { useState } from "react";
-import { ptShort } from "yup-locale-pt";
-import * as Yup from "yup";
-import styles from "../../../../styles/Login.module.scss";
 
 
 const REGEX = {
@@ -55,7 +54,8 @@ export const FormPartNumber = ({action, ...props}:Prop) => {
     ...INITIAL_FORM_STATE,
   }}
   validationSchema={FORM_VALIDATION}
-  onSubmit={(values) => {
+      onSubmit={(values) => {
+      console.log('PART-NUMBER', values)
   }}
 >
   <Form className={styles.formWrapper}>

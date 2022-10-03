@@ -3,14 +3,13 @@ import {
   TableBody,
   TableHead,
   TableRow as TableRowMui,
-  Typography,
+  Typography
 } from '@mui/material';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { setupApiClient } from '../../src/api/api';
-import DialogHistory from '../../src/components/DialogHistory/DialogHistory';
 import DialogRemove from '../../src/components/DialogRemove/DialogRemove';
 import Layout from '../../src/components/Layout';
 import Swipeable from '../../src/components/Swipeable/Swipeable';
@@ -135,7 +134,12 @@ export default function PartNumber() {
                         title={label}
                       >
                         {
-<<<<<<< HEAD
+                          <FormComponent
+                            action={"Update"}
+                            data={{ ...partnumber }}
+                          />
+                        }
+                        {/* {
                           <div>
                             <Swipeable
                               type={"Update"}
@@ -154,13 +158,7 @@ export default function PartNumber() {
                               id={partnumber.id}
                             />
                           </div>
-=======
-                          <FormLabel
-                            action={'Update'}
-                            data={{ ...partnumber }}
-                          />
->>>>>>> 46c09a6dc848aa3fcfa202ce8bfb84dffad5c7f9
-                        }
+                        } */}
                       </Swipeable>
                       <DialogRemove
                         onAction={() => handleDelete(partnumber)}
