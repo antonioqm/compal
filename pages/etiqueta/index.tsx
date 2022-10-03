@@ -17,11 +17,12 @@ import Layout from "../../src/components/Layout";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
-import { LabelModel, LabelResponse } from "../../src/interfaces/label.interface";
-import { currentPage } from "../../src/ROUTES";
 import {
-  useLevelsMutations
-} from "../../src/state/atom";
+  LabelModel,
+  LabelResponse
+} from "../../src/interfaces/label.interface";
+import { currentPage } from "../../src/ROUTES";
+import { useLevelsMutations } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
@@ -40,19 +41,17 @@ export default function Etiqueta() {
   const [hoverAction, setHoverAction] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(1);
 
-
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
 
-  const handleDelete = async (value: LabelModel) => {
-    console.log("handleDelete", value);
+  const onOpenPrinter = async (value: LabelModel) => {
+    console.log("onOpenPrinter", value);
   };
 
-  const [listLabel, setListLabel] = useState<LabelModel[]>([])
+  const [listLabel, setListLabel] = useState<LabelModel[]>([]);
   const [labelResponse, setLabelResponse] = useState<LabelResponse>();
-
 
   const [expanded, setExpanded] = useState<string | false>(false);
   const [page, setPage] = useState<number>(1);
@@ -61,19 +60,22 @@ export default function Etiqueta() {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
-  
-    const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
-      setPage(newPage)
-    }
 
-  useEffect(() => {
+  const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const loadLabelsData = () => {
     listAllModel<LabelResponse>(
       "/etiquetas?orderByDesc=true&page=1&size=10&orderBy=StartCode"
     ).then((response) => {
-      setTotalPages(Math.ceil(response.totalItems / response.pageSize))
-      setLabelResponse(response)
+      setTotalPages(Math.ceil(response.totalItems / response.pageSize));
+      setLabelResponse(response);
       setListLabel(response.result);
     });
+  }
+  useEffect(() => {
+    loadLabelsData()
   }, [page]);
 
   return (
@@ -95,68 +97,77 @@ export default function Etiqueta() {
           {listLabel &&
             listLabel.length > 0 &&
             listLabel.map((etiqueta: LabelModel, index) => (
-             
-                  <TableRow key={etiqueta.id}>
-                    <TableCell component="th" scope="row">
-                      {formatDate(etiqueta.createDate)}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {etiqueta.user}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {etiqueta.quantity}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {etiqueta.startCode}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {etiqueta.endCode}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Chip
-                        size="small"
-                        sx={{
-                          fontSize: "10px",
-                          textTransform: "uppercase",
-                          p: 0,
-                        }}
-                        color={etiqueta.printed ? "success" : "error"}
-                        label={etiqueta.printed ? "sim" : "não"}
-                        icon={
-                          etiqueta.printed ? (
-                            <IconCircleCheck size={16} />
-                          ) : (
-                            <IconCircleX size={16} />
-                          )
-                        }
-                      />
-                    </TableCell>
-                    
-                    <TableCell component="th" scope="row">
-                      {/* <Fade in={hoverAction}> */}
-                        {
-                          <div>
-                      
+              <TableRow key={etiqueta.id}>
+                <TableCell component="th" scope="row">
+                  {formatDate(etiqueta.createDate)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {etiqueta.user}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {etiqueta.quantity}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {etiqueta.startCode}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {etiqueta.endCode}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <Chip
+                    size="small"
+                    sx={{
+                      fontSize: "10px",
+                      textTransform: "uppercase",
+                      p: 0,
+                    }}
+                    color={etiqueta.printed ? "success" : "error"}
+                    label={etiqueta.printed ? "sim" : "não"}
+                    icon={
+                      etiqueta.printed ? (
+                        <IconCircleCheck size={16} />
+                      ) : (
+                        <IconCircleX size={16} />
+                      )
+                    }
+                  />
+                </TableCell>
+
+                <TableCell component="th" scope="row">
+                  {/* <Fade in={hoverAction}> */}
+                  {
+                    <div>
                       <DialogPrinter
-                              etiqueta={etiqueta}
-                              onAction={() => handleDelete(etiqueta)}
-                              id={etiqueta.id}
-                            />
-                          </div>
-                        }
+                        reloadDataLabel={loadLabelsData}
+                        etiqueta={etiqueta}
+                        // onAction={() => onOpenPrinter(etiqueta)}
+                        id={etiqueta.id}
+                      />
+                    </div>
+                  }
                   {/* </Fade> */}
-                  
-                  
-                      
-                    </TableCell>
-              
+                </TableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
-      
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} top={20} marginTop={4}>
-      {((labelResponse && totalPages > 1)) &&  <Pagination shape="rounded" onChange={handlePage} count={totalPages} siblingCount={0} boundaryCount={2} />}
+
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        top={20}
+        marginTop={4}
+      >
+        {labelResponse && totalPages > 1 && (
+          <Pagination
+            shape="rounded"
+            onChange={handlePage}
+            count={totalPages}
+            siblingCount={0}
+            boundaryCount={2}
+          />
+        )}
       </Stack>
     </Layout>
   );

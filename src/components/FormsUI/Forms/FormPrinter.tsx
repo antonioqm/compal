@@ -1,3 +1,15 @@
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  LinearProgress,
+  Stack,
+  Typography
+} from "@mui/material";
+import { IconPrinter, IconX } from "@tabler/icons";
 import { Form, Formik } from "formik";
 import { useState } from "react";
 import * as Yup from "yup";
@@ -12,6 +24,7 @@ import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
 
 interface PrintProps {
   etiqueta: LabelModel;
+  updateDialog: () => void;
 }
 
 interface EtiquetaRequest {
@@ -20,12 +33,13 @@ interface EtiquetaRequest {
   printerInterval: boolean;
 }
 
-export const FormPrinter = ({etiqueta}:PrintProps) => {
+export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
   const { listAllModel, updateModel, createModel } = useLevelsMutations();
-  const [disabledStart, setDisabledStart] =
-    useState<boolean>(false);
-  const [disabledEnd, setDisabledEnd] =
-    useState<boolean>(false);
+  const [disabledStart, setDisabledStart] = useState<boolean>(false);
+  const [disabledEnd, setDisabledEnd] = useState<boolean>(false);
+  const [showMessageSucess, setShowMessageSucess] = useState<boolean>(false);
+  const [printedResponse, setPrintedResponse] = useState<string>("");
+  const [awaitingPrinting, setAwaitingPrinting] = useState<boolean>(false);
 
   const [inventoryTenperatureList, setInventoryTenperatureList] = useState<
     any[]
@@ -33,9 +47,9 @@ export const FormPrinter = ({etiqueta}:PrintProps) => {
   Yup.setLocale(ptShort);
 
   let INITIAL_FORM_STATE: EtiquetaRequest = {
-    start:  etiqueta ? 1 : "",  
+    start: etiqueta ? 1 : "",
     end: etiqueta ? etiqueta.quantity : "",
-    printerInterval: false
+    printerInterval: false,
   };
 
   const FORM_VALIDATION = Yup.object().shape({
@@ -55,8 +69,12 @@ export const FormPrinter = ({etiqueta}:PrintProps) => {
     }
   };
 
+
+
+
   return (
     <>
+     
       <Formik
         initialValues={{
           ...INITIAL_FORM_STATE,
@@ -65,10 +83,20 @@ export const FormPrinter = ({etiqueta}:PrintProps) => {
         validationSchema={FORM_VALIDATION}
         onSubmit={async (etiquetaRequest: EtiquetaRequest) => {
           console.log("values", etiquetaRequest);
-          const printedResponse = await apiClient.get(`etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}`)
-          console.log(printedResponse);
+          try {
+            setAwaitingPrinting(true);
+            const printedResponse = await apiClient.get(
+              `etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}`
+            );
+            setAwaitingPrinting(false);
+            setShowMessageSucess(true);
+            setPrintedResponse(printedResponse.message);
+          } catch (e: any) {
+            setShowMessageSucess(false);
+          }
         }}
       >
+        {/* {showMessageSucess && <Typography>{printedResponse}</Typography>} */}
         {({
           values,
           errors,
@@ -78,19 +106,79 @@ export const FormPrinter = ({etiqueta}:PrintProps) => {
           setFieldValue,
           resetForm,
         }) => (
-          <Form className={styles.formWrapper}>
-            <ToggleBottonWrapper
-              name="printerInterval"
-              legend="Quantidade de códigos"
-              data={[
-                { label: "Todas", value: true },
-                { label: "Intervalo", value: false },
-              ]}
-            />
-            <TextfieldWrapper type="number"  inputProps={{ min: 1, step: 1, max: values.end }} disabled={disabledStart} name={"start"} label={"Inicial"} />
-            <TextfieldWrapper type="number"  inputProps={{ min: 1, step: 1, max: values.end }} disabled={disabledEnd} name={"end"}  label={"Final"} />
-            <ButtonWrapper fixed>Imprimir</ButtonWrapper>
-          </Form>
+          <>          
+            {!showMessageSucess && (
+              <DialogTitle id="alert-dialog-title">
+                {" "}
+                <IconButton disableRipple>
+                  <IconPrinter />
+                </IconButton>{" "}
+                {`Imprimir `}
+              </DialogTitle>
+            )}
+            <DialogContent sx={{ p: 0 }}>
+              <Box sx={{ px: 4, pt: 0, pb: showMessageSucess ? 0 : 4 }}>
+                <Form className={styles.formWrapper}>
+                  {/* <FormPrinter etiqueta={etiqueta}  /> */}
+
+                  {showMessageSucess && !awaitingPrinting && (
+                    <Alert closeText="fechar" sx={{ p: 5 }} severity="info">
+                      <IconButton
+                        onClick={() => {
+                          updateDialog();
+                          setShowMessageSucess(false);
+                        }}
+                        sx={{ position: "absolute", top: 16, right: 16 }}
+                      >
+                        {" "}
+                        <IconX />{" "}
+                      </IconButton>
+                      <AlertTitle>Finalizado</AlertTitle>
+                      {printedResponse}
+                    </Alert>
+                  )}
+
+                  {!showMessageSucess && !awaitingPrinting && (
+                    <>
+                      <ToggleBottonWrapper
+                        name="printerInterval"
+                        legend="Quantidade de códigos"
+                        data={[
+                          { label: "Todas", value: true },
+                          { label: "Intervalo", value: false },
+                        ]}
+                      />
+                      <TextfieldWrapper
+                        type="number"
+                        inputProps={{ min: 1, step: 1, max: values.end }}
+                        disabled={disabledStart}
+                        name={"start"}
+                        label={"Inicial"}
+                      />
+                      <TextfieldWrapper
+                        type="number"
+                        inputProps={{ min: 1, step: 1, max: values.end }}
+                        disabled={disabledEnd}
+                        name={"end"}
+                        label={"Final"}
+                      />
+                      <ButtonWrapper disableElevation>Imprimir</ButtonWrapper>
+                    </>
+                  )}
+                  {awaitingPrinting && (
+                    <Box sx={{ width: "100%", p: 4 }}>
+                      <Stack direction={'column'} spacing={2}>
+                      <Typography  variant="overline">Imprimindo</Typography>
+                      <LinearProgress color="info" />
+
+                      </Stack>
+                    </Box>
+                  )}
+                </Form>
+              </Box>
+            </DialogContent>
+            {/* <DialogActions sx={{}}></DialogActions> */}
+          </>
         )}
       </Formik>
     </>
