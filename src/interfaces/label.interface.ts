@@ -11,3 +11,8 @@ export interface LabelModel {
   updateDate: string,
   user?: string | null;
 }
+
+
+export interface Label {
+	quantity: number,
+}

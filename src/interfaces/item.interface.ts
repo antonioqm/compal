@@ -3,7 +3,8 @@ import { ResponseList } from "./listResponse.interface";
 export  type ItemResponse =  ResponseList<ItemModel>
 export interface ItemModel {
   id: number;
-  codeLabel: number;
+  codeLabel: string;
+  partNumber: string
   createdDate: string;
   feederCar: string;
   responsibleForExposition: string;

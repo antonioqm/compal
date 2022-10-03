@@ -1,118 +1,49 @@
-import { Formik, Form, useFormikContext, FieldArray } from "formik";
-import ButtonWrapper from "../../../components/FormsUI/Button/ButtonWrapper";
-import TextfieldWrapper from "../../../components/FormsUI/TextField/TextFieldWrapper";
-import ToggleBottonWrapper from "../../../components/FormsUI/ToggleBotton/ToggleBottonWrapper";
-import { useEffect, useState } from "react";
-import { ptShort } from "yup-locale-pt";
+import { Form, Formik } from "formik";
+import { Box } from "@mui/material";
 import * as Yup from "yup";
+import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
-import Select from "../../../components/FormsUI/Select/SelectWrapper";
-import { Typography } from "@mui/material";
 import { useLevelsMutations } from "../../../state/atom";
+import ButtonWrapper from "../Button/ButtonWrapper";
+import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import Label from "../../../interfaces/etiqueta.interface";
 
-interface Prop {
-  action?: "create" | "read" | "update" | "delete";
+interface FormLabelPropProp {
+  action?: "Create";
+  data?: any;
 }
 
-export interface Inventory {
-  typeInventoryId: number;
-  codeInventory: string;
-  description: string;
-  temperature: number;
-}
-
-export interface InventoryTypes{
-    id: number,
-		description: string,
-		temperatureAllowed: boolean,
-		temperatureRequired: boolean,
-}
-
-export interface InventoryTypesList{
-  id: number,
-  name: string
-}
-
-
-export const FormLabel = ({ action, ...props }: Prop) => {
-  const {listAllModel } = useLevelsMutations();
-  const [disabledTemperature, setDisabledTemperature] = useState<boolean>(true);
-  const [inventoryTypesList, setInventoryTypesList] = useState<InventoryTypesList[]>([]);
-   
+export const FormLabel = ({ data }: FormLabelPropProp) => {
+  const INITIAL_FORM_STATE = { ...data }
   Yup.setLocale(ptShort);
-  const INITIAL_FORM_STATE = {
-    typeInventoryId: "",
-    codeInventory: "",
-    description: "",
-    temperature: "",
-  };
-
-  
   const FORM_VALIDATION = Yup.object().shape({
-
+    quantity: Yup
+      .number()
+      .positive()
+      .min(1)
+      .max(500)
+      .required()
+      .typeError("Informe uma quantidade válida"),
   });
-
-  // const validate = (values: Inventory) => {
-  //   if (Number(values.type) === 4) {
-  //     setDisabledTemperature(false);
-  //   } else {
-  //     setDisabledTemperature(true);
-  //   }
-  // };
-
-  useEffect(() => {
-    listAllModel<InventoryTypes[]>('inventario/tipos').then((result) => {
-      console.log(result);
-      const newInventorytypeslist = result.map(type => {
-        return {
-          name: type.description,
-          id: type.id
-        }
-      })
-      setInventoryTypesList(newInventorytypeslist);
-
-     })
-
-  }, [])
+  const { createModel } = useLevelsMutations();
   return (
     <>
+      <Box sx={{ bgcolor: "orange", height: "100%", width: "100%" }}></Box>
       <Formik
-        initialValues={{
-          ...INITIAL_FORM_STATE,
-        }}
-        validate={(values: any) => {}}
+        initialValues={INITIAL_FORM_STATE}
         validationSchema={FORM_VALIDATION}
-        onSubmit={(values) => {
-          // console.log(values, "values print");
+        onSubmit={async (values: Label ) => {
+          await createModel<Label>({ endpoint: "etiquetas", payload: values });
         }}
       >
-        {({
-          values,
-          errors,
-          isSubmitting,
-          isValid,
-          setValues,
-          setFieldValue,
-          resetForm
-        }) => (
-          <Form className={styles.formWrapper}>
-            <Select
-              disabled={false}
-              items={inventoryTypesList}
-              name={"typeInventoryId"}
-              label={"Tipo"}
-            />
-           
-
-            <TextfieldWrapper name={"codeInventory"} label={"Código"} />
-            <TextfieldWrapper name={"description"} label={"Descrição"} />
-            <TextfieldWrapper name={"temperature"} label={"Temperatura"} type="number" />
-
-          
-
-            <ButtonWrapper fixed>{"enviar"}</ButtonWrapper>
-          </Form>
-        )}
+        <Form className={styles.formWrapper}>
+          <TextfieldWrapper
+            name={"quantity"}
+            label={"Quantidade"}
+            type={"number"}
+          />
+          <ButtonWrapper fixed>Criar</ButtonWrapper>
+        </Form>
       </Formik>
     </>
   );

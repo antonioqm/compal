@@ -11,6 +11,7 @@ import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { setupApiClient } from "../../src/api/api";
 import DialogPrinter from "../../src/components/DialogPrinter/DialogPrinter";
 import Layout from "../../src/components/Layout";
@@ -22,7 +23,10 @@ import {
   LabelResponse
 } from "../../src/interfaces/label.interface";
 import { currentPage } from "../../src/ROUTES";
-import { useLevelsMutations } from "../../src/state/atom";
+import {
+  ResponseState,
+  useLevelsMutations
+} from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
@@ -38,13 +42,14 @@ const header = [
 export default function Etiqueta() {
   // const listLabel: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   // const [model, setModel] = useRecoilState(modelState);
+  const [changes,] = useRecoilState(ResponseState)
   const [hoverAction, setHoverAction] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(1);
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
 
-  const { listAllModel } = useLevelsMutations();
+  const { listAllModel,  } = useLevelsMutations();
 
   const onOpenPrinter = async (value: LabelModel) => {
     console.log("onOpenPrinter", value);

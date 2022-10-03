@@ -35,14 +35,6 @@ export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) =
     lineName: Yup.string().required().min(2),
   });
 
-  const formik = useFormik({
-    initialValues: INITIAL_FORM_STATE,
-    validationSchema: FORM_VALIDATION,
-    onSubmit: (values: any) => {
-      alert(JSON.stringify(values, null, 2));
-    },
-  });
-  // console.log("data in form", data)
   
   const { updateModel, createModel } = useLevelsMutations();
   
