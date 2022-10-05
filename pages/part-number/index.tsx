@@ -2,8 +2,7 @@ import {
   Chip,
   TableBody,
   TableHead,
-  TableRow as TableRowMui,
-  Typography
+  TableRow as TableRowMui
 } from '@mui/material';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons';
 import type { GetServerSideProps } from 'next';
@@ -11,6 +10,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { setupApiClient } from '../../src/api/api';
 import DialogRemove from '../../src/components/DialogRemove/DialogRemove';
+import Filter from '../../src/components/Filter/Filter';
+import { ItemFilter } from "../../src/components/Filter/interfaces/Item.interface";
 import Layout from '../../src/components/Layout';
 import Swipeable from '../../src/components/Swipeable/Swipeable';
 import Table from '../../src/components/Table/Table';
@@ -20,6 +21,7 @@ import PartNumberResponse from '../../src/interfaces/partnumber.interface';
 import { currentPage } from '../../src/ROUTES';
 import { useLevelsMutations } from '../../src/state/atom';
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
+
 
 const header = [
   'Código',
@@ -32,10 +34,72 @@ const header = [
   'Nível',
 ];
 
+
+
+const partnumberFilter: ItemFilter[] = [
+  {
+    name: 'CodePartNumber',
+    label: 'Código',
+    type: 'text'
+  },
+  {
+    name: 'HumiditySensitivity',
+    label: 'SENSIBILIDADE À UMIDADE',
+    type: 'radio'
+  },
+  {
+    name: 'Temperature',
+    label: 'Temperatura',
+    type: 'slider'
+  },
+  {
+    name: 'NumberMaxBacking',
+    label: 'Número Máximo de Baking',
+    type: 'text'
+  },
+  {
+    name: 'MinimumTime',
+    label: 'Tempo minimo de exposicao',
+    type: 'text'
+  },
+  {
+    name: 'MaxTimeExposure',
+    label: 'Tempo maximo de exposicao',
+    type: 'text'
+  },
+  {
+    name: 'CreateDate',
+    label: 'Criado em',
+    type: 'text'
+  },
+  {
+    name: 'UpdateDate',
+    label: 'Atualizado em',
+    type: 'text'
+  },
+  {
+    name: 'ThicknessModel',
+    label: 'Espessura',
+    type: 'text'
+  },
+  {
+    name: 'Level',
+    label: 'Nível',
+    type: 'text'
+  },
+  {
+    name: 'User',
+    label: 'Usuário',
+    type: 'text'
+  },
+]
+
 export default function PartNumber() {
   // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   // const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);
+  const [urlFilter, setUrlFilter] = useState<string>('');
+  
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
@@ -54,10 +118,14 @@ export default function PartNumber() {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
+  
+    const updateUrlFilters = (url: string) => {
+      setUrlFilter(url)
+    }
 
   useEffect(() => {
     listAllModel<{ result: PartNumberResponse[] }>(
-      '/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10'
+      `/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10${urlFilter}`
     ).then(({ result }) => {
       setListItem(result);
     });
@@ -65,7 +133,9 @@ export default function PartNumber() {
 
   return (
     <Layout title="Home">
-      <Typography variant="h1"></Typography>
+      <Filter onChangeFilter={updateUrlFilters} items={partnumberFilter}  endpoint='itens-expostos' />
+
+
       <Table>
         <TableHead>
           <TableRowMui sx={{ boxShadow: 'none', background: 'transparent' }}>
@@ -106,7 +176,7 @@ export default function PartNumber() {
                   />
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {partnumber.thickness}
+                  {partnumber.thickness.thicknessName}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {partnumber.temperature}
@@ -126,45 +196,26 @@ export default function PartNumber() {
 
                 <TableCell component="th" scope="row">
                   {/* <Fade in={hoverAction}> */}
-                  {
-                    <div>
-                      <Swipeable
-                        type={'Update'}
-                        tooltipLabel={`Atualizar ${label}`}
-                        title={label}
-                      >
-                        {
-                          <FormComponent
-                            action={"Update"}
-                            data={{ ...partnumber }}
-                          />
-                        }
-                        {/* {
-                          <div>
-                            <Swipeable
-                              type={"Update"}
-                              tooltipLabel={`Atualizar ${label}`}
-                              title={label}
-                            >
-                              {
-                                <FormComponent
-                                  action={"Update"}
-                                  data={{ ...partnumber }}
-                                />
-                              }
-                            </Swipeable>
-                            <DialogRemove
-                              onAction={() => handleDelete(partnumber)}
-                              id={partnumber.id}
-                            />
-                          </div>
-                        } */}
-                      </Swipeable>
-                      <DialogRemove
-                        onAction={() => handleDelete(partnumber)}
-                        id={partnumber.id}
-                      />
-                    </div>
+
+                  {<>
+                    <Swipeable
+                      type={'Update'}
+                      tooltipLabel={`Atualizar ${label}`}
+                      title={label}
+                    >
+                      
+                        <FormComponent
+                          action={"Update"}
+                          data={{ ...partnumber }}
+                        />
+                      
+                     
+                    </Swipeable>
+                    <DialogRemove
+                      onAction={() => handleDelete(partnumber)}
+                      id={partnumber.id}
+                    />
+                  </>
                   }
                 </TableCell>
               </TableRow>

@@ -3,7 +3,7 @@ import { Form, Formik, useFormik } from "formik";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
-import { Level } from "../../../interfaces/level.interface";
+import { LevelModel } from "../../../interfaces/level.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
@@ -58,14 +58,14 @@ export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: Level ) => {
+        onSubmit={async (values: LevelModel ) => {
           const { id } = values;
           action === "Update" && id
-            ? await updateModel<Level>({
+            ? await updateModel<LevelModel>({
                 endpoint: "nivel",
                 payload: { ...values, id },
               })
-            : await createModel<Level>({ endpoint: "nivel", payload: values });
+            : await createModel<LevelModel>({ endpoint: "nivel", payload: values });
         }}
       >
         <Form className={styles.formWrapper}>

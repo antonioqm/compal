@@ -5,7 +5,8 @@ import {
   Stack,
   TableBody,
   TableHead,
-  TableRow as TableRowMui
+  TableRow as TableRowMui,
+  Typography
 } from "@mui/material";
 import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from 'next';
@@ -16,7 +17,7 @@ import { apiClient, setupApiClient } from '../../src/api/api';
 import DialogHistory from '../../src/components/DialogHistory/DialogHistory';
 import DialogRemove from '../../src/components/DialogRemove/DialogRemove';
 import Filter from "../../src/components/Filter/Filter";
-import { Item } from "../../src/components/Filter/interfaces/Item.interface";
+import { ItemFilter } from "../../src/components/Filter/interfaces/Item.interface";
 import Layout from '../../src/components/Layout';
 import { ProgressBar } from "../../src/components/Progress/Progress";
 import Swipeable from "../../src/components/Swipeable/Swipeable";
@@ -31,6 +32,7 @@ import {
   useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate } from '../../src/utils/format';
+import { getStatusItem } from "../../src/utils/statusItems";
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
 const header = [
@@ -51,7 +53,7 @@ const historyHeader = [
 
 
 
-const itemsFilter: Item[] = [
+const itemsFilter: ItemFilter[] = [
   { name: 'feederCar',
     label: 'Feeder Car',
     type: 'text'
@@ -171,6 +173,7 @@ export default function Itens() {
                       width: '100%',
                     }}
                   >
+                    <Typography variant="overline">{ getStatusItem( 2, 80)}</Typography>
                     <span style={{ padding: '0 8px' }}>
                       {Math.ceil(
                         item.percentExposition < 100

@@ -1,7 +1,4 @@
-import {
-  Button, ButtonProps, Fade,
-  FormControl
-} from "@mui/material";
+import { Button, ButtonProps, Fade, FormControl } from "@mui/material";
 import { useFormikContext } from "formik";
 import React from "react";
 
@@ -10,7 +7,12 @@ interface Prop extends ButtonProps {
   children?: React.ReactElement | string;
   height?: number;
 }
-const ButtonWrapper = ({ height = 56, fixed, children, ...otherProps }: Prop) => {
+const ButtonWrapper = ({
+  height = 56,
+  fixed,
+  children,
+  ...otherProps
+}: Prop) => {
   const { submitForm, isValid } = useFormikContext();
 
   const handleSubmit = () => {
@@ -44,7 +46,7 @@ const ButtonWrapper = ({ height = 56, fixed, children, ...otherProps }: Prop) =>
       >
         <Button
           {...otherProps}
-          sx={{height: height, color: 'white'}}
+          sx={{ height: height, color: "white" }}
           disabled={!isValid}
           variant="contained"
           fullWidth

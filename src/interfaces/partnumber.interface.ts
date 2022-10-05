@@ -2,7 +2,7 @@ export default interface PartNumberResponse {
   id: number,
   codePartNumber: string,
   humiditySensitivity: boolean,
-  thickness: string,
+  thickness: {thicknessName: string},
   temperature: number,
   numberMaxBacking: number,
   minimumTime: number,
