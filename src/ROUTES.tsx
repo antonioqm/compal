@@ -1,13 +1,11 @@
 import { JSXElementConstructor } from "react";
-import { InventoryIcon, ItemsIcon, LabelIcon, LevelIcon, PartNumberIcon, ProductionIcon, ThicknessIcon } from "./components/icons/icons";
+import { ComponentIcon, InventoryIcon, ItemsIcon, LabelIcon, LevelIcon, ThicknessIcon } from "./components/icons/icons";
 
+import { FormComponent } from "./components/FormsUI/Forms/FormComponent";
 import { FormInventory } from "./components/FormsUI/Forms/FormInventory";
-import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
-import { FormPrinter } from "./components/FormsUI/Forms/FormPrinter";
 import { FormLabel } from "./components/FormsUI/Forms/FormLabel";
-import { FormProducao } from "./components/FormsUI/Forms/FormProducao";
+import { FormLevel } from "./components/FormsUI/Forms/FormLevel";
 import { FormThickness } from "./components/FormsUI/Forms/FormThickness";
-import { FormPartNumber } from "./components/FormsUI/Forms/PartNumber";
 
 
 
@@ -53,11 +51,11 @@ export const ROUTES: PageRouter[] = [
     FormComponent: FormThickness,
   },
   {
-    path: "/part-number",
-    label: "Part Number",
+    path: "/componente",
+    label: "componente",
     addButton: true,
-    IconComponent: PartNumberIcon,
-    FormComponent: FormPartNumber,
+    IconComponent: ComponentIcon,
+    FormComponent: FormComponent,
   },
   {
     path: "/itens",
@@ -81,11 +79,11 @@ export const ROUTES: PageRouter[] = [
     FormComponent: FormLabel,
   },
 
-  {
-    path: "/linha-producao",
-    label: "Linha de produção",
-    addButton: true,
-    IconComponent: ProductionIcon,
-    FormComponent: FormProducao,
-  }
+  // {
+  //   path: "/linha-producao",
+  //   label: "Linha de produção",
+  //   addButton: true,
+  //   IconComponent: ProductionIcon,
+  //   FormComponent: FormProducao,
+  // }
 ];

@@ -19,7 +19,7 @@ const keyFields = [
 ]
 
 const header = [
-  {thicknessName: 'Nome da Espessura'},
+  {thicknessName: 'Espessura'},
   {level: 'Nível'},
   { minTimeBaking40: 'Tempo mínimo de Baking 40º (Horas)' },
   {minTimeBaking90: 'Tempo mínimo de Baking 90º (Horas)'},
@@ -60,6 +60,7 @@ export default function Espessura() {
     <Layout title='Home' >
       <Typography variant='h1'></Typography>
       <Table
+        endpoint={'part-number'}
         header={header}
         body={listThickness}
         nameKeys={keyFields}

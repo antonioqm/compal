@@ -66,8 +66,8 @@ export default ({
             <em>Nenhum</em>
           </MenuItem>
           {
-            items.map((value:any ) => {
-              return <MenuItem key={value.id} value={value.id}>{value.name}</MenuItem>
+            items.map((value:{id:number, name:string} ) => {
+              return <MenuItem key={value.id+value.name} value={value.id}>{value.name}</MenuItem>
             })
           }
         </Select>

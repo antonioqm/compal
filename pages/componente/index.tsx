@@ -1,10 +1,8 @@
 import {
-  Chip,
   TableBody,
   TableHead,
   TableRow as TableRowMui
 } from '@mui/material';
-import { IconCircleCheck, IconCircleX } from '@tabler/icons';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -17,20 +15,20 @@ import Swipeable from '../../src/components/Swipeable/Swipeable';
 import Table from '../../src/components/Table/Table';
 import { TableCell } from '../../src/components/Table/TableCell';
 import { TableRow } from '../../src/components/Table/TableRow';
-import PartNumberResponse from '../../src/interfaces/partnumber.interface';
+import { ComponentResponse } from '../../src/interfaces/component.interface';
 import { currentPage } from '../../src/ROUTES';
 import { useLevelsMutations } from '../../src/state/atom';
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
 
 const header = [
-  'Código',
-  'Sensibilidade à umidade',
+  'Part-number',
+  // 'Sensibilidade à umidade',
   'Espessura',
-  'Temperatura',
-  'Número max de Backing',
-  'Tempo mínimo',
-  'Tempo máximo',
+  // 'Temperatura',
+  // 'Número max de Backing',
+  // 'Tempo mínimo',
+  // 'Tempo máximo',
   'Nível',
 ];
 
@@ -39,44 +37,44 @@ const header = [
 const partnumberFilter: ItemFilter[] = [
   {
     name: 'CodePartNumber',
-    label: 'Código',
+    label: 'Part-Number',
     type: 'text'
   },
-  {
-    name: 'HumiditySensitivity',
-    label: 'SENSIBILIDADE À UMIDADE',
-    type: 'radio'
-  },
-  {
-    name: 'Temperature',
-    label: 'Temperatura',
-    type: 'slider'
-  },
+  // {
+  //   name: 'HumiditySensitivity',
+  //   label: 'SENSIBILIDADE À UMIDADE',
+  //   type: 'radio'
+  // },
+  // {
+  //   name: 'Temperature',
+  //   label: 'Temperatura',
+  //   type: 'slider'
+  // },
   {
     name: 'NumberMaxBacking',
     label: 'Número Máximo de Baking',
     type: 'text'
   },
-  {
-    name: 'MinimumTime',
-    label: 'Tempo minimo de exposicao',
-    type: 'text'
-  },
-  {
-    name: 'MaxTimeExposure',
-    label: 'Tempo maximo de exposicao',
-    type: 'text'
-  },
-  {
-    name: 'CreateDate',
-    label: 'Criado em',
-    type: 'text'
-  },
-  {
-    name: 'UpdateDate',
-    label: 'Atualizado em',
-    type: 'text'
-  },
+  // {
+  //   name: 'MinimumTime',
+  //   label: 'Tempo minimo de exposicao',
+  //   type: 'text'
+  // },
+  // {
+  //   name: 'MaxTimeExposure',
+  //   label: 'Tempo maximo de exposicao',
+  //   type: 'text'
+  // },
+  // {
+  //   name: 'CreateDate',
+  //   label: 'Criado em',
+  //   type: 'text'
+  // },
+  // {
+  //   name: 'UpdateDate',
+  //   label: 'Atualizado em',
+  //   type: 'text'
+  // },
   {
     name: 'ThicknessModel',
     label: 'Espessura',
@@ -94,7 +92,11 @@ const partnumberFilter: ItemFilter[] = [
   },
 ]
 
+
+
+
 export default function PartNumber() {
+  
   // const listItem: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
   // const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);
@@ -106,11 +108,11 @@ export default function PartNumber() {
 
   const { listAllModel } = useLevelsMutations();
 
-  const handleDelete = async (value: PartNumberResponse) => {
+  const handleDelete = async (value: ComponentResponse) => {
     console.log('handleDelete', value);
   };
 
-  const [listItem, setListItem] = useState<PartNumberResponse[]>([]);
+  const [listItem, setListItem] = useState<ComponentResponse[]>([]);
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -124,12 +126,13 @@ export default function PartNumber() {
     }
 
   useEffect(() => {
-    listAllModel<{ result: PartNumberResponse[] }>(
+    listAllModel<{ result: any[] }>(
       `/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10${urlFilter}`
     ).then(({ result }) => {
       setListItem(result);
     });
   }, []);
+
 
   return (
     <Layout title="Home">
@@ -151,12 +154,12 @@ export default function PartNumber() {
         <TableBody>
           {listItem &&
             listItem.length > 0 &&
-            listItem.map((partnumber: PartNumberResponse, index) => (
+            listItem.map((partnumber: any, index) => (
               <TableRow key={partnumber.id}>
                 <TableCell component="th" scope="row">
                   {partnumber.codePartNumber}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                {/* <TableCell component="th" scope="row">
                   <Chip
                     size="small"
                     sx={{
@@ -174,22 +177,22 @@ export default function PartNumber() {
                       )
                     }
                   />
-                </TableCell>
+                </TableCell> */}
                 <TableCell component="th" scope="row">
                   {partnumber.thickness.thicknessName}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                {/* <TableCell component="th" scope="row">
                   {partnumber.temperature}
-                </TableCell>
+                </TableCell> */}
                 <TableCell component="th" scope="row">
                   {partnumber.numberMaxBacking}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                {/* <TableCell component="th" scope="row">
                   {partnumber.minimumTime}
-                </TableCell>
-                <TableCell component="th" scope="row">
+                </TableCell> */}
+                {/* <TableCell component="th" scope="row">
                   {partnumber.maxTimeExposure}
-                </TableCell>
+                </TableCell> */}
                 <TableCell component="th" scope="row">
                   {partnumber.level}
                 </TableCell>

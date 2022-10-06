@@ -13,6 +13,7 @@ import SealingMachineImage from '../../../public/icons/sealingMachine.svg'
 import ThicknessImage from '../../../public/icons/thickness.svg'
 import TrashImage from '../../../public/icons/trash.svg'
 
+
 export const ThicknessIcon = ({...props}) => {
   return <ThicknessImage {...props} />
 }

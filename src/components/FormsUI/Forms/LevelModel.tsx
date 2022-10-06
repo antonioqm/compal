@@ -6,7 +6,7 @@ import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { apiClient } from "../../../api/api";
 import Select from "../../../components/FormsUI/Select/SelectWrapper";
-import { LevelModel } from "../../../interfaces/level.interface";
+import { Level } from "../../../interfaces/level.interface";
 import { Thickness } from "../../../interfaces/thickness.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
@@ -61,9 +61,9 @@ export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
   const [listLevel, setListLevel] = useState<levelItemSelect[]>([])
 
   useLayoutEffect(() => {
-    apiClient.listAll<{ result: LevelModel[] }>("nivel/?orderBy=levelName").then(
+    apiClient.listAll<{ result: Level[] }>("nivel/?orderBy=levelName").then(
       ({ result }) => {
-        const itemSelect = result.map((item:LevelModel) => {
+        const itemSelect = result.map((item:Level) => {
           return { id: item.id!, name: item.levelName}
         })
         setListLevel(itemSelect)
