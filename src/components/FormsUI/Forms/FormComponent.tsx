@@ -32,7 +32,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
 
   Yup.setLocale(ptShort);
   
-  const filedsClean: ComponentRequest & { id: number } = {
+  const filedsClean: ComponentRequest = {
     id: 0,
     codePartNumber: "",
     humiditySensitivity: null,
@@ -101,9 +101,9 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
 
   return (
     <Formik
-      initialValues={{
-        ...INITIAL_FORM_STATE,
-      }}
+      initialValues={
+        INITIAL_FORM_STATE
+      }
       validationSchema={FORM_VALIDATION}
       // onSubmit={async (values: Thickness) => {
       //   console.log("action type ", action)
@@ -116,7 +116,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
       //     : await createModel<Thickness>({ endpoint: "espessura", payload: values });
       // }}
 
-      onSubmit={async (values: ComponentRequest &{id:number}) => {
+      onSubmit={async (values:any) => {
         console.log("ComponentRequest", values);
 
         if (action === "Update") {

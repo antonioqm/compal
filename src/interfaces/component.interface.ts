@@ -19,7 +19,7 @@ export interface ComponentModel {
   user: string
 }
 export interface ComponentRequest {
-  id?: number;
+  id: number;
   codePartNumber: string,
   humiditySensitivity: boolean | null,
   maxTimeExposure: number,
