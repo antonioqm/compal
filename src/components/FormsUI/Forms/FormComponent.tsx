@@ -57,7 +57,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     } : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    codePartNumber: Yup.string().required().min(14),
+    codePartNumber: Yup.string().required().min(5).max(25),
     // .matches(REGEX.PART_NUMBER.REGEX, REGEX.PART_NUMBER.MESSAGE),
     humiditySensitivity: Yup.boolean().required(),
     maxTimeExposure: Yup.number().positive().required(),

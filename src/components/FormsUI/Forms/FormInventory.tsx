@@ -115,7 +115,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
                 endpoint: "inventario",
                 payload: { ...values, id },
               })
-            : await createModel<Inventory>({ endpoint: "nivel", payload: values });
+            : await createModel<Inventory>({ endpoint: "inventario", payload: values });
         }}
       >
         {({
