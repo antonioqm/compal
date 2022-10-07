@@ -43,9 +43,6 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     thicknessId: 0,
   };
   
-
-  
-  console.log('chegou aqui---->', data)
   
   const INITIAL_FORM_STATE = data ?
     {
@@ -59,7 +56,6 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
       thicknessId: data.thickness.id,
     } : filedsClean;
 
-    console.log('TRANSFORMOU INITIAL_FORM_STATE---->', INITIAL_FORM_STATE)
   const FORM_VALIDATION = Yup.object().shape({
     codePartNumber: Yup.string().required().min(14),
     // .matches(REGEX.PART_NUMBER.REGEX, REGEX.PART_NUMBER.MESSAGE),
