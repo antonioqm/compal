@@ -93,17 +93,17 @@ console.log('formThickness', data)
         }}
       >
         <Form className={styles.formWrapper}>
-          <TextfieldWrapper
+          {/* <TextfieldWrapper
             name={"thicknessName"}
             label={"Título"}
-          />
+          /> */}
+          <TextfieldWrapper name={"thicknessName"} label={"Espessura (≤)"} />
           <Select
               items={listLevel}
               type="number"
               name={"levelId"}
               label={"Nível"}
             />
-          <TextfieldWrapper name={"thicknessName"} label={"Espessura (≤)"} />
           <TextfieldWrapper
             type="number"
             inputProps={{ min: 0, step: 1 }}

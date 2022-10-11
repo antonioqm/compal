@@ -5,12 +5,11 @@ import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { apiClient } from "../../../api/api";
 import { ComponentModel, ComponentRequest } from "../../../interfaces/component.interface";
-import { Thickness } from "../../../interfaces/thickness.interface";
+import { ThicknessModel } from "../../../interfaces/thickness.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import Select from "../Select/SelectWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
-import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
 
 const REGEX = {
   PART_NUMBER: {
@@ -35,7 +34,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
   const filedsClean: ComponentRequest = {
     id: 0,
     codePartNumber: "",
-    humiditySensitivity: null,
+    // humiditySensitivity: null,
     maxTimeExposure: 0,
     minimumTime: 0,
     numberMaxBacking: 0,
@@ -48,7 +47,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     {
       id: data.id,
       codePartNumber: data.codePartNumber,
-      humiditySensitivity: data.humiditySensitivity,
+      // humiditySensitivity: data.humiditySensitivity,
       maxTimeExposure: data.maxTimeExposure,
       minimumTime: data.minimumTime,
       numberMaxBacking: data.numberMaxBacking,
@@ -59,7 +58,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
   const FORM_VALIDATION = Yup.object().shape({
     codePartNumber: Yup.string().required().min(5).max(25),
     // .matches(REGEX.PART_NUMBER.REGEX, REGEX.PART_NUMBER.MESSAGE),
-    humiditySensitivity: Yup.boolean().required(),
+    // humiditySensitivity: Yup.boolean().required(),
     maxTimeExposure: Yup.number().positive().required(),
     minimumTime: Yup.number().positive().required(),
     numberMaxBacking: Yup.number().positive().required(),
@@ -85,9 +84,9 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
 
   useLayoutEffect(() => {
     apiClient
-      .listAll<{ result: Thickness[] }>("espessura/?orderBy=thicknessName")
+      .listAll<{ result: ThicknessModel[] }>("espessura/?orderBy=thicknessName")
       .then(({ result }) => {
-        const thicknessItems = result.map((item: Thickness) => {
+        const thicknessItems = result.map((item: ThicknessModel) => {
           return { id: item.id!, name: item.thicknessName };
         });
         setListThickness(thicknessItems);
@@ -137,14 +136,14 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
           name={"codePartNumber"}
           label={"Partnumber"}
         />
-        <ToggleBottonWrapper
+        {/* <ToggleBottonWrapper
           name="humiditySensitivity"
           legend="Sensibilidade à umidade?"
           data={[
             { label: "Sim", value: true },
             { label: "Não", value: false },
           ]}
-        />
+        /> */}
 
         <Select items={listThickness} name={"thicknessId"} label={"Espessura"} />
 

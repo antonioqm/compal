@@ -1,4 +1,6 @@
 import {
+  Pagination,
+  Stack,
   TableBody,
   TableHead,
   TableRow as TableRowMui
@@ -15,7 +17,7 @@ import Swipeable from '../../src/components/Swipeable/Swipeable';
 import Table from '../../src/components/Table/Table';
 import { TableCell } from '../../src/components/Table/TableCell';
 import { TableRow } from '../../src/components/Table/TableRow';
-import { ComponentResponse } from '../../src/interfaces/component.interface';
+import { ComponentModel, ComponentResponse } from '../../src/interfaces/component.interface';
 import { currentPage } from '../../src/ROUTES';
 import { useLevelsMutations } from '../../src/state/atom';
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
@@ -101,6 +103,8 @@ export default function PartNumber() {
   // const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);
   const [urlFilter, setUrlFilter] = useState<string>('');
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
   
 
   const router = useRouter();
@@ -112,7 +116,7 @@ export default function PartNumber() {
     console.log('handleDelete', value);
   };
 
-  const [listItem, setListItem] = useState<ComponentResponse[]>([]);
+  const [listItem, setListItem] = useState<ComponentModel[]>([]);
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -124,12 +128,17 @@ export default function PartNumber() {
     const updateUrlFilters = (url: string) => {
       setUrlFilter(url)
     }
+    const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
+      setPage(newPage);
+    };
 
   useEffect(() => {
-    listAllModel<{ result: any[] }>(
+    listAllModel<ComponentResponse>(
       `/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10${urlFilter}`
-    ).then(({ result }) => {
-      setListItem(result);
+    ).then((data) => {
+      setListItem(data.result);
+      setPage(data.pageSize)
+      setTotalPages(data.totalPages)
     });
   }, []);
 
@@ -224,7 +233,24 @@ export default function PartNumber() {
               </TableRow>
             ))}
         </TableBody>
+        
       </Table>
+        <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        top={20}
+        marginTop={4}
+      >
+
+       <Pagination
+            shape="rounded"
+            onChange={handlePage}
+            count={totalPages}
+            siblingCount={0}
+            boundaryCount={2}
+      />
+      </Stack>
     </Layout>
   );
 }

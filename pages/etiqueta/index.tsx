@@ -72,7 +72,7 @@ export default function Etiqueta() {
 
   const loadLabelsData = () => {
     listAllModel<LabelResponse>(
-      "/etiquetas?orderByDesc=true&page=1&size=10&orderBy=StartCode"
+      `/etiquetas?orderByDesc=true&${page}=1&size=10&orderBy=StartCode`
     ).then((response) => {
       setTotalPages(Math.ceil(response.totalItems / response.pageSize));
       setLabelResponse(response);

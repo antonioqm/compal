@@ -1,11 +1,11 @@
-import { Typography } from '@mui/material'
+import { Pagination, Stack, Typography } from '@mui/material'
 import type { GetServerSideProps } from 'next'
 import { useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { setupApiClient } from '../../src/api/api'
 import Layout from '../../src/components/Layout'
 import Table from '../../src/components/Table'
-import { Thickness } from '../../src/interfaces/thickness.interface'
+import { ThicknessModel, ThicknessResponse } from '../../src/interfaces/thickness.interface'
 import { filterModel, modelState, useLevelsMutations } from '../../src/state/atom'
 import { withSSRAuth } from '../../src/utils/withSSRAuth'
 
@@ -31,30 +31,39 @@ const header = [
 
 export default function Espessura() {  
 
-  const listThickness:Thickness[] = useRecoilValue<Thickness[]>(filterModel);
+  const listThickness:ThicknessModel[] = useRecoilValue<ThicknessModel[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
 
   const {listAllModel } = useLevelsMutations();
   
   
   const [open, setOpen] = useState(false)
+  const [page, setPage] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(1)
 
-  const transformThickness = (thicknesses: Thickness[]): any => {
-    const transformedThicknesses = thicknesses.map((thickness: Thickness) => {
+  const transformThickness = (thicknesses: ThicknessModel[]): any => {
+    const transformedThicknesses = thicknesses.map((thickness: ThicknessModel) => {
       return {...thickness, level: thickness.level?.levelName}
     })
 
     return transformedThicknesses
   }
+  const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const loadEspessuraData = () => {
+    listAllModel<ThicknessResponse>(`espessura?orderByDesc=true&${page}=1&size=10&orderBy=ThicknessName`).then((data) => {
+      const newresult = transformThickness(data.result)
+      setModel(newresult)
+      setTotalPages(data.totalPages)
+    })
+
+  }
 
   useEffect(() => {
-    listAllModel<{ result: Thickness[] }>('espessura?orderByDesc=true&page=1&size=10&orderBy=ThicknessName').then(({ result }) => {
-      const newresult = transformThickness(result)
-      console.log(newresult)
-      setModel(newresult)
-     })
-
-  }, [])
+    loadEspessuraData()
+  }, [page]);
 
   return (
     <Layout title='Home' >
@@ -65,6 +74,22 @@ export default function Espessura() {
         body={listThickness}
         nameKeys={keyFields}
       />
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        top={20}
+        marginTop={4}
+      >
+
+       <Pagination
+            shape="rounded"
+            onChange={handlePage}
+            count={totalPages}
+            siblingCount={0}
+            boundaryCount={2}
+      />
+      </Stack>
       
    </Layout>
   )

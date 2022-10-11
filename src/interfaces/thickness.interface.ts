@@ -1,4 +1,7 @@
-export interface Thickness {
+import { ResponseList } from "./listResponse.interface";
+
+export type ThicknessResponse =  ResponseList<ThicknessModel>
+export interface ThicknessModel {
   id?: number | undefined;
   thicknessName: string;
   levelId: number;

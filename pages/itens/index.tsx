@@ -108,7 +108,7 @@ export default function Itens() {
   
   useEffect(() => {
     listAllModel<ItemResponse>(
-      `itens-expostos?orderByDesc=true&page=${page}&size=10&orderBy=CodeLabel&${urlFilter}`
+      `inventario/itens?orderByDesc=true&page=${page}&size=10&orderBy=CodeInventory&${urlFilter}`
     ).then((itemResponse) => {
       setItemResponse(itemResponse)
       setModel(itemResponse.result);

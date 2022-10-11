@@ -21,7 +21,7 @@ export interface ComponentModel {
 export interface ComponentRequest {
   id: number;
   codePartNumber: string,
-  humiditySensitivity: boolean | null,
+  humiditySensitivity?: boolean | null,
   maxTimeExposure: number,
   minimumTime: number,
   numberMaxBacking: number,
