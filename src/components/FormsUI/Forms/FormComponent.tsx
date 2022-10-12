@@ -61,7 +61,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     // humiditySensitivity: Yup.boolean().required(),
     maxTimeExposure: Yup.number().positive().required(),
     minimumTime: Yup.number().positive().required(),
-    numberMaxBacking: Yup.number().positive().required(),
+    numberMaxBacking: Yup.number().positive().moreThan(0).lessThan(10).required(),
     temperature: Yup.number().positive().required(),
     thicknessId: Yup.number().positive().required()
   });
@@ -148,21 +148,25 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
         <Select items={listThickness} name={"thicknessId"} label={"Espessura"} />
 
         <TextfieldWrapper
+          inputProps={{ min: 0, step: 1 , max: 400}}
           type="number"
           name={"temperature"}
           label={"Temperatura"}
         />
         <TextfieldWrapper
+          inputProps={{ min: 0, step: 1 }}
           type="number"
           name={"minimumTime"}
           label={"Tempo mínimo"}
         />
         <TextfieldWrapper
+          inputProps={{ min: 0, step: 1 }}
           type="number"
           name={"maxTimeExposure"}
           label={"Tempo de exposição máximo"}
         />
         <TextfieldWrapper
+          inputProps={{ min: 0, step: 1 }}
           type="number"
           name={"numberMaxBacking"}
           label={"Número máximo de baking"}

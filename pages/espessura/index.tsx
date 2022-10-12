@@ -53,7 +53,7 @@ export default function Espessura() {
   };
 
   const loadEspessuraData = () => {
-    listAllModel<ThicknessResponse>(`espessura?orderByDesc=true&${page}=1&size=10&orderBy=ThicknessName`).then((data) => {
+    listAllModel<ThicknessResponse>(`espessura?orderByDesc=true&page=${page}&size=10&orderBy=ThicknessName`).then((data) => {
       const newresult = transformThickness(data.result)
       setModel(newresult)
       setTotalPages(data.totalPages)

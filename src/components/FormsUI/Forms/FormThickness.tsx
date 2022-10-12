@@ -31,7 +31,7 @@ interface levelItemSelect {
 
 export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
   const filedsClean = {
-    thicknessName: '',
+    thicknessName: 0,
     levelId: 4,
     minTimeBaking40: 0,
     minTimeBaking90: 0,
@@ -42,7 +42,7 @@ export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
   const INITIAL_FORM_STATE = data ? data : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    // levelName: Yup.string().required(),
+    thicknessName: Yup.number().required().moreThan(0),
     // maxTimeExposition: Yup.number().required(),
     // // criticalExposureTime: Yup.number(),
     // backingRequired: Yup.boolean().required(),
@@ -61,7 +61,7 @@ export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
   const [listLevel, setListLevel] = useState<levelItemSelect[]>([])
 
   useLayoutEffect(() => {
-    apiClient.listAll<{ result: LevelModel[] }>("nivel/?orderBy=levelName").then(
+    apiClient.listAll<{ result: LevelModel[] }>("nivel/?size=1000&orderBy=levelName&orderByDesc=false").then(
       ({ result }) => {
         const itemSelect = result.map((item:LevelModel) => {
           return { id: item.id!, name: item.levelName}
@@ -97,7 +97,7 @@ console.log('formThickness', data)
             name={"thicknessName"}
             label={"Título"}
           /> */}
-          <TextfieldWrapper name={"thicknessName"} label={"Espessura (≤)"} />
+          <TextfieldWrapper inputProps={{ min: 0, step: 0.01, max:5 }} type={'number'} name={"thicknessName"} label={"Espessura (mm)"} />
           <Select
               items={listLevel}
               type="number"
