@@ -1,9 +1,12 @@
+import { LevelModel } from "./level.interface";
 import { ResponseList } from "./listResponse.interface";
+import { ThicknessModel } from "./thickness.interface";
 
 
 export  type ItemResponse =  ResponseList<ItemModel>
 export interface ItemModel {
   id: number;
+  occurrencyDate: string;
   codeLabel: string;
   partNumber: string
   createdDate: string;
@@ -13,7 +16,11 @@ export interface ItemModel {
   maxExpositionTime: number;
   percentExposition: number;
   used: boolean;
-  inventory: Inventory
+  inventory: Inventory;
+  level: LevelModel;
+  thickness: ThicknessModel;
+  timeToleranceInBaking: number;
+  numberMaxBaking: number;
 
 //   {
 //     msdCode: 000014,

@@ -1,26 +1,19 @@
 import {
-  Chip,
-  Fade,
   Pagination,
   Stack,
   TableBody,
-  TableHead,
-  TableRow as TableRowMui,
-  Typography
+  TableHead, TableRow as TableRowMui, Typography
 } from "@mui/material";
-import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { apiClient, setupApiClient } from '../../src/api/api';
-import DialogHistory from '../../src/components/DialogHistory/DialogHistory';
-import DialogRemove from '../../src/components/DialogRemove/DialogRemove';
+import DialogHistory from "../../src/components/DialogHistory/DialogHistory";
 import Filter from "../../src/components/Filter/Filter";
 import { ItemFilter } from "../../src/components/Filter/interfaces/Item.interface";
 import Layout from '../../src/components/Layout';
 import { ProgressBar } from "../../src/components/Progress/Progress";
-import Swipeable from "../../src/components/Swipeable/Swipeable";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
@@ -31,23 +24,23 @@ import {
   modelState,
   useLevelsMutations
 } from "../../src/state/atom";
-import { formatDate } from '../../src/utils/format';
+import { formatDate } from "../../src/utils/format";
 import { getStatusItem } from "../../src/utils/statusItems";
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
 const header = [
-  'Código',
-  'Criado em',
-  'Feeder Car',
-  'Responsável pela exposição',
-  'Exposição em minutos',
-  'Tempo máximo de exposição',
-  'Percentual de exposição',
-  'Usado',
+  'Data de Modificação',
+  'Part Number',
+  'Nível',
+  'Configuraçã de Espessura',
+  'Tempo de Tolerância de Baking (Minutos)',
+  'Número Máximo de Baking',
+  'Status',
+  'Histórico',
 ];
 
 const historyHeader = [
-  { name: 'Data de ocorrência', field: 'occurencyDate', type: 'datetime' },
+  { name: 'Data de ocorrência', field: 'occurrencyDate', type: 'datetime' },
   { name: 'Descrição', field: 'description', type: 'string' },
 ];
 
@@ -107,9 +100,8 @@ export default function Itens() {
 
   
   useEffect(() => {
-    listAllModel<ItemResponse>(
-      `itens-expostos?orderByDesc=true&page=${page}&size=10&orderBy=CodeInventory&${urlFilter}`
-    ).then((itemResponse) => {
+    listAllModel<ItemResponse>(`itens-expostos?orderBy=CodeLabel&orderByDesc=true&page=${page}&size=10&${urlFilter}`)
+      .then((itemResponse) => {
       setItemResponse(itemResponse)
       setModel(itemResponse.result);
     });
@@ -120,6 +112,7 @@ export default function Itens() {
     codeLabel: string;
   }): Promise<void> {
     const response = await apiClient.get(`/historico-item/${data?.partNumber}/${data?.codeLabel}`)
+    console.log('setCurrentHistories', response)
     setCurrentHistories(response);
   }
 
@@ -145,6 +138,65 @@ export default function Itens() {
             listItem.map((item: ItemModel, index) => (
               <TableRow key={item.id}>
                 <TableCell component="th" scope="row">
+                  {formatDate(item.occurrencyDate)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {item.partNumber}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {item.level.levelName}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {item.thickness?.thicknessName}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {item.timeToleranceInBaking}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {item.numberMaxBaking}
+                </TableCell>
+                <TableCell align="center" component="th" scope="row">
+                  <span
+                    style={{
+                      padding: 2,
+                      background: 'rgb(0 0 0 / 5%)',
+                      borderRadius: 16,
+                      height: 24,
+                      display: 'flex',
+                      width: '100%',
+                    }}
+                  >
+                    <Typography variant="overline">{ getStatusItem( 2, 80)}</Typography>
+                    <span style={{ padding: '0 8px' }}>
+                      {Math.ceil(
+                        item.percentExposition < 100
+                          ? item.percentExposition
+                          : 100
+                      )}
+                      %
+                    </span>
+                    <ProgressBar
+                      style={{ flexGrow: 1, minWidth: 80 }}
+                      variant="determinate"
+                      value={
+                        item.percentExposition < 100
+                          ? item.percentExposition
+                          : 97
+                      }
+                    />
+                  </span>
+                </TableCell>
+                {/* <TableCell component="th" scope="row">
+                  {item.used}
+                </TableCell> */}
+                <TableCell component="th" scope="row">
+                  <DialogHistory
+                    header={historyHeader}
+                    data={currentHitories}
+                    onAction={() => handleHistory(item)}
+                  />
+                </TableCell>
+                {/* <TableCell component="th" scope="row">
                   {item.codeLabel}
                 </TableCell>
                 <TableCell component="th" scope="row">
@@ -242,7 +294,7 @@ export default function Itens() {
                       </div>
                     }
                   </Fade>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))}
         </TableBody>

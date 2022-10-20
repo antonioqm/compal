@@ -111,8 +111,13 @@ export default function PartNumber() {
   const { FormComponent, label } = currentPage(router.pathname)!;
 
   const { listAllModel } = useLevelsMutations();
+  const { deleteModel } = useLevelsMutations();
 
-  const handleDelete = async (value: ComponentResponse) => {
+  const handleDelete = async (value: ComponentModel) => {
+    if (value.id) {
+      await deleteModel<ComponentModel>({endpoint:'/partNumber', payload: {...value, id: value.id}})
+      
+    }
     console.log('handleDelete', value);
   };
 
@@ -163,7 +168,7 @@ export default function PartNumber() {
         <TableBody>
           {listItem &&
             listItem.length > 0 &&
-            listItem.map((partnumber: any, index) => (
+            listItem.map((partnumber: ComponentModel, index) => (
               <TableRow key={partnumber.id}>
                 <TableCell component="th" scope="row">
                   {partnumber.codePartNumber}
@@ -203,7 +208,7 @@ export default function PartNumber() {
                   {partnumber.maxTimeExposure}
                 </TableCell> */}
                 <TableCell component="th" scope="row">
-                  {partnumber.level}
+                  {partnumber.level?.levelName}
                 </TableCell>
 
                 <TableCell component="th" scope="row">

@@ -25,12 +25,16 @@ const header = ["Código", "Descrição", "Temperatura", "Tipo"];
 export default function Inventory() {
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
-  const { listAllModel } = useLevelsMutations();
+  const { listAllModel, deleteModel } = useLevelsMutations();
   const [page, setPage] = useState<number>(1);
 
 
   const handleDelete = async (value: InventoryModel) => {
-    console.log("handleDelete", value);
+    if (value.id) {
+      await deleteModel<InventoryModel>({endpoint:'/inventario', payload: {...value, id: value.id}})
+      
+    }
+    console.log('handleDelete', value);
   };
 
   const [listInventory, setListInventory] = useState<InventoryModel[]>([]);

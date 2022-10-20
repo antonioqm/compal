@@ -7,16 +7,14 @@ import {
   IconButton,
   TableBody,
   TableHead,
-  TableRow as TableRowMui,
+  TableRow as TableRowMui
 } from '@mui/material';
 import { IconHistory } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
-import EtiquetaResponse from '../../interfaces/etiqueta.interface';
 import { formatDate } from '../../utils/format';
 import Table from '../Table/Table';
 import { TableCell } from '../Table/TableCell';
 import { TableRow } from '../Table/TableRow';
-
 interface DialogHistoryProp {
   onAction: () => void;
   header: { name: string; field: string; type: string }[];

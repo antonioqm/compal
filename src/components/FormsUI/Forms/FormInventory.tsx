@@ -14,7 +14,7 @@ export interface Inventory {
   typeInventoryId: number | string;
   codeInventory: string;
   description: string;
-  temperature: number | string;
+  temperature?: number | string;
 }
 
 export interface DataProp {
@@ -50,8 +50,9 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
   let INITIAL_FORM_STATE: Inventory = {
     codeInventory: "",
     description: "",
-    temperature: "",
     typeInventoryId: "",
+    temperature: ""
+
   };
 
   if (data) {
@@ -86,7 +87,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
     description: Yup.string().required(),
     typeInventoryId: Yup.number(),
     temperature: Yup.number().when('typeInventoryId', (typeInventoryId, schema) => {
-      return  typeInventoryId === 4 ? schema.required() : schema.notRequired()
+      return  typeInventoryId === FORNO ? schema.required() : schema.notRequired()
     }),
   });
 
@@ -95,7 +96,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
       setDisabledTemperature(false);
     } else {
       setDisabledTemperature(true);
-      values.temperature = "";
+      const {temperature, ...restValues} = values
     }
   };
 
@@ -108,8 +109,14 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
         validate={validateTemperature}
         validationSchema={FORM_VALIDATION}
         onSubmit={async (values: Inventory ) => {
-          
+          console.log('values: Inventory ', values)
           const { id } = values;
+
+          if (action === "Update") {
+            const { temperature, ...rest } = values
+            values = values.typeInventoryId !== FORNO ? {...rest} : values
+          }
+
           action === "Update" && id
             ? await updateModel<Inventory>({
                 endpoint: "inventario",

@@ -1,4 +1,6 @@
+import { LevelModel } from "./level.interface";
 import { ResponseList } from "./listResponse.interface";
+import { ThicknessModel } from './thickness.interface';
 
 export type ComponentResponse = ResponseList<ComponentModel>
 
@@ -7,7 +9,7 @@ export interface ComponentModel {
   moistureSensitive: boolean;
   codePartNumber: string,
   humiditySensitivity: boolean,
-  thickness: { thicknessName: string, id: string },
+  thickness: ThicknessModel,
   temperature: number,
   numberMaxBacking: number,
   minimumTime: number,
@@ -15,7 +17,7 @@ export interface ComponentModel {
   maximumExposureTime?: number
   createDate: string,
   updateDate: string,
-  level?: { levelName: string, id: number },
+  level?: LevelModel,
   user: string
 }
 export interface ComponentRequest {

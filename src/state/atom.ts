@@ -1,5 +1,3 @@
-import { AxiosError, AxiosResponse } from "axios";
-import { truncate } from "fs";
 import { atom, selector, useRecoilState } from "recoil";
 import { apiClient } from "../api/api";
 import { Level } from "../interfaces/level.interface";
@@ -188,12 +186,12 @@ export function useLevelsMutations() {
       const removedItem:(Model & Payload)[] = models.filter((level: Model & Payload) => payload.id !== level.id)
       setModels(removedItem)
 
-      setResponse({type: 'success',
-        status: 200,
-        statusText: '',
-        data: `${payload.id} foi removido`,
-        message: '',
-    })
+    //   setResponse({type: 'success',
+    //     status: 200,
+    //     statusText: '',
+    //     data: `${payload.id} foi removido`,
+    //     message: '',
+    // })
       
     } catch (error: any) {
       setLoading(false)

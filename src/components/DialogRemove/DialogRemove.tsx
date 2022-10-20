@@ -16,6 +16,7 @@ interface DialogProp {
   id: number;
 }
 export default ({id, onAction}:DialogProp) => {
+  
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
   const { deleteModel } = useLevelsMutations();
 
