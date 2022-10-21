@@ -2,17 +2,18 @@ import {
   Pagination,
   Stack,
   TableBody,
-  TableHead, TableRow as TableRowMui, Typography
+  TableHead,
+  TableRow as TableRowMui,
+  Typography
 } from "@mui/material";
-import type { GetServerSideProps } from 'next';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { apiClient, setupApiClient } from '../../src/api/api';
+import { apiClient } from "../../src/api/api";
 import DialogHistory from "../../src/components/DialogHistory/DialogHistory";
 import Filter from "../../src/components/Filter/Filter";
 import { ItemFilter } from "../../src/components/Filter/interfaces/Item.interface";
-import Layout from '../../src/components/Layout';
+import Layout from "../../src/components/Layout";
 import { ProgressBar } from "../../src/components/Progress/Progress";
 import Table from "../../src/components/Table/Table";
 import { TableCell } from "../../src/components/Table/TableCell";
@@ -25,52 +26,39 @@ import {
   useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
-import { getStatusItem } from "../../src/utils/statusItems";
-import { withSSRAuth } from '../../src/utils/withSSRAuth';
+import { getStatusItem, InventoryType } from "../../src/utils/statusItems";
 
 const header = [
-  'Data de Modificação',
-  'Part Number',
-  'Nível',
-  'Configuraçã de Espessura',
-  'Tempo de Tolerância de Baking (Minutos)',
-  'Número Máximo de Baking',
-  'Status',
-  'Histórico',
+  "Part Number",
+  "MSD Code",
+  "Status",
+  "Nível",
+  "Data de Abertura",
+  "Vencimento",
+  "Data de Fechamento",
+  "Operador de fechamento",
+  "Tempo de exposição (horas)",
+  "Histórico",
 ];
 
 const historyHeader = [
-  { name: 'Data de ocorrência', field: 'occurrencyDate', type: 'datetime' },
-  { name: 'Descrição', field: 'description', type: 'string' },
+  { name: "Data de ocorrência", field: "occurrencyDate", type: "datetime" },
+  { name: "Descrição", field: "description", type: "string" },
 ];
 
-
-
 const itemsFilter: ItemFilter[] = [
-  { name: 'feederCar',
-    label: 'Feeder Car',
-    type: 'text'
-  },
-  { name: 'codeLabel',
-    label: 'Código',
-    type: 'text'
-  },
-  { name: 'used',
-    label: 'Usado',
-    type: 'radio'
-  },
-  { name: 'temperature',
-    label: 'Temperatura',
-    type: 'slider'
-  },
-]
+  { name: "feederCar", label: "Feeder Car", type: "text" },
+  { name: "codeLabel", label: "Código", type: "text" },
+  { name: "used", label: "Usado", type: "radio" },
+  { name: "temperature", label: "Temperatura", type: "slider" },
+];
 
 export default function Itens() {
   const listItem: ItemModel[] = useRecoilValue<ItemModel[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
   const [itemResponse, setItemResponse] = useState<ItemResponse>();
   const [hoverAction, setHoverAction] = useState<boolean>(false);
-  const [urlFilter, setUrlFilter] = useState<string>('');
+  const [urlFilter, setUrlFilter] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [currentHitories, setCurrentHistories] = useState<any[]>([]);
 
@@ -89,21 +77,35 @@ export default function Itens() {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
-  
+
   const updateUrlFilters = (url: string) => {
-    setUrlFilter(url)
-  }
+    setUrlFilter(url);
+  };
 
   const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
-      setPage(newPage)
-  }
+    setPage(newPage);
+  };
 
-  
   useEffect(() => {
-    listAllModel<ItemResponse>(`itens-expostos?orderBy=CodeLabel&orderByDesc=true&page=${page}&size=10&${urlFilter}`)
-      .then((itemResponse) => {
-      setItemResponse(itemResponse)
-      setModel(itemResponse.result);
+    listAllModel<ItemResponse>(
+      `itens-expostos?orderBy=CodeLabel&orderByDesc=true&page=${page}&size=10&${urlFilter}`
+    ).then((itemResponse:ItemResponse) => {
+
+      let result = itemResponse.result
+      itemResponse.result.map((item: ItemModel, index:number) => {
+
+        apiClient.get<InventoryType>(`inventario/${item.inventory.typeInventoryId}/byId`)
+          .then(data => {
+            const current = result[index]
+            result = [...result, { ...current, inventoryTypeName: 'ppppp' }]
+            console.log('result', result)
+          })
+        
+      });
+
+      setItemResponse(itemResponse);
+      setModel(result);
+
     });
   }, [urlFilter, page]);
 
@@ -111,18 +113,23 @@ export default function Itens() {
     partNumber: string;
     codeLabel: string;
   }): Promise<void> {
-    const response = await apiClient.get(`/historico-item/${data?.partNumber}/${data?.codeLabel}`)
-    console.log('setCurrentHistories', response)
+    const response = await apiClient.get(
+      `/historico-item/${data?.partNumber}/${data?.codeLabel}`
+    );
     setCurrentHistories(response);
   }
 
   return (
     <Layout title="Home">
-      <Filter onChangeFilter={updateUrlFilters} items={itemsFilter}  endpoint='itens-expostos' />
+      <Filter
+        onChangeFilter={updateUrlFilters}
+        items={itemsFilter}
+        endpoint="itens-expostos"
+      />
 
       <Table>
         <TableHead>
-          <TableRowMui sx={{ boxShadow: 'none', background: 'transparent' }}>
+          <TableRowMui sx={{ boxShadow: "none", background: "transparent" }}>
             {header.length > 0 &&
               header.map((field, index) => (
                 <TableCell key={index}>
@@ -138,36 +145,31 @@ export default function Itens() {
             listItem.map((item: ItemModel, index) => (
               <TableRow key={item.id}>
                 <TableCell component="th" scope="row">
-                  {formatDate(item.occurrencyDate)}
-                </TableCell>
-                <TableCell component="th" scope="row">
                   {item.partNumber}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {item.level.levelName}
+                  {formatDate(item.codeLabel)}
                 </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.thickness?.thicknessName}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.timeToleranceInBaking}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {item.numberMaxBaking}
-                </TableCell>
+
                 <TableCell align="center" component="th" scope="row">
+                  <Typography variant="body2">
+                    {getStatusItem(
+                      item.expositionInMinutes,
+                      item.maxExpositionTime,
+                      item?.level?.criticalExposureTime
+                    )}
+                  </Typography>
                   <span
                     style={{
                       padding: 2,
-                      background: 'rgb(0 0 0 / 5%)',
+                      background: "rgb(0 0 0 / 5%)",
                       borderRadius: 16,
                       height: 24,
-                      display: 'flex',
-                      width: '100%',
+                      display: "flex",
+                      width: "100%",
                     }}
                   >
-                    <Typography variant="overline">{ getStatusItem( 2, 80)}</Typography>
-                    <span style={{ padding: '0 8px' }}>
+                    <span style={{ padding: "0 8px" }}>
                       {Math.ceil(
                         item.percentExposition < 100
                           ? item.percentExposition
@@ -185,6 +187,26 @@ export default function Itens() {
                       }
                     />
                   </span>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {item.level?.levelName}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {item.occurrencyDate}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {"calculando"}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {"calc..."}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {"calc..."}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {`${Math.floor(item.expositionInMinutes / 60)}:${
+                    item.expositionInMinutes % 60
+                  }`}
                 </TableCell>
                 {/* <TableCell component="th" scope="row">
                   {item.used}
@@ -299,25 +321,27 @@ export default function Itens() {
             ))}
         </TableBody>
       </Table>
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} top={20} marginTop={4}>
-
-      {(itemResponse && itemResponse?.totalPages > 1)  &&  <Pagination shape="rounded" onChange={handlePage} count={itemResponse?.totalPages} siblingCount={0} boundaryCount={2} />}
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        top={20}
+        marginTop={4}
+      >
+        {itemResponse && itemResponse?.totalPages > 1 && (
+          <Pagination
+            shape="rounded"
+            onChange={handlePage}
+            count={itemResponse?.totalPages}
+            siblingCount={0}
+            boundaryCount={2}
+          />
+        )}
       </Stack>
-
     </Layout>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth(
-  async (ctx) => {
-    const apiClient = setupApiClient(ctx);
-
-    await apiClient.get('account/currentUser');
-    return {
-      props: {},
-    };
-  }
-);
 
 // Só exposto abaixo de 100%;
 // Acima de 100% excelente;

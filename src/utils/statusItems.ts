@@ -1,12 +1,38 @@
 
-export const getStatusItem = (exposurePercentage: number, criticalTime: number = 0): string => {
+import { apiClient } from '../api/api';
+``
+export interface InventoryType {
+   id: number;
+   codeInventory: string;
+   description: string;
+   temperature: number;
+   typeInventory: {
+       id: number;
+       name: string
+   }
+}
+export const getStatusItem = (expositionInMinutes = 0, maxExpositionTime = 0, criticalExposureTime = 0): string => {
+   const OneHour = 60;
 
-    if (exposurePercentage > 100) {
-        return 'Exposto Excedente'
-    }
-      
-    else if (exposurePercentage < 100 && exposurePercentage > criticalTime) {
+
+     if (expositionInMinutes <= (maxExpositionTime * OneHour) &&  expositionInMinutes >= (criticalExposureTime * OneHour)) {
+        // Tempo crítico
         return 'Exposto (tempo crítico)'
     }
-  return ''
+     else if (expositionInMinutes > (maxExpositionTime * OneHour)) {
+        // Tempo crítico
+       console.log('Exposto (Excedente)', expositionInMinutes, (maxExpositionTime * OneHour))
+        return 'Exposto (Excedente)'
+   }
+return "exposto"
+     
+
+}
+
+const whereIs = (invetoryId: number): any => {
+   apiClient.get<InventoryType>(`inventario/${invetoryId}/byId`)
+      .then(data => {
+         console.log(data)
+         if(data) return data.typeInventory.name
+      })
 }

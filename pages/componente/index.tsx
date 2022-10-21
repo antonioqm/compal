@@ -20,18 +20,17 @@ import { TableRow } from '../../src/components/Table/TableRow';
 import { ComponentModel, ComponentResponse } from '../../src/interfaces/component.interface';
 import { currentPage } from '../../src/ROUTES';
 import { useLevelsMutations } from '../../src/state/atom';
+import { formatDate } from '../../src/utils/format';
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
 
 const header = [
-  'Part-number',
-  // 'Sensibilidade à umidade',
-  'Espessura',
-  // 'Temperatura',
-  // 'Número max de Backing',
-  // 'Tempo mínimo',
-  // 'Tempo máximo',
+  'Data de Modificação', 
+  'Part NUmber',
   'Nível',
+  'Cnfiguração de Espessura (mm)',
+  'Tempo de Tolerância de Baking (minutos)',
+  'Número Máximo de Baking'
 ];
 
 
@@ -171,7 +170,22 @@ export default function PartNumber() {
             listItem.map((partnumber: ComponentModel, index) => (
               <TableRow key={partnumber.id}>
                 <TableCell component="th" scope="row">
-                  {partnumber.codePartNumber}
+                  {formatDate(partnumber.updateDate)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {formatDate(partnumber.codePartNumber)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {formatDate(partnumber.level?.levelName)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {formatDate(partnumber.thickness.thicknessName)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {'sem retorno '}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {partnumber.numberMaxBacking}
                 </TableCell>
                 {/* <TableCell component="th" scope="row">
                   <Chip
@@ -192,24 +206,17 @@ export default function PartNumber() {
                     }
                   />
                 </TableCell> */}
-                <TableCell component="th" scope="row">
-                  {partnumber.thickness.thicknessName}
-                </TableCell>
+               
                 {/* <TableCell component="th" scope="row">
                   {partnumber.temperature}
                 </TableCell> */}
-                <TableCell component="th" scope="row">
-                  {partnumber.numberMaxBacking}
-                </TableCell>
+
                 {/* <TableCell component="th" scope="row">
                   {partnumber.minimumTime}
                 </TableCell> */}
                 {/* <TableCell component="th" scope="row">
                   {partnumber.maxTimeExposure}
                 </TableCell> */}
-                <TableCell component="th" scope="row">
-                  {partnumber.level?.levelName}
-                </TableCell>
 
                 <TableCell component="th" scope="row">
                   {/* <Fade in={hoverAction}> */}

@@ -6,6 +6,7 @@ import { ThicknessModel } from "./thickness.interface";
 export  type ItemResponse =  ResponseList<ItemModel>
 export interface ItemModel {
   id: number;
+  inventoryTypeName?: string;
   occurrencyDate: string;
   codeLabel: string;
   partNumber: string
@@ -17,7 +18,7 @@ export interface ItemModel {
   percentExposition: number;
   used: boolean;
   inventory: Inventory;
-  level: LevelModel;
+  level?: LevelModel;
   thickness: ThicknessModel;
   timeToleranceInBaking: number;
   numberMaxBaking: number;
