@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { apiClient } from "../../../api/api";
-import { ComponentModel, ComponentRequest } from "../../../interfaces/component.interface";
+import { ComponentRequest } from "../../../interfaces/component.interface";
+import { LevelModel } from "../../../interfaces/level.interface";
 import { ThicknessModel } from "../../../interfaces/thickness.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
@@ -19,7 +20,7 @@ const REGEX = {
 };
 interface Prop {
   action?: "Create" | "Update";
-  data?: ComponentModel;
+  data?: ComponentRequest;
 }
 
 interface SelectItem {
@@ -29,17 +30,17 @@ interface SelectItem {
 
 export const FormComponent = ({ action, data, ...props }: Prop) => {
 
+  console.log("data form", data)
+
   Yup.setLocale(ptShort);
   
   const filedsClean: ComponentRequest = {
     id: 0,
     codePartNumber: "",
-    // humiditySensitivity: null,
-    maxTimeExposure: 0,
-    minimumTime: 0,
+    levelId: 0,
     numberMaxBacking: 0,
-    temperature: 0,
-    thicknessId: 0,
+    thickness: 0,
+    timeToleranceInBaking: 0,
   };
   
   
@@ -47,40 +48,39 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     {
       id: data.id,
       codePartNumber: data.codePartNumber,
-      // humiditySensitivity: data.humiditySensitivity,
-      maxTimeExposure: data.maxTimeExposure,
-      minimumTime: data.minimumTime,
-      numberMaxBacking: data.numberMaxBacking,
-      temperature: data.temperature,
-      thicknessId: data.thickness.id,
+        levelId: data.levelId,
+        numberMaxBacking: data.numberMaxBacking,
+        thickness: data.thickness,
+        timeToleranceInBaking: data.timeToleranceInBaking
+
     } : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    codePartNumber: Yup.string().required().min(5).max(25),
+    // codePartNumber: Yup.string().required().min(5).max(25),
     // .matches(REGEX.PART_NUMBER.REGEX, REGEX.PART_NUMBER.MESSAGE),
     // humiditySensitivity: Yup.boolean().required(),
-    maxTimeExposure: Yup.number().positive().required(),
-    minimumTime: Yup.number().positive().required(),
-    numberMaxBacking: Yup.number().positive().moreThan(0).lessThan(10).required(),
-    temperature: Yup.number().positive().required(),
-    thicknessId: Yup.number().positive().required()
+    // maxTimeExposure: Yup.number().positive().required(),
+    // minimumTime: Yup.number().positive().required(),
+    // numberMaxBacking: Yup.number().positive().moreThan(0).lessThan(10).required(),
+    // temperature: Yup.number().positive().required(),
+    // thicknessId: Yup.number().positive().required()
   });
 
   const { createModel, updateModel } = useLevelsMutations();
 
-  // const [listLevel, setListLevel] = useState<SelectItem[]>([]);
+  const [listLevel, setListLevel] = useState<SelectItem[]>([]);
   const [listThickness, setListThickness] = useState<SelectItem[]>([]);
 
-  // useLayoutEffect(() => {
-  //   apiClient
-  //     .listAll<{ result: LevelModel[] }>("nivel/?orderBy=levelName")
-  //     .then(({ result }) => {
-  //       const levelItems = result.map((item: LevelModel) => {
-  //         return { id: item.id!, name: item.levelName };
-  //       });
-  //       setListLevel(levelItems);
-  //     });
-  // }, []);
+  useLayoutEffect(() => {
+    apiClient
+      .listAll<{ result: LevelModel[] }>("nivel/?orderBy=levelName")
+      .then(({ result }) => {
+        const levelItems = result.map((item: LevelModel) => {
+          return { id: item.id!, name: item.levelName };
+        });
+        setListLevel(levelItems);
+      });
+  }, []);
 
   useLayoutEffect(() => {
     apiClient
@@ -145,25 +145,19 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
           ]}
         /> */}
 
-        <Select items={listThickness} name={"thicknessId"} label={"Espessura"} />
+        <Select  items={listLevel} name={"levelId"} label={"Nível"} />
 
         <TextfieldWrapper
-          inputProps={{ min: 0, step: 1 , max: 400}}
+          inputProps={{ min: 0, step: .1 , max: 400}}
           type="number"
-          name={"temperature"}
-          label={"Temperatura"}
+          name={"thickness"}
+          label={"Espessura"}
         />
         <TextfieldWrapper
           inputProps={{ min: 0, step: 1 }}
           type="number"
-          name={"minimumTime"}
-          label={"Tempo mínimo"}
-        />
-        <TextfieldWrapper
-          inputProps={{ min: 0, step: 1 }}
-          type="number"
-          name={"maxTimeExposure"}
-          label={"Tempo de exposição máximo"}
+          name={"timeToleranceInBaking"}
+          label={"Tempo de tolerância de baking"}
         />
         <TextfieldWrapper
           inputProps={{ min: 0, step: 1 }}

@@ -33,7 +33,7 @@ const header = [
   "MSD Code",
   "Status",
   "Nível",
-  "Data de Abertura",
+  "Última ocorrência",
   "Vencimento",
   "Data de Fechamento",
   "Operador de fechamento",
@@ -192,7 +192,7 @@ export default function Itens() {
                   {item.level?.levelName}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {item.occurrencyDate}
+                  {formatDate(item.occurrencyDate)}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {"calculando"}
@@ -321,6 +321,7 @@ export default function Itens() {
             ))}
         </TableBody>
       </Table>
+      
       <Stack
         direction={"row"}
         alignItems={"center"}

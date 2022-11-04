@@ -20,7 +20,7 @@ import { TableRow } from '../../src/components/Table/TableRow';
 import { ComponentModel, ComponentResponse } from '../../src/interfaces/component.interface';
 import { currentPage } from '../../src/ROUTES';
 import { useLevelsMutations } from '../../src/state/atom';
-import { formatDate } from '../../src/utils/format';
+import { formatDate, formatNumber } from '../../src/utils/format';
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
 
@@ -179,10 +179,10 @@ export default function PartNumber() {
                   {formatDate(partnumber.level?.levelName)}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {formatDate(partnumber.thickness.thicknessName)}
+                  {formatNumber(partnumber.configThickness.thicknessName)}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {'sem retorno '}
+                  {formatNumber(partnumber.timeToleranceInBaking)}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {partnumber.numberMaxBacking}
@@ -230,7 +230,12 @@ export default function PartNumber() {
                       
                         <FormComponent
                           action={"Update"}
-                          data={{ ...partnumber }}
+                          data={{ id: partnumber.id,
+                            codePartNumber: partnumber.codePartNumber,
+                            levelId: partnumber.level?.id,
+                            numberMaxBacking: partnumber.numberMaxBacking,
+                            thickness: partnumber.configThickness.thicknessName,
+                            timeToleranceInBaking: partnumber.timeToleranceInBaking, }}
                         />
                       
                      
