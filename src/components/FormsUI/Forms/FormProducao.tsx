@@ -1,15 +1,12 @@
-import { Form, Formik, useFormik } from "formik";
 import { Box } from "@mui/material";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
-import { apiClient } from "../../../api/api";
+import Producao from "../../../interfaces/producao.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
-import Select from "../Select/SelectWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
-import Producao from "../../../interfaces/producao.interface";
-import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
 export interface ProducaoProp {
   id?: number,
   lineName: string,
@@ -60,7 +57,7 @@ export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) =
         <Form className={styles.formWrapper}>
           <TextfieldWrapper  name={"lineName"} label={"Nome"} />
           
-          {/* <TextfieldWrapper type='number' inputProps={{  min: 0.00, step: .05  }} name={"criticalExposureTime"} label={"Tempo Crítico de Exposição (Horas)"} /> */}
+          {/* <TextfieldWrapper type='number' inputProps={{  min: 0.00, step: .05  }} name={"criticalExpositionTime"} label={"Tempo Crítico de Exposição (Horas)"} /> */}
           
           <ButtonWrapper fixed>{`${
             action === "Create" ? "Criar" : "Atualizar"

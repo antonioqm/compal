@@ -69,12 +69,8 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
     }
   };
 
-
-
-
   return (
     <>
-     
       <Formik
         initialValues={{
           ...INITIAL_FORM_STATE,
@@ -106,14 +102,31 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           setFieldValue,
           resetForm,
         }) => (
-          <>          
+          <>
             {!showMessageSucess && (
-              <DialogTitle id="alert-dialog-title">
-                {" "}
-                <IconButton disableRipple>
-                  <IconPrinter />
-                </IconButton>{" "}
-                {`Imprimir `}
+              <DialogTitle
+                sx={{
+                  display: "flex",
+                  alignContent: "space-between",
+                  justifyContent: "space-between",
+                }}
+                id="alert-dialog-title"
+              >
+                <Stack flexDirection={"row"}>
+                  {" "}
+                  <IconButton disableRipple>
+                    <IconPrinter />
+                  </IconButton>{" "}
+                  {`Imprimir `}
+                </Stack>
+                <IconButton
+                  onClick={() => {
+                    updateDialog();
+                    setShowMessageSucess(false);
+                  }}
+                >
+                  <IconX />{" "}
+                </IconButton>
               </DialogTitle>
             )}
             <DialogContent sx={{ p: 0 }}>
@@ -167,10 +180,9 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
                   )}
                   {awaitingPrinting && (
                     <Box sx={{ width: "100%", p: 4 }}>
-                      <Stack direction={'column'} spacing={2}>
-                      <Typography  variant="overline">Imprimindo</Typography>
-                      <LinearProgress color="info" />
-
+                      <Stack direction={"column"} spacing={2}>
+                        <Typography variant="overline">Imprimindo</Typography>
+                        <LinearProgress color="info" />
                       </Stack>
                     </Box>
                   )}

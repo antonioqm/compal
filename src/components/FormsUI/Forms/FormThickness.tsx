@@ -7,20 +7,15 @@ import styles from "../../../../styles/Login.module.scss";
 import { apiClient } from "../../../api/api";
 import Select from "../../../components/FormsUI/Select/SelectWrapper";
 import { LevelModel } from "../../../interfaces/level.interface";
-import { Thickness } from "../../../interfaces/thickness.interface";
+import { ThicknessModel } from "../../../interfaces/thickness.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
 
-// interface ThicknessProp {
-//   levelName: string;
-//   maxTimeExposition: number;
-//   backingRequired: boolean;
-// }
-  
+
 interface FormThicknessProp {
   action?: "Create" | "Update";
-  data?: Thickness;
+  data?: ThicknessModel;
 }
 
 interface levelItemSelect {
@@ -30,21 +25,22 @@ interface levelItemSelect {
 
 
 export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
-  const filedsClean = {
-    thicknessName: 0,
-    levelId: 4,
+  const filedsClean:ThicknessModel = {
+    thicknessName: '',
+    levelId: undefined,
     minTimeBaking40: 0,
     minTimeBaking90: 0,
     minTimeBaking125: 0
   };
 
+
   Yup.setLocale(ptShort);
-  const INITIAL_FORM_STATE = data ? data : filedsClean;
+  const INITIAL_FORM_STATE: ThicknessModel = data ? data : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
     thicknessName: Yup.number().required().moreThan(0),
     // maxTimeExposition: Yup.number().required(),
-    // // criticalExposureTime: Yup.number(),
+    // // criticalExpositionTime: Yup.number(),
     // backingRequired: Yup.boolean().required(),
   });
 
@@ -81,15 +77,15 @@ console.log('formThickness', data)
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: Thickness) => {
+        onSubmit={async (values: ThicknessModel) => {
           console.log("action type ", action)
           const { id } = values;
           action === "Update" && id
-            ? await updateModel<Thickness>({
+            ? await updateModel<ThicknessModel>({
                 endpoint: "espessura",
                 payload: { ...values, id },
               })
-            : await createModel<Thickness>({ endpoint: "espessura", payload: values });
+            : await createModel<ThicknessModel>({ endpoint: "espessura", payload: values });
         }}
       >
         <Form className={styles.formWrapper}>
@@ -101,8 +97,8 @@ console.log('formThickness', data)
           <Select
               items={listLevel}
               type="number"
-              name={"levelId"}
-              label={"Nível"}
+            name={"levelId"}
+            label={"Nível"}
             />
           <TextfieldWrapper
             type="number"

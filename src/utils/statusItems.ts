@@ -11,11 +11,11 @@ export interface InventoryType {
        name: string
    }
 }
-export const getStatusItem = (expositionInMinutes = 0, maxExpositionTime = 0, criticalExposureTime = 0): string => {
+export const getStatusItem = (expositionInMinutes = 0, maxExpositionTime = 0, criticalExpositionTime = 0): string => {
    const OneHour = 60;
 
 
-     if (expositionInMinutes <= (maxExpositionTime * OneHour) &&  expositionInMinutes >= (criticalExposureTime * OneHour)) {
+     if (expositionInMinutes <= (maxExpositionTime * OneHour) &&  expositionInMinutes >= (criticalExpositionTime * OneHour)) {
         // Tempo crítico
         return 'Exposto (tempo crítico)'
     }

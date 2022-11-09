@@ -44,7 +44,7 @@ export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
   const FORM_VALIDATION = Yup.object().shape({
     // levelName: Yup.string().required(),
     // maxTimeExposition: Yup.number().required(),
-    // // criticalExposureTime: Yup.number(),
+    // // criticalExpositionTime: Yup.number(),
     // backingRequired: Yup.boolean().required(),
   });
 

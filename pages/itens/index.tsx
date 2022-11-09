@@ -26,7 +26,7 @@ import {
   useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
-import { getStatusItem, InventoryType } from "../../src/utils/statusItems";
+import { InventoryType } from "../../src/utils/statusItems";
 
 const header = [
   "Part Number",
@@ -35,8 +35,7 @@ const header = [
   "Nível",
   "Última ocorrência",
   "Vencimento",
-  "Data de Fechamento",
-  "Operador de fechamento",
+  // "Operador de fechamento",
   "Tempo de exposição (horas)",
   "Histórico",
 ];
@@ -44,6 +43,7 @@ const header = [
 const historyHeader = [
   { name: "Data de ocorrência", field: "occurrencyDate", type: "datetime" },
   { name: "Descrição", field: "description", type: "string" },
+  { name: "Operador", field: "user", type: "string" },
 ];
 
 const itemsFilter: ItemFilter[] = [
@@ -88,7 +88,7 @@ export default function Itens() {
 
   useEffect(() => {
     listAllModel<ItemResponse>(
-      `itens-expostos?orderBy=CodeLabel&orderByDesc=true&page=${page}&size=10&${urlFilter}`
+      `itens-in-baking-or-feederCar?orderBy=CodeLabel&orderByDesc=true&page=${page}&size=10&${urlFilter}`
     ).then((itemResponse:ItemResponse) => {
 
       let result = itemResponse.result
@@ -119,6 +119,25 @@ export default function Itens() {
     setCurrentHistories(response);
   }
 
+  const setBgColor = (qtyBakingRealized:number):string => {
+    if (qtyBakingRealized === 0) {
+      return '#fff'
+    }
+    if (qtyBakingRealized === 1) {
+      return '#dcedf5'
+    }
+    if (qtyBakingRealized === 2) {
+      return '#f3f5dc'
+    }
+    if (qtyBakingRealized === 3) {
+      return '#fae3d7'
+    }
+    if (qtyBakingRealized >= 4) {
+      return '#ff6b7f'
+    }
+    return 'red'
+  }
+
   return (
     <Layout title="Home">
       <Filter
@@ -143,7 +162,7 @@ export default function Itens() {
           {listItem &&
             listItem.length > 0 &&
             listItem.map((item: ItemModel, index) => (
-              <TableRow key={item.id}>
+              <TableRow sx={{ bgcolor: setBgColor(item.qtyBakingRealized) }} key={item.id}>
                 <TableCell component="th" scope="row">
                   {item.partNumber}
                 </TableCell>
@@ -153,11 +172,7 @@ export default function Itens() {
 
                 <TableCell align="center" component="th" scope="row">
                   <Typography variant="body2">
-                    {getStatusItem(
-                      item.expositionInMinutes,
-                      item.maxExpositionTime,
-                      item?.level?.criticalExposureTime
-                    )}
+                    {item.status}
                   </Typography>
                   <span
                     style={{
@@ -181,9 +196,7 @@ export default function Itens() {
                       style={{ flexGrow: 1, minWidth: 80 }}
                       variant="determinate"
                       value={
-                        item.percentExposition < 100
-                          ? item.percentExposition
-                          : 97
+                        item.percentExposition
                       }
                     />
                   </span>
@@ -195,13 +208,7 @@ export default function Itens() {
                   {formatDate(item.occurrencyDate)}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {"calculando"}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {"calc..."}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {"calc..."}
+                  {formatDate(item.vencimentoDate)}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {`${Math.floor(item.expositionInMinutes / 60)}:${

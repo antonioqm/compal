@@ -12,7 +12,7 @@ import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
 interface LevelProp {
   levelName: string;
   maxTimeExposition: number;
-  criticalExposureTime: number;
+  criticalExpositionTime: number;
   backingRequired: boolean;
 
 }
@@ -25,7 +25,7 @@ export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
   const filedsClean = {
     levelName: "",
     maxTimeExposition: 0,
-    criticalExposureTime: 0,
+    criticalExpositionTime: 0,
     backingRequired: true,
   };
 
@@ -35,7 +35,7 @@ export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
   const FORM_VALIDATION = Yup.object().shape({
     levelName: Yup.string().required(),
     maxTimeExposition: Yup.number().required().moreThan(0),
-    criticalExposureTime: Yup.number().required().moreThan(0),
+    criticalExpositionTime: Yup.number().required().moreThan(0),
     backingRequired: Yup.boolean().required(),
   });
 
@@ -81,10 +81,10 @@ export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
             
             type="number"
             inputProps={{ min: 0, step: 1 }}
-            name={"criticalExposureTime"}
+            name={"criticalExpositionTime"}
             label={"Tempo Crítico de Exposição (Horas)"}
           />
-          {/* <TextfieldWrapper type='number' inputProps={{  min: 0.00, step: .05  }} name={"criticalExposureTime"} label={"Tempo Crítico de Exposição (Horas)"} /> */}
+          {/* <TextfieldWrapper type='number' inputProps={{  min: 0.00, step: .05  }} name={"criticalExpositionTime"} label={"Tempo Crítico de Exposição (Horas)"} /> */}
           <ToggleBottonWrapper
             name={"backingRequired"}
             legend={"Baking Obrigatório"}

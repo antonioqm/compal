@@ -6,6 +6,9 @@ import { ThicknessModel } from "./thickness.interface";
 export  type ItemResponse =  ResponseList<ItemModel>
 export interface ItemModel {
   id: number;
+  vencimentoDate: string;
+  status: string;
+  operador: string;
   inventoryTypeName?: string;
   occurrencyDate: string;
   codeLabel: string;
@@ -22,6 +25,7 @@ export interface ItemModel {
   thickness: ThicknessModel;
   timeToleranceInBaking: number;
   numberMaxBaking: number;
+  qtyBakingRealized: number;
 
 //   {
 //     msdCode: 000014,

@@ -16,14 +16,13 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import { LevelModel } from "../../interfaces/level.interface";
-import { Thickness } from "../../interfaces/thickness.interface";
+import { ThicknessModel } from "../../interfaces/thickness.interface";
 import { currentPage } from "../../ROUTES";
 import { loadingState, useLevelsMutations } from "../../state/atom";
 import { formatDate } from "../../utils/format";
 import DialogRemove from "../DialogRemove/DialogRemove";
 import { SkeletonTable } from "../Skeleton/SkeletonTable";
 import Swipeable from "../Swipeable/Swipeable";
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "rgba(231, 237, 242, 0.44)",
@@ -76,28 +75,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 interface DataTable {
   header: any[];
-  body: Array<LevelModel | Thickness>;
+  body: Array<LevelModel | ThicknessModel>;
   nameKeys: Array<any>;
   endpoint: string
 }
 
 export default function TableCompal({ endpoint, header, body, nameKeys }: DataTable) {
-  const [editing, setEditing] = React.useState<LevelModel>();
+  const [editing, setEditing] = React.useState<LevelModel | ThicknessModel>();
   const [loading, setLoading] = useRecoilState(loadingState)
   const { deleteModel } = useLevelsMutations();
 
   // const [open, setOpen] = useState(false);
 
-  const handleDelete = async (value:LevelModel) => {
+  const handleDelete = async (value:LevelModel | ThicknessModel) => {
     console.log("handleDelete", value);
     if (value.id) {
-      await deleteModel<LevelModel>({endpoint:'/'+endpoint, payload: {...value, id: value.id}})
+      await deleteModel<LevelModel | ThicknessModel>({endpoint:'/'+endpoint, payload: {...value, id: value.id}})
       
     }
   };
 
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
+
+  console.log(header, body)
 
   return (
     <>

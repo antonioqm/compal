@@ -3,10 +3,10 @@ import { ResponseList } from "./listResponse.interface";
 
 export type ThicknessResponse =  ResponseList<ThicknessModel>
 export interface ThicknessModel {
-  id?: number | undefined;
+  id?: number;
   thicknessName: string;
-  levelId: number;
-  level?: {levelName: string};
+  level?: { levelName: string, id: number };
+  levelId: number | undefined;
   minTimeBaking40: number;
   minTimeBaking90: number;
   minTimeBaking125: number

@@ -1,15 +1,13 @@
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
+  Dialog, DialogContent,
   DialogTitle,
   IconButton,
+  Stack,
   TableBody,
   TableHead,
   TableRow as TableRowMui
 } from '@mui/material';
-import { IconHistory } from '@tabler/icons';
+import { IconHistory, IconX } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import { formatDate } from '../../utils/format';
 import Table from '../Table/Table';
@@ -28,6 +26,12 @@ export default function DialogHistory({
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
 
   const [open, setOpen] = useState(false);
+
+  const dataOrder = data.sort((a, b) => {
+    const newB = new Date(b.occurrencyDate).getTime()
+    const newA = new Date(a.occurrencyDate).getTime()
+    return newA - newB
+  })
 
   useEffect(() => {
     onAction();
@@ -60,12 +64,25 @@ export default function DialogHistory({
           '& .MuiPaper-root': { borderRadius: 4, p: 2, width: '100%' },
         }}
       >
-        <DialogTitle id="alert-dialog-title">
-          {' '}
-          <IconButton disableRipple>
-            <IconHistory />
-          </IconButton>{' '}
-          {`Histórico`}
+        <DialogTitle  sx={{
+                  display: "flex",
+                  alignContent: "space-between",
+                  justifyContent: "space-between",
+                }} id="alert-dialog-title">
+          <Stack flexDirection={"row"}>
+                  {" "}
+                  <IconButton disableRipple>
+                    <IconHistory />
+                  </IconButton>{" "}
+                  {`Histórico `}
+                </Stack>
+                <IconButton
+                  onClick={() => {
+                   onClose()
+                  }}
+                >
+                  <IconX />{" "}
+                </IconButton>
         </DialogTitle>
         <DialogContent>
           <Table>
@@ -84,7 +101,7 @@ export default function DialogHistory({
                   </TableRowMui>
                 </TableHead>
                 <TableBody>
-                  {data.map((row: { [key: string]: any }, index: number) => (
+                  {dataOrder.map((row: { [key: string]: any }, index: number) => (
                     <TableRow key={index}>
                       {header.map(({ field, type }: any, index: number) => (
                         <TableCell key={index} component="th" scope="row">
@@ -108,11 +125,11 @@ export default function DialogHistory({
             )}
           </Table>
         </DialogContent>
-        <DialogActions sx={{ height: 120 }}>
+        {/* <DialogActions sx={{ height: 120 }}>
           <Button sx={{ height: 56 }} color={'inherit'} onClick={onClose}>
             Fechar
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </>
   );

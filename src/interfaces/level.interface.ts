@@ -8,7 +8,7 @@ export interface LevelModel {
   backingRequired: boolean;
   levelName: string;
   maxTimeExposition: number;
-  criticalExposureTime: number;
+  criticalExpositionTime: number;
   user?: string | null;
 }
 
