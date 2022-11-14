@@ -28,7 +28,7 @@ const header = [
   'Data de Modificação', 
   'Part NUmber',
   'Nível',
-  'Cnfiguração de Espessura (mm)',
+  'Espessura (mm)',
   'Tempo de Tolerância de Baking (minutos)',
   'Número Máximo de Baking'
 ];
@@ -179,7 +179,7 @@ export default function PartNumber() {
                   {formatDate(partnumber.level?.levelName)}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {formatNumber(partnumber.configThickness.thicknessName)}
+                  {formatNumber(partnumber.espessura)}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {formatNumber(partnumber.timeToleranceInBaking)}
@@ -234,7 +234,7 @@ export default function PartNumber() {
                             codePartNumber: partnumber.codePartNumber,
                             levelId: partnumber.level?.id,
                             numberMaxBacking: partnumber.numberMaxBacking,
-                            thickness: partnumber.configThickness.thicknessName,
+                            espessura: partnumber.espessura,
                             timeToleranceInBaking: partnumber.timeToleranceInBaking, }}
                         />
                       

@@ -196,7 +196,9 @@ export default function Itens() {
                       style={{ flexGrow: 1, minWidth: 80 }}
                       variant="determinate"
                       value={
-                        item.percentExposition
+                        item.percentExposition < 100
+                        ? item.percentExposition
+                        : 101
                       }
                     />
                   </span>

@@ -107,7 +107,7 @@ export default function Etiqueta() {
                   {formatDate(etiqueta.createDate)}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {etiqueta.user}
+                  {etiqueta.user?.name}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {etiqueta.quantity}

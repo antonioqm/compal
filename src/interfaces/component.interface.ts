@@ -13,7 +13,7 @@ export interface ComponentModel {
   configThickness: ConfigThickness,
   temperature: number,
   numberMaxBacking: number,
-  thicknessId: number;
+  espessura: number;
   minimumTime: number,
   maxTimeExposure: number,
   maximumExposureTime?: number
@@ -53,7 +53,7 @@ export interface ComponentRequest {
   id: number;
   codePartNumber: string;
   numberMaxBacking: number;
-  thickness: number;
+  espessura: number;
   levelId: number;
   timeToleranceInBaking: number;
 }

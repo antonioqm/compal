@@ -39,7 +39,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     codePartNumber: "",
     levelId: 0,
     numberMaxBacking: 0,
-    thickness: 0,
+    espessura: 0,
     timeToleranceInBaking: 0,
   };
   
@@ -50,7 +50,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
       codePartNumber: data.codePartNumber,
         levelId: data.levelId,
         numberMaxBacking: data.numberMaxBacking,
-        thickness: data.thickness,
+        espessura: data.espessura,
         timeToleranceInBaking: data.timeToleranceInBaking
 
     } : filedsClean;
@@ -150,7 +150,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
         <TextfieldWrapper
           inputProps={{ min: 0, step: .1 , max: 400}}
           type="number"
-          name={"thickness"}
+          name={"espessura"}
           label={"Espessura"}
         />
         <TextfieldWrapper

@@ -30,7 +30,7 @@ export default function DialogHistory({
   const dataOrder = data.sort((a, b) => {
     const newB = new Date(b.occurrencyDate).getTime()
     const newA = new Date(a.occurrencyDate).getTime()
-    return newA - newB
+    return newB - newA
   })
 
   useEffect(() => {

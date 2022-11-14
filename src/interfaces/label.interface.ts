@@ -9,7 +9,7 @@ export interface LabelModel {
   printed: boolean,
   createDate: string,
   updateDate: string,
-  user?: string | null;
+  user?: { id: number; name: string; email: string; };
 }
 
 
