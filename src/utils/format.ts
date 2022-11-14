@@ -21,10 +21,16 @@ export const formatNumber = (number: any) => {
   return new Intl.NumberFormat('pt-BR', { maximumSignificantDigits: 2 }).format(number);
 }
 
-export const orderDate = (date: {occurrencyDate:string}[], field: string) => {
-  return date.sort(function(a,b){
-    // Turn your strings into dates, and then subtract them
-    // to get a value that is either negative, positive, or zero.
-    return new Date(b.occurrencyDate) - new Date(a.occurrencyDate);
-  });
+
+
+export const formatHours = (value: number): string => {
+  const hour = addZero(Math.floor(value / 60))
+  const minutes = addZero(value % 60)
+  return `${hour}:${minutes}`
 }
+function addZero(value: number): string {
+
+  const valueWithZero = value >= 0 && value < 10 ? '0' + value : `${value}`
+  return valueWithZero
+}
+

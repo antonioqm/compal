@@ -25,7 +25,7 @@ import {
   modelState,
   useLevelsMutations
 } from "../../src/state/atom";
-import { formatDate } from "../../src/utils/format";
+import { formatDate, formatHours } from "../../src/utils/format";
 import { InventoryType } from "../../src/utils/statusItems";
 
 const header = [
@@ -36,7 +36,7 @@ const header = [
   "Última ocorrência",
   "Vencimento",
   // "Operador de fechamento",
-  "Tempo de exposição (horas)",
+  "Tempo de exposiçã/baking (horas)",
   "Histórico",
 ];
 
@@ -213,9 +213,7 @@ export default function Itens() {
                   {formatDate(item.vencimentoDate)}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {`${Math.floor(item.expositionInMinutes / 60)}:${
-                    item.expositionInMinutes % 60
-                  }`}
+                  {formatHours(item.expositionInMinutes)}
                 </TableCell>
                 {/* <TableCell component="th" scope="row">
                   {item.used}

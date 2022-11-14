@@ -107,7 +107,7 @@ export default function DialogHistory({
                         <TableCell key={index} component="th" scope="row">
                           {type === 'datetime' || type === 'date'
                             ? formatDate(row[field])
-                            : row[field]}
+                            : field === 'description' ? `${row[field]} [${row.descriptionInventory}]` : row[field]  }
                         </TableCell>
                       ))}
                     </TableRow>
