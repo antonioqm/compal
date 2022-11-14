@@ -37,12 +37,11 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
   const filedsClean: ComponentRequest = {
     id: 0,
     codePartNumber: "",
-    levelId: 0,
+    levelId: undefined,
     numberMaxBacking: 0,
     espessura: 0,
     timeToleranceInBaking: 0,
   };
-  
   
   const INITIAL_FORM_STATE = data ?
     {
@@ -73,7 +72,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
 
   useLayoutEffect(() => {
     apiClient
-      .listAll<{ result: LevelModel[] }>("nivel/?orderBy=levelName")
+      .listAll<{ result: LevelModel[] }>("nivel/?orderBy=levelName&size=1000")
       .then(({ result }) => {
         const levelItems = result.map((item: LevelModel) => {
           return { id: item.id!, name: item.levelName };

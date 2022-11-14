@@ -43,7 +43,7 @@ export default function Espessura() {
 
   const transformThickness = (thicknesses: ThicknessModel[]): any => {
     const transformedThicknesses = thicknesses.map((thickness: ThicknessModel) => {
-      return {...thickness, level: thickness.level?.levelName}
+      return {...thickness, level: thickness.level?.levelName,  levelId: thickness.level?.id}
     })
 
     return transformedThicknesses
@@ -64,7 +64,7 @@ export default function Espessura() {
   useEffect(() => {
     loadEspessuraData()
   }, [page]);
-
+console.log('espessura--->', listThickness)
   return (
     <Layout title='Home' >
       <Typography variant='h1'></Typography>

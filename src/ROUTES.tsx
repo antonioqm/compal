@@ -52,7 +52,7 @@ export const ROUTES: PageRouter[] = [
   },
   {
     path: "/componente",
-    label: "componente",
+    label: "Componente",
     addButton: true,
     IconComponent: ComponentIcon,
     FormComponent: FormComponent,

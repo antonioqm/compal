@@ -210,7 +210,7 @@ export default function Itens() {
                   {formatDate(item.occurrencyDate)}
                 </TableCell>
                 <TableCell component="th" scope="row">
-                  {formatDate(item.vencimentoDate)}
+                  {item.vencimentoDate}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {formatHours(item.expositionInMinutes)}

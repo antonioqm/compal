@@ -54,7 +54,7 @@ export interface ComponentRequest {
   codePartNumber: string;
   numberMaxBacking: number;
   espessura: number;
-  levelId: number;
+  levelId: number | undefined;
   timeToleranceInBaking: number;
 }
 
