@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { IconPrinter, IconX } from "@tabler/icons";
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
@@ -34,6 +35,7 @@ interface EtiquetaRequest {
 }
 
 export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
+  const router = useRouter()
   const { listAllModel, updateModel, createModel } = useLevelsMutations();
   const [disabledStart, setDisabledStart] = useState<boolean>(false);
   const [disabledEnd, setDisabledEnd] = useState<boolean>(false);
@@ -90,6 +92,7 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           } catch (e: any) {
             setShowMessageSucess(false);
           }
+          router.reload()
         }}
       >
         {/* {showMessageSucess && <Typography>{printedResponse}</Typography>} */}

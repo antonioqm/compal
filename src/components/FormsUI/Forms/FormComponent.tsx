@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import { useLayoutEffect, useState } from "react";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
@@ -29,6 +30,7 @@ interface SelectItem {
 }
 
 export const FormComponent = ({ action, data, ...props }: Prop) => {
+  const router = useRouter()
 
   console.log("data form", data)
 
@@ -126,6 +128,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
             payload: values,
           });
         }
+        router.reload()
       }}
     >
       <Form className={styles.formWrapper}>

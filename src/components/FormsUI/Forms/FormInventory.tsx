@@ -1,4 +1,5 @@
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
@@ -11,10 +12,10 @@ import TextfieldWrapper from "../TextField/TextFieldWrapper";
 
 export interface Inventory {
   id?: number;
-  typeInventoryId: number | string;
+  typeInventoryId: number;
   codeInventory: string;
   description: string;
-  temperature?: number | string;
+  temperature?: number;
 }
 
 export interface DataProp {
@@ -22,7 +23,7 @@ export interface DataProp {
   typeInventory: InventorySelectList;
   codeInventory: string;
   description: string;
-  temperature: number | string;
+  temperature: number;
 }
 interface Prop {
   action?: "Create" | "Update";
@@ -34,6 +35,7 @@ export interface InventorySelectList {
 }
 
 export const FormInventory = ({ action, data, ...props }: Prop) => {
+  const router = useRouter()
   const { listAllModel, updateModel, createModel } = useLevelsMutations();
   const [disabledTemperature, setDisabledTemperature] = useState<boolean>((false));
   const [inventorySelectList, setInventorySelectList] = useState<
@@ -50,8 +52,8 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
   let INITIAL_FORM_STATE: Inventory = {
     codeInventory: "",
     description: "",
-    typeInventoryId: "",
-    temperature: ""
+    typeInventoryId: 0,
+    temperature: 0
 
   };
 
@@ -96,6 +98,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
       setDisabledTemperature(false);
     } else {
       setDisabledTemperature(true);
+      values.temperature = 0
       const {temperature, ...restValues} = values
     }
   };
@@ -122,7 +125,8 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
                 endpoint: "inventario",
                 payload: { ...values, id },
               })
-            : await createModel<Inventory>({ endpoint: "inventario", payload: values });
+            : await createModel<Inventory & {itemInventory: null}>({ endpoint: "inventario", payload: {...values, itemInventory: null} });
+            router.reload()
         }}
       >
         {({

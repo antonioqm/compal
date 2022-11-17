@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
@@ -20,6 +21,7 @@ interface FormProducaoPropProp {
 
 
 export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) => {
+  const router = useRouter()
   const filedsClean = {
     lineName: "",
   };
@@ -52,6 +54,7 @@ export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) =
                 payload: { ...values, id },
               })
             : await createModel<Producao>({ endpoint: "linhaProducao", payload: values });
+            router.reload()
         }}
       >
         <Form className={styles.formWrapper}>

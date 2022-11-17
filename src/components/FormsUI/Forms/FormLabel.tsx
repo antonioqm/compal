@@ -1,12 +1,13 @@
-import { Form, Formik } from "formik";
 import { Box } from "@mui/material";
+import { Form, Formik } from "formik";
+import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
+import Label from "../../../interfaces/etiqueta.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import TextfieldWrapper from "../TextField/TextFieldWrapper";
-import Label from "../../../interfaces/etiqueta.interface";
 
 interface FormLabelPropProp {
   action?: "Create";
@@ -14,6 +15,9 @@ interface FormLabelPropProp {
 }
 
 export const FormLabel = ({ data }: FormLabelPropProp) => {
+
+  const router = useRouter()
+
   const INITIAL_FORM_STATE = { ...data }
   Yup.setLocale(ptShort);
   const FORM_VALIDATION = Yup.object().shape({
@@ -34,6 +38,7 @@ export const FormLabel = ({ data }: FormLabelPropProp) => {
         validationSchema={FORM_VALIDATION}
         onSubmit={async (values: Label ) => {
           await createModel<Label>({ endpoint: "etiquetas", payload: values });
+          router.reload()
         }}
       >
         <Form className={styles.formWrapper}>

@@ -136,16 +136,19 @@ export default function PartNumber() {
       setPage(newPage);
     };
 
-  useEffect(() => {
-    listAllModel<ComponentResponse>(
-      `/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=1&size=10${urlFilter}`
-    ).then((data) => {
-      setListItem(data.result);
-      setPage(data.pageSize)
-      setTotalPages(data.totalPages)
-    });
-  }, []);
+  const loadComponentData = () => {
+      listAllModel<ComponentResponse>(
+        `/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=${page}&size=10${urlFilter}`
+      ).then((data) => {
+        setListItem(data.result);
+        // setPage(data.pageSize)
+        setTotalPages(data.totalPages)
+      });
+  }
 
+  useEffect(() => {
+    loadComponentData()
+  }, [page]);
 
   return (
     <Layout title="Home">

@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Form, Formik, useFormik } from "formik";
+import { useRouter } from "next/router";
 import { useLayoutEffect, useState } from "react";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
@@ -24,7 +25,8 @@ interface levelItemSelect {
 }
 
 
-export function FormThickness ({ action, data, ...props }: FormThicknessProp) {
+export function FormThickness({ action, data, ...props }: FormThicknessProp) {
+  const router = useRouter()
   const filedsClean:ThicknessModel = {
     thicknessName: '',
     levelId: undefined,
@@ -86,6 +88,8 @@ console.log('formThickness', data)
                 payload: { ...values, id },
               })
             : await createModel<ThicknessModel>({ endpoint: "espessura", payload: values });
+            router.reload()
+            
         }}
       >
         <Form className={styles.formWrapper}>

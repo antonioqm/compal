@@ -69,7 +69,7 @@ console.log('espessura--->', listThickness)
     <Layout title='Home' >
       <Typography variant='h1'></Typography>
       <Table
-        endpoint={'part-number'}
+        endpoint={'espessura'}
         header={header}
         body={listThickness}
         nameKeys={keyFields}

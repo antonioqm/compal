@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Form, Formik, useFormik } from "formik";
+import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
@@ -22,6 +23,7 @@ interface FormLevelProp {
 }
 
 export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
+  const router = useRouter()
   const filedsClean = {
     levelName: "",
     maxTimeExposition: 0,
@@ -66,6 +68,7 @@ export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
                 payload: { ...values, id },
               })
             : await createModel<LevelModel>({ endpoint: "nivel", payload: values });
+            router.reload()
         }}
       >
         <Form className={styles.formWrapper}>
