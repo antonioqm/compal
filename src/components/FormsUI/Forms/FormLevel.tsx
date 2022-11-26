@@ -68,7 +68,7 @@ export const FormLevel = ({ action, data, ...props }: FormLevelProp) => {
                 payload: { ...values, id },
               })
             : await createModel<LevelModel>({ endpoint: "nivel", payload: values });
-            router.reload()
+            
         }}
       >
         <Form className={styles.formWrapper}>

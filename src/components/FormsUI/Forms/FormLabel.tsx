@@ -38,7 +38,7 @@ export const FormLabel = ({ data }: FormLabelPropProp) => {
         validationSchema={FORM_VALIDATION}
         onSubmit={async (values: Label ) => {
           await createModel<Label>({ endpoint: "etiquetas", payload: values });
-          router.reload()
+          
         }}
       >
         <Form className={styles.formWrapper}>

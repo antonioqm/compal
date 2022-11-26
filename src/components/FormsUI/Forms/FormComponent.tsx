@@ -128,7 +128,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
             payload: values,
           });
         }
-        router.reload()
+        
       }}
     >
       <Form className={styles.formWrapper}>

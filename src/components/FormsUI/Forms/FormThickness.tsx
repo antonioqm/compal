@@ -88,7 +88,7 @@ console.log('formThickness', data)
                 payload: { ...values, id },
               })
             : await createModel<ThicknessModel>({ endpoint: "espessura", payload: values });
-            router.reload()
+            
             
         }}
       >

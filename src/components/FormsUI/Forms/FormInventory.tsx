@@ -126,7 +126,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
                 payload: { ...values, id },
               })
             : await createModel<Inventory & {itemInventory: null}>({ endpoint: "inventario", payload: {...values, itemInventory: null} });
-            router.reload()
+            
         }}
       >
         {({

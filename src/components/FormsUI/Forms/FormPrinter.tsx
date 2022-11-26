@@ -1,13 +1,13 @@
 import {
-  Alert,
-  AlertTitle,
-  Box,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  LinearProgress,
-  Stack,
-  Typography
+    Alert,
+    AlertTitle,
+    Box,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    LinearProgress,
+    Stack,
+    Typography
 } from "@mui/material";
 import { IconPrinter, IconX } from "@tabler/icons";
 import { Form, Formik } from "formik";
@@ -92,7 +92,7 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           } catch (e: any) {
             setShowMessageSucess(false);
           }
-          router.reload()
+          
         }}
       >
         {/* {showMessageSucess && <Typography>{printedResponse}</Typography>} */}

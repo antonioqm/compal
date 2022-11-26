@@ -54,7 +54,7 @@ export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) =
                 payload: { ...values, id },
               })
             : await createModel<Producao>({ endpoint: "linhaProducao", payload: values });
-            router.reload()
+            
         }}
       >
         <Form className={styles.formWrapper}>
