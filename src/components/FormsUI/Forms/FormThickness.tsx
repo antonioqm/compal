@@ -11,7 +11,7 @@ import { LevelModel } from "../../../interfaces/level.interface";
 import { ThicknessModel } from "../../../interfaces/thickness.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
-import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 
 
 interface FormThicknessProp {
@@ -27,23 +27,24 @@ interface levelItemSelect {
 
 export function FormThickness({ action, data, ...props }: FormThicknessProp) {
   const router = useRouter()
-  const filedsClean:ThicknessModel = {
+  const filedsClean = {
     thicknessName: '',
-    levelId: undefined,
-    minTimeBaking40: 0,
-    minTimeBaking90: 0,
-    minTimeBaking125: 0
+    levelId: 0,
+    minTimeBaking40: '',
+    minTimeBaking90: '',
+    minTimeBaking125: ''
   };
 
 
   Yup.setLocale(ptShort);
-  const INITIAL_FORM_STATE: ThicknessModel = data ? data : filedsClean;
+  const INITIAL_FORM_STATE = data ? data : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    thicknessName: Yup.number().required().moreThan(0),
-    // maxTimeExposition: Yup.number().required(),
-    // // criticalExpositionTime: Yup.number(),
-    // backingRequired: Yup.boolean().required(),
+    thicknessName: Yup.number().required().lessThan(1000).moreThan(0),
+    minTimeBaking40: Yup.number().integer().required().lessThan(1000).moreThan(0),
+    minTimeBaking90: Yup.number().integer().required().lessThan(1000).moreThan(0),
+    minTimeBaking125: Yup.number().integer().required().lessThan(1000).moreThan(0),
+    // levelId: Yup.number().required(),
   });
 
   const formik = useFormik({
@@ -69,7 +70,7 @@ export function FormThickness({ action, data, ...props }: FormThicknessProp) {
       );
   }, []);
   
-console.log('formThickness', data)
+
   return (
     <>
       <Box sx={{ bgcolor: "orange", height: "100%", width: "100%" }}></Box>
@@ -79,8 +80,9 @@ console.log('formThickness', data)
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: ThicknessModel) => {
-          console.log("action type ", action)
+        onSubmit={async (values:any, actions) => {
+          
+          // values.thicknessName = values.thicknessName.replace(',', '.')
           const { id } = values;
           action === "Update" && id
             ? await updateModel<ThicknessModel>({
@@ -89,6 +91,7 @@ console.log('formThickness', data)
               })
             : await createModel<ThicknessModel>({ endpoint: "espessura", payload: values });
             
+            actions.resetForm()
             
         }}
       >
@@ -97,28 +100,32 @@ console.log('formThickness', data)
             name={"thicknessName"}
             label={"Título"}
           /> */}
-          <TextfieldWrapper inputProps={{ min: 0, step: 0.01, max:5 }} type={'number'} name={"thicknessName"} label={"Espessura (mm)"} />
+          <TextfieldWrapper
+            inputProps={{ min: 1, max: 999, step: .1, }}
+            type={'number'}
+            name={"thicknessName"}
+            label={"Espessura (mm)"} />
           <Select
-              items={listLevel}
-              type="number"
+            items={listLevel}
             name={"levelId"}
             label={"Nível"}
+            id={"nivel-thickeness"}
             />
           <TextfieldWrapper
-            type="number"
-            inputProps={{ min: 0, step: 1 }}
+           inputProps={{ min: 1, max: 999, step: 1, }}
+            type={'number'}
             name={"minTimeBaking40"}
             label={"Tempo mínimo de Baking 40º (Horas)*"}
           />
           <TextfieldWrapper
-            type="number"
-            inputProps={{ min: 0, step: 1 }}
+           inputProps={{ min: 1, max: 999, step: 1, }}
+            type={'number'}
             name={"minTimeBaking90"}
             label={"Tempo mínimo de Baking 90º (Horas)*"}
           />
           <TextfieldWrapper
-            type="number"
-            inputProps={{ min: 0, step: 1 }}
+           inputProps={{ min: 1, max: 999, step: 1, }}
+            type={'number'}
             name={"minTimeBaking125"}
             label={"Tempo mínimo de Baking 125º (Horas)*"}
           />

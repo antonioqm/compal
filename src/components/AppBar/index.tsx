@@ -1,24 +1,14 @@
-import { Add } from '@mui/icons-material';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 import {
-  Toolbar,
-  Button,
-  Typography,
-  styled,
-  Box,
-  Alert,
-  Snackbar,
+  styled, Toolbar, Typography
 } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { useRouter } from 'next/router';
-import { cloneElement, useContext, useState } from 'react';
-import GlobalContext from '../Drawer/GlobalContext';
+import { useContext, useRef } from 'react';
 import { currentPage } from '../../ROUTES';
+import GlobalContext from '../Drawer/GlobalContext';
 import ElevationScroll from '../ElevationScroll';
-import Avatar from './Avatar';
 import Swipeable from '../Swipeable/Swipeable';
-import axios from 'axios';
-import { useRecoilValue } from 'recoil';
+import Avatar from './Avatar';
 
 const drawerWidth = 256;
 
@@ -50,9 +40,14 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function Appbar() {
+  const myRef = useRef<any>(null);
   const { open } = useContext(GlobalContext);
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
+  // const [toogleDrawer, setToogleDrawer] = useState<boolean>(false)
+  const closeDrawer = () => {
+    // myRef.current?.closeSwipeable()!
+  }
 
   return (
     <ElevationScroll>
@@ -60,11 +55,12 @@ export default function Appbar() {
         <Toolbar sx={{ height: '100%' }}>
           {Route.addButton && (
             <Swipeable
+            ref={myRef}
               type={'Create'}
               tooltipLabel={`Adicionar ${Route?.label}`}
               title={Route?.label}
             >
-              {Route && <Route.FormComponent action={'Create'} />}
+              {Route && <Route.FormComponent  closeForm={closeDrawer}  action={'Create'} />}
             </Swipeable>
           )}
 

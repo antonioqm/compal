@@ -36,13 +36,13 @@ export function setupApiClient(ctx:GetServerSidePropsContext | undefined = undef
 
               const { token } = response;
 
-              console.log('login novo', response)
+              
 
               setCookie(ctx, `nextAuth.token`, token, {
                 maxAge: 60 * 60 * 24 * 30, //1 month
                 path: '/'
               })
-              console.log(`Bearer ${token}`)
+              
               api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
               failRequestsQueue.forEach(request => request.onSuccess(token))
@@ -62,7 +62,7 @@ export function setupApiClient(ctx:GetServerSidePropsContext | undefined = undef
           return new Promise((resolve, reject) => {
             failRequestsQueue.push({
               onSuccess: (token: string) => {
-                console.log('onSucess', token)
+                
                 originalConfig.headers!.Authorization = `Bearer ${token}`;
                 resolve(api(originalConfig))
               },
@@ -74,7 +74,7 @@ export function setupApiClient(ctx:GetServerSidePropsContext | undefined = undef
         } else {
           // deslogar o usuário
           if (process.browser) {
-            console.log('logOut')
+            
             signOut()
           } else {
             return Promise.reject(new AuthTokenError())
@@ -117,18 +117,27 @@ export const apiClient = {
     const data = await api.get('account/currentuser')
     return data;
   },
-  create: async <Resource = any>(endpoint: string, payload = {}): Promise<Resource> => {
-    const { data } = await api.post(endpoint, payload)
-    return data;
+  create: async <Resource = any>(endpoint: string, payload: Resource | {} = {}): Promise<Resource> => {
+    return new Promise(async (resolve, reject) => {
+      api.post(endpoint, payload)
+        .then(({ data }) => resolve(data))
+        .catch(error => reject(error))
+    })
   },
   update: async <Resource = any>(endpoint: string, payload = {}): Promise<Resource> => {
-    const { data } = await api.put(endpoint, payload)
-    return data;
+    return new Promise(async (resolve, reject) => {
+      api.put(endpoint, payload)
+        .then(({ data }) => resolve(data))
+        .catch(error => reject(error))
+    })
 
   },
   delete: async <Resource = any>(endpoint: string): Promise<Resource> => {
-    const { data } = await api.delete(`${endpoint}`)
-    return data;
+    return new Promise(async (resolve, reject) => {
+      api.delete(endpoint)
+        .then(({ data }) => resolve(data))
+        .catch(error => reject(error))
+    })
   },
   get: async <Resource = any>(endpoint: string): Promise<Resource> => {
     const { data } = await api.get(`${endpoint}`)

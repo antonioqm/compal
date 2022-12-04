@@ -1,4 +1,5 @@
-import { Alert, Box, Snackbar } from "@mui/material";
+import { Alert, AlertTitle, Box, List, ListItem, ListItemIcon, ListItemText, Snackbar } from "@mui/material";
+import { IconApi } from "@tabler/icons";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
@@ -49,7 +50,7 @@ const Home = ({ children, title, ...props }: Props) => {
     <GlobalContext.Provider value={value}>
       <div className={styles.container}>
         <Snackbar
-          autoHideDuration={1000}
+          autoHideDuration={5000}
           open={openSnackbar}
           onClose={handleCloseSnackbar}
         >
@@ -59,7 +60,21 @@ const Home = ({ children, title, ...props }: Props) => {
             severity={response?.type ? response?.type : "info"}
             sx={{ width: "100%" }}
           >
-            {response?.data ? response?.data : response?.message}
+            <AlertTitle>{response?.type === 'success' ? 'Sucesso' :response?.type === 'error' ? 'Erro' : "Alerta"}</AlertTitle>
+            {response?.message && response?.message}
+            {response?.messages && response.messages.map(message => {
+              return (
+                <List dense>
+                  <ListItem>
+                  <ListItemIcon>
+                    <IconApi />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={message ? message : null}
+                  />
+                </ListItem>
+                </List>)
+            })}
           </Alert>
         </Snackbar>
 

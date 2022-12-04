@@ -7,7 +7,7 @@ import styles from "../../../../styles/Login.module.scss";
 import Label from "../../../interfaces/etiqueta.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
-import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 
 interface FormLabelPropProp {
   action?: "Create";
@@ -36,8 +36,9 @@ export const FormLabel = ({ data }: FormLabelPropProp) => {
       <Formik
         initialValues={INITIAL_FORM_STATE}
         validationSchema={FORM_VALIDATION}
-        onSubmit={async (values: Label ) => {
+        onSubmit={async (values: Label, actions ) => {
           await createModel<Label>({ endpoint: "etiquetas", payload: values });
+          actions.resetForm()
           
         }}
       >

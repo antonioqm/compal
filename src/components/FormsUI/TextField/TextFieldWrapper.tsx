@@ -7,19 +7,22 @@ import {
 } from "@mui/material";
 import { IconEye, IconEyeOff } from "@tabler/icons";
 import { useField, useFormikContext } from "formik";
-import { useState } from "react";
+import { createRef, useState } from "react";
+import { TextMask } from "../TextMask/TextMask";
 
 
-const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: any) => {
+export const TextfieldWrapper = ({ name, label, type, mask, min, max, endAdornment, inputProps = {}, ...otherProps }: any) => {
   const [field, meta, form] = useField(name);
   const { setFieldValue } = useFormikContext();
   const [showPassword, setShowPassword] = useState(false)
   const [showDomain, setShowDomain] = useState(true)
+  const ref = createRef();
  
   
-  const handleChange = (evt: any) => {
-    const { value } = evt.target;
+  const handleChange = (event: { target: { value: string }; }) => {
+    const { value } = event.target;
     setFieldValue(name, value);
+    console.log('event', event.target.value)
   };
 
   const handleClickShowPassword = () => {
@@ -46,13 +49,17 @@ const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: an
   }
   
 
+
   return (
     <>
-      <FormControl fullWidth variant="outlined">
+      <FormControl   fullWidth variant="outlined">
         <InputLabel sx={{ '&.MuiFormLabel-root-MuiInputLabel-root.Mui-disabled': {color: 'red'} }} focused htmlFor={`outlined-adornment-${name}`}>
           {label}
         </InputLabel>
-        <OutlinedInput
+        {
+          <OutlinedInput
+            inputComponent={ mask ? TextMask : null}
+            inputProps={{ mask: mask ? mask : '', ...inputProps, type }}
           sx={{
             "&.Mui-disabled": { color: '#c0c0c0'},
           }}
@@ -77,6 +84,7 @@ const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: an
           }
           label={label}
         />
+        }
         <FormHelperText sx={{ ml: 0 }} error={errorsField.error}>
           {errorsField.helperText}
         </FormHelperText>
@@ -85,4 +93,3 @@ const TextfieldWrapper = ({ name, label, type, endAdornment, ...otherProps }: an
   );
 };
 
-export default TextfieldWrapper;

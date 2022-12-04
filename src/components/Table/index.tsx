@@ -88,7 +88,7 @@ export default function TableCompal({ endpoint, header, body, nameKeys }: DataTa
   // const [open, setOpen] = useState(false);
 
   const handleDelete = async (value:LevelModel | ThicknessModel) => {
-    console.log("handleDelete", value);
+    
     if (value.id) {
       await deleteModel<LevelModel | ThicknessModel>({endpoint:'/'+endpoint, payload: {...value, id: value.id}})
       
@@ -97,8 +97,6 @@ export default function TableCompal({ endpoint, header, body, nameKeys }: DataTa
 
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
-
-  console.log(header, body)
 
   return (
     <>
@@ -141,6 +139,7 @@ export default function TableCompal({ endpoint, header, body, nameKeys }: DataTa
                               key={`${bodyField.name}${index}`}
                               component="th"
                               scope="row"
+                              style={{ whiteSpace: key.name === 'thicknessName' ? 'nowrap' : 'initial'}}
                               align={typeof bodyField[key.name] === "number" ? 'center' : 'left'}
                             >
                               <>
@@ -166,11 +165,13 @@ export default function TableCompal({ endpoint, header, body, nameKeys }: DataTa
                                     }
                                   />
                                 ) : (
-                                  `${bodyField.isMain
-                                    ? "principal" +
-                                    formatDate(bodyField[key.name])
+                                    <>
+                                    {`${ key.name === 'thicknessName' ?
+                                    bodyField[key.name] + ' mm'
                                     : formatDate(bodyField[key.name])
-                                  }`
+                                    }`}
+                                    </>
+                                    
                                 )}
                               </>
                             </StyledTableCell>

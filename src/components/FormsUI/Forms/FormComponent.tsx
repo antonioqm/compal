@@ -11,7 +11,7 @@ import { ThicknessModel } from "../../../interfaces/thickness.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import Select from "../Select/SelectWrapper";
-import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 
 const REGEX = {
   PART_NUMBER: {
@@ -32,17 +32,17 @@ interface SelectItem {
 export const FormComponent = ({ action, data, ...props }: Prop) => {
   const router = useRouter()
 
-  console.log("data form", data)
+  
 
   Yup.setLocale(ptShort);
   
-  const filedsClean: ComponentRequest = {
-    id: 0,
+  const filedsClean = {
+    id: "",
     codePartNumber: "",
     levelId: undefined,
-    numberMaxBacking: 0,
-    espessura: 0,
-    timeToleranceInBaking: 0,
+    numberMaxBacking: "",
+    espessura: "",
+    timeToleranceInBaking: "",
   };
   
   const INITIAL_FORM_STATE = data ?
@@ -57,14 +57,17 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     } : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    // codePartNumber: Yup.string().required().min(5).max(25),
-    // .matches(REGEX.PART_NUMBER.REGEX, REGEX.PART_NUMBER.MESSAGE),
-    // humiditySensitivity: Yup.boolean().required(),
-    // maxTimeExposure: Yup.number().positive().required(),
-    // minimumTime: Yup.number().positive().required(),
-    // numberMaxBacking: Yup.number().positive().moreThan(0).lessThan(10).required(),
-    // temperature: Yup.number().positive().required(),
-    // thicknessId: Yup.number().positive().required()
+    codePartNumber: Yup.string().required()
+      .matches(/[0-9]*[\.]*[a-z]*[-]*/, {
+      message: 'A combinação deve ser de letras, números, ponto ou traço',
+      excludeEmptyString: true
+      })
+    ,
+    levelId:Yup.string().required(),
+    numberMaxBacking: Yup.string().required(),
+    espessura: Yup.string().required(),
+    timeToleranceInBaking: Yup.string().required()
+
   });
 
   const { createModel, updateModel } = useLevelsMutations();
@@ -102,7 +105,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
       }
       validationSchema={FORM_VALIDATION}
       // onSubmit={async (values: Thickness) => {
-      //   console.log("action type ", action)
+      //   
       //   const { id } = values;
       //   action === "Update" && id
       //     ? await updateModel<Thickness>({
@@ -112,8 +115,8 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
       //     : await createModel<Thickness>({ endpoint: "espessura", payload: values });
       // }}
 
-      onSubmit={async (values:any) => {
-        console.log("ComponentRequest", values);
+      onSubmit={async (values:any, actions) => {
+        
 
         if (action === "Update") {
           const { id } = values ;
@@ -122,12 +125,15 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
             payload: { ...values, id },
           });
         }
+        
         if (action === "Create") {
           await createModel<ComponentRequest>({
             endpoint: "partNumber",
             payload: values,
           });
         }
+
+        actions.resetForm()
         
       }}
     >

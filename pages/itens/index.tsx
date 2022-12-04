@@ -97,8 +97,8 @@ export default function Itens() {
         apiClient.get<InventoryType>(`inventario/${item.inventory.typeInventoryId}/byId`)
           .then(data => {
             const current = result[index]
-            result = [...result, { ...current, inventoryTypeName: 'ppppp' }]
-            console.log('result', result)
+            result = [...result, { ...current, inventoryTypeName: '' }]
+
           })
         
       });

@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import { Level } from "../../interfaces/level.interface";
-import { currentPage } from "../../ROUTES";
 import { loadingState, useLevelsMutations } from "../../state/atom";
 import { SkeletonTable } from "../Skeleton/SkeletonTable";
 
@@ -18,7 +17,7 @@ export default function ({ children }: DataTable) {
   const { deleteModel } = useLevelsMutations();
 
   const handleDelete = async (value:Level) => {
-    console.log("handleDelete", value);
+    
     if (value.id) {
       await deleteModel<Level>({endpoint:'/nivel', payload: {...value, id: value.id}})
       

@@ -62,9 +62,6 @@ export default ({
           value={selected}
           {...otherProps}
           {...configSelect}>
-           <MenuItem value="">
-            <em>Nenhum</em>
-          </MenuItem>
           {
             items.map((value:{id:number, name:string} ) => {
               return <MenuItem key={value.id+value.name} value={value.id}>{value.name}</MenuItem>

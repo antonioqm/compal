@@ -11,7 +11,7 @@ import { Level } from "../../../interfaces/level.interface";
 import { Thickness } from "../../../interfaces/thickness.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
-import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 
 // interface ThicknessProp {
 //   levelName: string;
@@ -73,7 +73,7 @@ export function FormThickness({ action, data, ...props }: FormThicknessProp) {
       );
   }, []);
   
-console.log('formThickness', data)
+
   return (
     <>
       <Box sx={{ bgcolor: "orange", height: "100%", width: "100%" }}></Box>
@@ -83,8 +83,8 @@ console.log('formThickness', data)
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: Thickness) => {
-          console.log("action type ", action)
+        onSubmit={async (values: Thickness, actions) => {
+          
           const { id } = values;
           action === "Update" && id
             ? await updateModel<Thickness>({
@@ -92,7 +92,7 @@ console.log('formThickness', data)
                 payload: { ...values, id },
               })
             : await createModel<Thickness>({ endpoint: "espessura", payload: values });
-            
+            actions.resetForm()
         }}
       >
         <Form className={styles.formWrapper}>

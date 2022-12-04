@@ -64,7 +64,7 @@ export default function Espessura() {
   useEffect(() => {
     loadEspessuraData()
   }, [page]);
-console.log('espessura--->', listThickness)
+  
   return (
     <Layout title='Home' >
       <Typography variant='h1'></Typography>

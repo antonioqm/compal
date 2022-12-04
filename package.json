@@ -18,6 +18,7 @@
     "axios": "^0.27.2",
     "babel-plugin-inline-react-svg": "^2.0.1",
     "formik": "^2.2.9",
+    "imask": "^6.4.3",
     "jwt-decode": "^3.1.2",
     "lottie-react": "^2.3.1",
     "next": "12.1.6",
@@ -27,6 +28,7 @@
     "react-dom": "18.1.0",
     "react-hook-form": "^7.33.1",
     "react-imask": "^6.4.2",
+    "react-number-format": "^5.1.2",
     "recoil": "^0.7.5",
     "yup": "^0.32.11",
     "yup-locale-pt": "^0.0.9"

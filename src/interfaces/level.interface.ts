@@ -5,10 +5,10 @@ export interface LevelModel {
   id?: number | undefined;
   createDate?: string;
   updateDate?: string;
-  backingRequired: boolean;
+  backingRequired?: boolean;
   levelName: string;
-  maxTimeExposition: number;
-  criticalExpositionTime: number;
+  maxTimeExposition: number | string;
+  criticalExpositionTime: number | string;
   user?: string | null;
 }
 

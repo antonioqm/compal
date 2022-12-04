@@ -8,7 +8,7 @@ import { apiClient } from "../../../api/api";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import Select from "../Select/SelectWrapper";
-import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 
 export interface Inventory {
   id?: number;
@@ -63,7 +63,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
   }
 
 
-  // console.log("data in form", data)
+  // 
   useEffect(() => {
     apiClient.listAll<any[]>("inventario/tipos").then((result) => {
       const newInventorySelectlist = result.map((type) => {
@@ -111,8 +111,8 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
         }}
         validate={validateTemperature}
         validationSchema={FORM_VALIDATION}
-        onSubmit={async (values: Inventory ) => {
-          console.log('values: Inventory ', values)
+        onSubmit={async (values: Inventory, actions ) => {
+          
           const { id } = values;
 
           if (action === "Update") {
@@ -120,12 +120,12 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
             values = values.typeInventoryId !== FORNO ? {...rest} : values
           }
 
-          action === "Update" && id
-            ? await updateModel<Inventory>({
-                endpoint: "inventario",
-                payload: { ...values, id },
-              })
-            : await createModel<Inventory & {itemInventory: null}>({ endpoint: "inventario", payload: {...values, itemInventory: null} });
+          if (action === "Create") {
+            await createModel<Inventory & { itemInventory: null }>({ endpoint: "inventario", payload: { ...values, itemInventory: null } });
+              
+          }
+
+          actions.resetForm()
             
         }}
       >

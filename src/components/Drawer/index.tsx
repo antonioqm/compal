@@ -1,33 +1,23 @@
-import * as React from "react";
-import {
-  styled,
-  useTheme,
-  Theme,
-  CSSObject,
-  withStyles,
-} from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import MuiDrawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
 import MuiListItem from "@mui/material/ListItem";
 import MuiListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import {
+    CSSObject, styled, Theme, useTheme
+} from "@mui/material/styles";
 import Image from "next/image";
-import { useContext, useState } from "react";
-import {ROUTES, activeRoute} from "../../ROUTES";
-import { Button, TextField } from "@mui/material";
-import { Add, AddCircle } from "@mui/icons-material";
 import Link from "next/link";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
+import { useContext, useState } from "react";
+import { activeRoute, ROUTES } from "../../ROUTES";
 import GlobalContext from "./GlobalContext";
 
 const drawerWidth = 256;
@@ -60,7 +50,7 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const DrawerHeader = styled("div")(({ theme }) => {
-  // console.log(theme)
+  // 
   return {
     display: "flex",
     height: 80,

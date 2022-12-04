@@ -1,13 +1,13 @@
 import {
-    Alert,
-    AlertTitle,
-    Box,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    LinearProgress,
-    Stack,
-    Typography
+  Alert,
+  AlertTitle,
+  Box,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  LinearProgress,
+  Stack,
+  Typography
 } from "@mui/material";
 import { IconPrinter, IconX } from "@tabler/icons";
 import { Form, Formik } from "formik";
@@ -79,8 +79,8 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
         }}
         validate={validateStartEnd}
         validationSchema={FORM_VALIDATION}
-        onSubmit={async (etiquetaRequest: EtiquetaRequest) => {
-          console.log("values", etiquetaRequest);
+        onSubmit={async (etiquetaRequest: EtiquetaRequest, actions) => {
+          
           try {
             setAwaitingPrinting(true);
             const printedResponse = await apiClient.get(
@@ -92,7 +92,7 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           } catch (e: any) {
             setShowMessageSucess(false);
           }
-          
+          actions.resetForm()
         }}
       >
         {/* {showMessageSucess && <Typography>{printedResponse}</Typography>} */}

@@ -1,8 +1,8 @@
-import Router  from "next/router";
-import { createContext, ReactNode, useState, useEffect } from "react";
-import { apiClient, api } from "../api/api";
-import { destroyCookie, parseCookies, setCookie } from 'nookies'
-import jwtDecode,  {JwtPayload } from "jwt-decode";
+import jwtDecode from "jwt-decode";
+import Router from "next/router";
+import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { api, apiClient } from "../api/api";
 
 
 export type User = {
@@ -48,9 +48,9 @@ export function AuthProvider({ children }: AuthProvideProps) {
       apiClient.getCurrentUser()
         .then(response => {
           const decoded = jwtDecode<any>(token)
-          console.log('decoded', decoded.name!)
-          console.log('process.cwd()', process.cwd())
-          console.log('process--->', process.browser)
+          
+          
+          
         setUser(user)
         }).catch(() => {
           signOut()
@@ -74,9 +74,9 @@ export function AuthProvider({ children }: AuthProvideProps) {
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
       Router.push('/')
-      console.log('User-->', userResponse);
+      
     } catch (error) {
-      console.log(error);
+      
     } 
   }
 

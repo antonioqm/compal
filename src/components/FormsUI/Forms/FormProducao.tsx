@@ -7,7 +7,7 @@ import styles from "../../../../styles/Login.module.scss";
 import Producao from "../../../interfaces/producao.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
-import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 export interface ProducaoProp {
   id?: number,
   lineName: string,
@@ -46,7 +46,7 @@ export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) =
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
-        onSubmit={async (values: Producao ) => {
+        onSubmit={async (values: Producao, actions ) => {
           const { id } = values;
           action === "Update" && id
             ? await updateModel<Producao>({
@@ -54,6 +54,8 @@ export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) =
                 payload: { ...values, id },
               })
             : await createModel<Producao>({ endpoint: "linhaProducao", payload: values });
+          
+            actions.resetForm()
             
         }}
       >

@@ -8,6 +8,7 @@ import {
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { setupApiClient } from '../../src/api/api';
 import DialogRemove from '../../src/components/DialogRemove/DialogRemove';
 import Filter from '../../src/components/Filter/Filter';
@@ -19,7 +20,7 @@ import { TableCell } from '../../src/components/Table/TableCell';
 import { TableRow } from '../../src/components/Table/TableRow';
 import { ComponentModel, ComponentResponse } from '../../src/interfaces/component.interface';
 import { currentPage } from '../../src/ROUTES';
-import { useLevelsMutations } from '../../src/state/atom';
+import { filterModel, loadingState, modelState, useLevelsMutations } from '../../src/state/atom';
 import { formatDate, formatNumber } from '../../src/utils/format';
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
@@ -120,7 +121,11 @@ export default function PartNumber() {
     console.log('handleDelete', value);
   };
 
-  const [listItem, setListItem] = useState<ComponentModel[]>([]);
+  const listComponents:ComponentModel[] = useRecoilValue<ComponentModel[]>(filterModel);
+  const [listItem, setListItem]  = useRecoilState<ComponentModel[]>(modelState);
+  const [loading, setLoading]  = useRecoilState<boolean>(loadingState);
+
+  // const [listItem, setListItem] = useState<ComponentModel[]>([]);
 
   const [expanded, setExpanded] = useState<string | false>(false);
 
@@ -152,6 +157,7 @@ export default function PartNumber() {
 
   return (
     <Layout title="Home">
+      <div>{ 'loading: ' + loading}</div>
       <Filter onChangeFilter={updateUrlFilters} items={partnumberFilter}  endpoint='itens-expostos' />
 
 
@@ -190,40 +196,7 @@ export default function PartNumber() {
                 <TableCell component="th" scope="row">
                   {partnumber.numberMaxBacking}
                 </TableCell>
-                {/* <TableCell component="th" scope="row">
-                  <Chip
-                    size="small"
-                    sx={{
-                      fontSize: '10px',
-                      textTransform: 'uppercase',
-                      p: 0,
-                    }}
-                    color={partnumber.humiditySensitivity ? 'success' : 'error'}
-                    label={partnumber.humiditySensitivity ? 'sim' : 'não'}
-                    icon={
-                      partnumber.humiditySensitivity ? (
-                        <IconCircleCheck size={16} />
-                      ) : (
-                        <IconCircleX size={16} />
-                      )
-                    }
-                  />
-                </TableCell> */}
-               
-                {/* <TableCell component="th" scope="row">
-                  {partnumber.temperature}
-                </TableCell> */}
-
-                {/* <TableCell component="th" scope="row">
-                  {partnumber.minimumTime}
-                </TableCell> */}
-                {/* <TableCell component="th" scope="row">
-                  {partnumber.maxTimeExposure}
-                </TableCell> */}
-
                 <TableCell component="th" scope="row">
-                  {/* <Fade in={hoverAction}> */}
-
                   {<>
                     <Swipeable
                       type={'Update'}

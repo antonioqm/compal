@@ -13,8 +13,8 @@ interface Props {
 export default function ElevationScroll({ ...props }: Props) {
   const { children, window } = props;
 
-  // console.log(window)
-  // console.log("children", children)
+  // 
+  // 
 
   // Note that you normally won't need to set the window ref as useScrollTrigger
   // will default to window.

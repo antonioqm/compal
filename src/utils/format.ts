@@ -8,7 +8,7 @@ function isDate(value: any) {
 
 
 export const formatDate = (dateString: any) => {
-  console.log(dateString)
+  
   if (isDate(dateString)) {
     let date = new Date(dateString)
     return date.toLocaleDateString('pt-BR',  { hour: '2-digit', minute: '2-digit', year: 'numeric', month: 'short', day: 'numeric',second:'2-digit', formatMatcher: 'basic', dayPeriod: 'narrow' },)

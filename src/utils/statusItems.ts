@@ -21,7 +21,7 @@ export const getStatusItem = (expositionInMinutes = 0, maxExpositionTime = 0, cr
     }
      else if (expositionInMinutes > (maxExpositionTime * OneHour)) {
         // Tempo crítico
-       console.log('Exposto (Excedente)', expositionInMinutes, (maxExpositionTime * OneHour))
+       
         return 'Exposto (Excedente)'
    }
 return "exposto"
@@ -32,7 +32,7 @@ return "exposto"
 const whereIs = (invetoryId: number): any => {
    apiClient.get<InventoryType>(`inventario/${invetoryId}/byId`)
       .then(data => {
-         console.log(data)
+         
          if(data) return data.typeInventory.name
       })
 }

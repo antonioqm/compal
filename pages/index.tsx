@@ -8,7 +8,7 @@ import React, { useContext } from "react";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import ButtonWrapper from "../src/components/FormsUI/Button/ButtonWrapper";
-import TextfieldWrapper from "../src/components/FormsUI/TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../src/components/FormsUI/TextField/TextFieldWrapper";
 import { AuthContext } from "../src/contexts/AuthContext";
 import { withSSRGuest } from "../src/utils/withSSRGuest";
 import styles from "../styles/Login.module.scss";
