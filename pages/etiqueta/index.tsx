@@ -70,9 +70,10 @@ export default function Etiqueta() {
     setPage(newPage);
   };
 
+  // `http://200.129.173.244:5001/v1/etiquetas?orderByDesc=true&1=1&size=10&orderBy=StartCode`
   const loadLabelsData = () => {
     listAllModel<LabelResponse>(
-      `/etiquetas?orderByDesc=true&${page}=1&size=10&orderBy=StartCode`
+      `/etiquetas?orderByDesc=true&page=${page}&size=10&orderBy=StartCode`
     ).then((response) => {
       setTotalPages(Math.ceil(response.totalItems / response.pageSize));
       setLabelResponse(response);

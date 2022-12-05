@@ -20,7 +20,7 @@ import { apiClient } from "../../../api/api";
 import { LabelModel } from "../../../interfaces/label.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
-import TextfieldWrapper from "../TextField/TextFieldWrapper";
+import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
 
 interface PrintProps {
@@ -49,15 +49,24 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
   Yup.setLocale(ptShort);
 
   let INITIAL_FORM_STATE: EtiquetaRequest = {
-    start: etiqueta ? 1 : "",
-    end: etiqueta ? etiqueta.quantity : "",
+    start: etiqueta ? 1 : '',
+    end: etiqueta ? etiqueta.quantity : '',
     printerInterval: false,
   };
 
   const FORM_VALIDATION = Yup.object().shape({
-    printerInterval: Yup.string().required(),
-    start: Yup.number(),
-    end: Yup.number().required(),
+    printerInterval: Yup.boolean().required(),
+    start: Yup.number()
+      .integer()
+      .positive()
+      .required()
+      .max(Yup.ref('end'), 'Não pode ser maior que o campo "final"'),
+    end: Yup.number()
+      .integer()
+      .positive()
+      .required()
+      .max(typeof INITIAL_FORM_STATE.end === 'number' ? INITIAL_FORM_STATE.end : 0, 'Não pode ser maior que o intervalo "final" pré-configurado.')
+      .min(Yup.ref('start'), 'Não pode ser menor que o campo "inicial".'),
   });
 
   const validateStartEnd = (values: EtiquetaRequest) => {
