@@ -39,7 +39,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
   const filedsClean = {
     id: "",
     codePartNumber: "",
-    levelId: undefined,
+    levelId: 1,
     numberMaxBacking: "",
     espessura: "",
     timeToleranceInBaking: "",
@@ -57,16 +57,11 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     } : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    codePartNumber: Yup.string().required()
-      .matches(/[0-9]*[\.]*[a-z]*[-]*/, {
-      message: 'A combinação deve ser de letras, números, ponto ou traço',
-      excludeEmptyString: true
-      })
-    ,
-    levelId:Yup.string().required(),
-    numberMaxBacking: Yup.string().required(),
-    espessura: Yup.string().required(),
-    timeToleranceInBaking: Yup.string().required()
+    codePartNumber: Yup.string().required(),
+    levelId:Yup.number().integer().required(),
+    numberMaxBacking: Yup.number().integer().required(),
+    espessura: Yup.number().integer().required(),
+    timeToleranceInBaking: Yup.number().integer().required()
 
   });
 
@@ -74,6 +69,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
 
   const [listLevel, setListLevel] = useState<SelectItem[]>([]);
   const [listThickness, setListThickness] = useState<SelectItem[]>([]);
+
 
   useLayoutEffect(() => {
     apiClient
@@ -143,6 +139,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
         <TextfieldWrapper
           name={"codePartNumber"}
           label={"Partnumber"}
+          mask={/^[\d|\w|\-|\.]{1,10}$/}
         />
         {/* <ToggleBottonWrapper
           name="humiditySensitivity"
@@ -156,19 +153,22 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
         <Select  items={listLevel} name={"levelId"} label={"Nível"} />
 
         <TextfieldWrapper
-          inputProps={{ min: 0, step: .1 , max: 400}}
+          inputProps={{ 
+                    min: 0, max: 400, step: .1
+          }}
           type="number"
           name={"espessura"}
           label={"Espessura"}
+ 
         />
         <TextfieldWrapper
-          inputProps={{ min: 0, step: 1 }}
+          inputProps={{ min: 0, step: 1, max:1000 }}
           type="number"
           name={"timeToleranceInBaking"}
           label={"Tempo de tolerância de baking"}
         />
         <TextfieldWrapper
-          inputProps={{ min: 0, step: 1 }}
+          inputProps={{ min: 0, step: 1, max: 1000 }}
           type="number"
           name={"numberMaxBacking"}
           label={"Número máximo de baking"}

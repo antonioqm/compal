@@ -3,7 +3,7 @@ import { IMaskInput } from "react-imask";
 
 
 interface CustomProps {
-  onChange: (event: { target: { name: string; value: string }}) => void;
+  onChange: (event:any) => void;
   name: string;
   mask: any;
   type?: any;
@@ -16,13 +16,17 @@ export const TextMask = React.forwardRef<HTMLElement, CustomProps>(
       <IMaskInput
         mask={mask}
         {...other}
-        // definitions={{
-        //   '#': /[1-9]/
+        definitions={{
+          '#': /[1-9]/
+        }}
+        // prepare={(value: any) => {
+        //   value =  typeof value ===  'number' ? value.toString() : value
+        //    return typeof mask === 'function' ? parseFloat(value.replace(',', '.')) : value
         // }}
         inputRef={ref}
-        onAccept={(value: any) => {
-          console.log('no mask', props)
-          return onChange({ target: { name, value }})
+        onChange={(value: any) => {
+          console.log('type mask', typeof(mask))
+          return onChange(value)
         }
         }
         overwrite

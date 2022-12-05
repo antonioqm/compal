@@ -140,6 +140,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
         }) => (
           <Form className={styles.formWrapper}>
             <Select
+              disabled={action === 'Update' ? true : false}
               ref={selectRefTypeInventory}
               items={inventorySelectList}
               name={"typeInventoryId"}

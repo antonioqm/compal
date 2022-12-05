@@ -157,10 +157,7 @@ export default function PartNumber() {
 
   return (
     <Layout title="Home">
-      <div>{ 'loading: ' + loading}</div>
       <Filter onChangeFilter={updateUrlFilters} items={partnumberFilter}  endpoint='itens-expostos' />
-
-
       <Table>
         <TableHead>
           <TableRowMui sx={{ boxShadow: 'none', background: 'transparent' }}>
