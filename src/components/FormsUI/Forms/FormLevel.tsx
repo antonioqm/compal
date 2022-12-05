@@ -106,7 +106,7 @@ export const FormLevel = ({ action, data, closeForm, ...props }: FormLevelProp) 
       >
         <Form className={styles.formWrapper}>
          
-          <TextfieldWrapper placeholder='LEV-00000-C' mask='LEV-[00000aaaaa]' name={"levelName"} label={"Nível"} />
+          <TextfieldWrapper placeholder='1A' mask='[0a]' name={"levelName"} label={"Nível"} />
           <TextfieldWrapper
             inputProps={{ min: 1, max: 999, pattern: '[0-9]*', inputMode: 'numeric' }}
             type={'number'}
