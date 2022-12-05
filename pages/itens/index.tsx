@@ -47,7 +47,8 @@ const historyHeader = [
 ];
 
 const itemsFilter: ItemFilter[] = [
-  { name: "feederCar", label: "Feeder Car", type: "text" },
+  { name: "espessura", label: "Espessura", type: "text" },
+  { name: "partNumber", label: "Part-number", type: "text" },
   { name: "codeLabel", label: "Código", type: "text" },
   { name: "used", label: "Usado", type: "radio" },
   { name: "temperature", label: "Temperatura", type: "slider" },
@@ -91,20 +92,20 @@ export default function Itens() {
       `itens-in-baking-or-feederCar?orderBy=CodeLabel&orderByDesc=true&page=${page}&size=10&${urlFilter}`
     ).then((itemResponse:ItemResponse) => {
 
-      let result = itemResponse.result
-      itemResponse.result.map((item: ItemModel, index:number) => {
-
-        apiClient.get<InventoryType>(`inventario/${item.inventory.typeInventoryId}/byId`)
-          .then(data => {
-            const current = result[index]
-            result = [...result, { ...current, inventoryTypeName: '' }]
-
-          })
-        
-      });
-
+      if (itemResponse.result) {
+        let result = itemResponse.result
+        itemResponse.result.map((item: ItemModel, index:number) => {
+  
+          apiClient.get<InventoryType>(`inventario/${item.inventory.typeInventoryId}/byId`)
+            .then(data => {
+              const current = result[index]
+              result = [...result, { ...current, inventoryTypeName: '' }]
+            })
+        });
+        setModel(result);
+      }
       setItemResponse(itemResponse);
-      setModel(result);
+
 
     });
   }, [urlFilter, page]);

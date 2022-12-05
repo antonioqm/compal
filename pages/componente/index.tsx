@@ -134,7 +134,8 @@ export default function PartNumber() {
       setExpanded(isExpanded ? panel : false);
     };
   
-    const updateUrlFilters = (url: string) => {
+  const updateUrlFilters = (url: string) => {
+      console.log('teste de url ', url)
       setUrlFilter(url)
     }
     const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
@@ -143,7 +144,7 @@ export default function PartNumber() {
 
   const loadComponentData = () => {
       listAllModel<ComponentResponse>(
-        `/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=${page}&size=10${urlFilter}`
+        `/partNumber?orderBy=CodePartNumber&orderByDesc=true&page=${page}&size=10&${urlFilter}`
       ).then((data) => {
         setListItem(data.result);
         // setPage(data.pageSize)
@@ -153,7 +154,7 @@ export default function PartNumber() {
 
   useEffect(() => {
     loadComponentData()
-  }, [page]);
+  }, [page, urlFilter]);
 
   return (
     <Layout title="Home">

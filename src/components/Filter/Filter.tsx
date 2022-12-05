@@ -2,7 +2,7 @@ import { Stack } from "@mui/material";
 import { useState } from "react";
 import { createUrlParams } from "./helpes/createUrlParams";
 import { updateParams } from "./helpes/updateParams";
-import { Item } from "./interfaces/Item.interface";
+import { ItemFilter } from "./interfaces/Item.interface";
 import Param from "./interfaces/Param.interface";
 import Input from "./Menus/InputText";
 import Temperature from "./Menus/Temperature";
@@ -11,7 +11,7 @@ import Toggle from "./Menus/Toggle";
 
 interface FilterProps {
   endpoint: string;
-  items: Item[];
+  items: ItemFilter[];
   onChangeFilter: (url: string) => void
 }
 

@@ -98,7 +98,7 @@ export default function ({
           sx={{ fontSize: 10, textTransform: 'uppercase',  color: term ? "#fff" : "#000",
            }}
           color={term ? "primary" : "default"}
-          label={term ? term : label}
+          label={term ? `${label}: ${term}` : label}
           onClick={handleClickListItem}
         />
       </Stack>

@@ -49,7 +49,7 @@ export default function ({
           clickable
           sx={{ fontSize: 10, textTransform: 'uppercase', color: typeof term === "string" || term === null   ? "#000" :  "#fff" }}
           color={typeof term === "string" || term === null   ? "default" :  "primary"}
-          label={ typeof term === "string" || term === null  ? label :  (term ? ` Sim` : ` Não`) }
+          label={ typeof term === "string" || term === null  ? label :  (term ? `${label}: Sim` : `${label}: Não`) }
           onClick={handleClickListItem}
         />
       </Stack>
