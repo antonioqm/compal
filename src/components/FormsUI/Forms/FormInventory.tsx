@@ -59,7 +59,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
 
   if (data) {
     const { typeInventory, ...dataLessTypeInventory } = data;
-    INITIAL_FORM_STATE = { typeInventoryId: typeInventory.id, ...dataLessTypeInventory}
+    INITIAL_FORM_STATE = { typeInventoryId: typeInventory.id, ...dataLessTypeInventory }
   }
 
 
@@ -89,7 +89,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
     description: Yup.string().required(),
     typeInventoryId: Yup.number(),
     temperature: Yup.number().when('typeInventoryId', (typeInventoryId, schema) => {
-      return  typeInventoryId === FORNO ? schema.required() : schema.notRequired()
+      return typeInventoryId === FORNO ? schema.required() : schema.notRequired()
     }),
   });
 
@@ -99,7 +99,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
     } else {
       setDisabledTemperature(true);
       values.temperature = 0
-      const {temperature, ...restValues} = values
+      const { temperature, ...restValues } = values
     }
   };
 
@@ -111,22 +111,22 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
         }}
         validate={validateTemperature}
         validationSchema={FORM_VALIDATION}
-        onSubmit={async (values: Inventory, actions ) => {
-          
+        onSubmit={async (values: Inventory, actions) => {
+
           const { id } = values;
 
           if (action === "Update") {
             const { temperature, ...rest } = values
-            values = values.typeInventoryId !== FORNO ? {...rest} : values
+            values = values.typeInventoryId !== FORNO ? { ...rest } : values
           }
 
           if (action === "Create") {
             await createModel<Inventory & { itemInventory: null }>({ endpoint: "inventario", payload: { ...values, itemInventory: null } });
-              
+
           }
 
           actions.resetForm()
-            
+
         }}
       >
         {({
@@ -148,7 +148,9 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
             />
             {/* { Number(values.typeInventory.id) === 5 &&  <TextfieldWrapper  name={"line"} label={"Linha"} />} */}
 
-            <TextfieldWrapper name={"codeInventory"} label={"Código"} />
+            <TextfieldWrapper name={"codeInventory"} label={"Código"}
+              disabled={action === 'Update' ? true : false}
+            />
 
             <TextfieldWrapper
               minRows={3}
@@ -166,9 +168,8 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
               label={"Temperatura"}
             />
 
-            <ButtonWrapper fixed>{`${
-              action === "Create" ? "Criar" : "Atualizar"
-            }`}</ButtonWrapper>
+            <ButtonWrapper fixed>{`${action === "Create" ? "Criar" : "Atualizar"
+              }`}</ButtonWrapper>
           </Form>
         )}
       </Formik>
