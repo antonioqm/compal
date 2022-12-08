@@ -27,20 +27,20 @@ const Home = ({ children, title, ...props }: Props) => {
   };
 
 
-
   const handleCloseSnackbar = (
     event: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    console.log("event----", event)
     if (reason === "clickaway") {
       return;
     }
+    setResponse(undefined)
     setOpenSnackbar(false);
     // setIsOpenDrawer(false)
   };
-
+  console.log('em layout raiz', response)
   useEffect(() => {
+    console.log('estamos aqui')
     if (response !== undefined ){
       setOpenSnackbar(
         (response?.type === "success" || response?.type === "error") &&
@@ -52,16 +52,18 @@ const Home = ({ children, title, ...props }: Props) => {
   return (
     <GlobalContext.Provider value={value}>
       <div className={styles.container}>
-        <Snackbar
+      {    response !== undefined && <Snackbar
           autoHideDuration={5000}
           open={openSnackbar}
           onClose={handleCloseSnackbar}
+          
         >
           <Alert
             variant="filled"
             onClose={handleCloseSnackbar}
             severity={response?.type ? response?.type : "info"}
             sx={{ width: "100%" }}
+            
           >
             <AlertTitle>{response?.type === 'success' ? 'Sucesso' :response?.type === 'error' ? 'Erro' : "Alerta"}</AlertTitle>
             {response?.message && response?.message}
@@ -79,7 +81,7 @@ const Home = ({ children, title, ...props }: Props) => {
                 </List>)
             })}
           </Alert>
-        </Snackbar>
+        </Snackbar>}
 
         <Head>
           <title>Compal - {}</title>

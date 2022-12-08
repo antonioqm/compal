@@ -105,7 +105,7 @@ export function useLevelsMutations() {
       
     } catch (error:any) {
       
-      console.log('LOgin error', error)
+      console.log('Login error', error)
       return error
     }
 
@@ -136,7 +136,7 @@ export function useLevelsMutations() {
     try {
       const { payload, endpoint } = createModel
       setLoading(true)
-      const createdModel: Model = await apiClient.create < Model>(`${endpoint}`, payload)
+      const createdModel: Model = await apiClient.create <Model>(`${endpoint}`, payload)
       setLoading(false)
       setModels([createdModel, ...models])
 
@@ -154,7 +154,9 @@ export function useLevelsMutations() {
         statusText: '',
         data: '',
         message: `Criamos '${endpoint.toUpperCase()}: ${createdModel[keyModel]}' com sucesso!`,
-    })
+      })
+      
+      return 'created'
       
     } catch (error:any) {
       setLoading(false)
@@ -180,6 +182,8 @@ export function useLevelsMutations() {
           messages: messages
       })     
       setModels(models)
+
+      return {error: true}
       
     }
 
@@ -213,7 +217,9 @@ export function useLevelsMutations() {
         statusText: '',
         data: '',
         message: `Editamos '${endpoint.toUpperCase()}: ${newValue[keyModel]}' com sucesso!`,
-    })
+      })
+      
+      return 'updated'
       
     } catch (error: any) {
       setLoading(false)
@@ -233,6 +239,7 @@ export function useLevelsMutations() {
         message: message,
       })     
       setModels(models)
+      return {error: true}
     }
 
   }

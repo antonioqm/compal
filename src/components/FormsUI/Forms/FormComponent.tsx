@@ -60,7 +60,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
     codePartNumber: Yup.string().required(),
     levelId:Yup.number().integer().required(),
     numberMaxBacking: Yup.number().integer().required(),
-    espessura: Yup.number().integer().required(),
+    espessura: Yup.number().required(),
     timeToleranceInBaking: Yup.number().integer().required()
 
   });
@@ -110,45 +110,38 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
       //       })
       //     : await createModel<Thickness>({ endpoint: "espessura", payload: values });
       // }}
-
+      validateOnBlur={true}
       onSubmit={async (values:any, actions) => {
         
-
+        let response: any;
         if (action === "Update") {
           const { id } = values ;
-          await updateModel<ComponentRequest>({
+          response = await updateModel<ComponentRequest>({
             endpoint: "partNumber",
             payload: { ...values, id },
           });
         }
         
         if (action === "Create") {
-          await createModel<ComponentRequest>({
+          response = await createModel<ComponentRequest>({
             endpoint: "partNumber",
             payload: values,
           });
         }
 
-        actions.resetForm()
+        if (!response.error && response === "created") {
+          actions.resetForm();
+        }
+
         
       }}
     >
       <Form className={styles.formWrapper}>
-        {/* <TextfieldWrapper name={"level"} label={"Nível"} />
-         */}
         <TextfieldWrapper
           name={"codePartNumber"}
           label={"Partnumber"}
           mask={/^[\d|\w|\-|\.]{1,10}$/}
         />
-        {/* <ToggleBottonWrapper
-          name="humiditySensitivity"
-          legend="Sensibilidade à umidade?"
-          data={[
-            { label: "Sim", value: true },
-            { label: "Não", value: false },
-          ]}
-        /> */}
 
         <Select  items={listLevel} name={"levelId"} label={"Nível"} />
 

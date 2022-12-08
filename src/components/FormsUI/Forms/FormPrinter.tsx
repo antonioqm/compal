@@ -70,10 +70,14 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
   });
 
   const validateStartEnd = (values: EtiquetaRequest) => {
+    console.log('validateStartEnd', values)
+    console.log('etiqueta', etiqueta)
+
     if (values.printerInterval as boolean) {
+      values.start = '1';
+      values.end = etiqueta.quantity;
       setDisabledStart(true);
       setDisabledEnd(true);
-      values.end = etiqueta.quantity;
     } else {
       setDisabledStart(false);
       setDisabledEnd(false);
@@ -113,6 +117,9 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           setValues,
           setFieldValue,
           resetForm,
+          initialValues,
+          status,
+
         }) => (
           <>
             {!showMessageSucess && (

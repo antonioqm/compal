@@ -29,6 +29,7 @@ export default function Inventory() {
   const [page, setPage] = useState<number>(1);
 
 
+
   const handleDelete = async (value: InventoryModel) => {
     if (value.id) {
       await deleteModel<InventoryModel>({endpoint:'/inventario', payload: {...value, id: value.id}})
@@ -50,8 +51,6 @@ export default function Inventory() {
   const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage)
 }
-
-
   useEffect(() => {
     listAllModel<InventoryResponse>(
       `inventario?orderByDesc=true&page=${page}&size=10&orderBy=CodeInventory`

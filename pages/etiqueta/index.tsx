@@ -11,7 +11,7 @@ import { IconCircleCheck, IconCircleX } from "@tabler/icons";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { setupApiClient } from "../../src/api/api";
 import DialogPrinter from "../../src/components/DialogPrinter/DialogPrinter";
 import Layout from "../../src/components/Layout";
@@ -23,10 +23,7 @@ import {
   LabelResponse
 } from "../../src/interfaces/label.interface";
 import { currentPage } from "../../src/ROUTES";
-import {
-  ResponseState,
-  useLevelsMutations
-} from "../../src/state/atom";
+import { filterModel, modelState, useLevelsMutations } from '../../src/state/atom';
 import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
@@ -40,11 +37,11 @@ const header = [
 ];
 
 export default function Etiqueta() {
-  // const listLabel: InventoryResponse[] = useRecoilValue<InventoryResponse[]>(filterModel);
-  // const [model, setModel] = useRecoilState(modelState);
-  const [changes,] = useRecoilState(ResponseState)
+  const listLabel: LabelModel[] = useRecoilValue<LabelModel[]>(filterModel);
+  const [model, setModel] = useRecoilState(modelState);
   const [hoverAction, setHoverAction] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(1);
+  
 
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
@@ -55,11 +52,12 @@ export default function Etiqueta() {
     console.log("onOpenPrinter", value);
   };
 
-  const [listLabel, setListLabel] = useState<LabelModel[]>([]);
+  // const [listLabel, setListLabel] = useState<LabelModel[]>([]);
   const [labelResponse, setLabelResponse] = useState<LabelResponse>();
 
   const [expanded, setExpanded] = useState<string | false>(false);
   const [page, setPage] = useState<number>(1);
+
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -77,7 +75,7 @@ export default function Etiqueta() {
     ).then((response) => {
       setTotalPages(Math.ceil(response.totalItems / response.pageSize));
       setLabelResponse(response);
-      setListLabel(response.result);
+      setModel(response.result);
     });
   }
   useEffect(() => {

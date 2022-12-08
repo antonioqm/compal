@@ -4,11 +4,10 @@ import { useRouter } from "next/router";
 import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
-import Label from "../../../interfaces/etiqueta.interface";
+import { Label } from "../../../interfaces/label.interface";
 import { useLevelsMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
-
 interface FormLabelPropProp {
   action?: "Create";
   data?: any;
@@ -36,6 +35,7 @@ export const FormLabel = ({ data }: FormLabelPropProp) => {
       <Formik
         initialValues={INITIAL_FORM_STATE}
         validationSchema={FORM_VALIDATION}
+        validateOnBlur={true}
         onSubmit={async (values: Label, actions ) => {
           await createModel<Label>({ endpoint: "etiquetas", payload: values });
           actions.resetForm()

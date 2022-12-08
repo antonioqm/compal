@@ -22,8 +22,7 @@ import { ItemModel, ItemResponse } from "../../src/interfaces/item.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
   filterModel,
-  modelState,
-  useLevelsMutations
+  modelState, useLevelsMutations
 } from "../../src/state/atom";
 import { formatDate, formatHours } from "../../src/utils/format";
 import { InventoryType } from "../../src/utils/statusItems";
@@ -45,7 +44,7 @@ const historyHeader = [
   { name: "Descrição", field: "description", type: "string" },
   { name: "Operador", field: "user", type: "string" },
 ];
-
+  
 const itemsFilter: ItemFilter[] = [
   { name: "espessura", label: "Espessura", type: "text" },
   { name: "partNumber", label: "Part-number", type: "text" },
@@ -62,6 +61,7 @@ export default function Itens() {
   const [urlFilter, setUrlFilter] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [currentHitories, setCurrentHistories] = useState<any[]>([]);
+
 
   const router = useRouter();
   const Route = currentPage(router.pathname)!;

@@ -22,7 +22,6 @@ export const TextfieldWrapper = ({ name, label, type, mask, min, max, endAdornme
   const handleChange = (event: any) => {
     const { value } = event.target;
     setFieldValue(name, value);
-    console.log('event.keyCode', event.keyCode)
   };
 
   const handleClickShowPassword = () => {

@@ -109,23 +109,28 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
         initialValues={{
           ...INITIAL_FORM_STATE,
         }}
+        validateOnBlur={true}
         validate={validateTemperature}
         validationSchema={FORM_VALIDATION}
         onSubmit={async (values: Inventory, actions ) => {
           
           const { id } = values;
-
-          if (action === "Update") {
+          let response: any;
+          if (action === "Update" && id) {
             const { temperature, ...rest } = values
-            values = values.typeInventoryId !== FORNO ? {...rest} : values
+            values = values.typeInventoryId !== FORNO ? { ...rest } : values;
+            response = await updateModel<Inventory & { itemInventory: null, id: number }>({ endpoint: "inventario", payload: { ...values, itemInventory: null, id } });
           }
 
           if (action === "Create") {
-            await createModel<Inventory & { itemInventory: null }>({ endpoint: "inventario", payload: { ...values, itemInventory: null } });
+            response = await createModel<Inventory & { itemInventory: null }>({ endpoint: "inventario", payload: { ...values, itemInventory: null } });
               
           }
 
-          actions.resetForm()
+          if (!response.error && response === "created") {
+            actions.resetForm();
+          }
+
             
         }}
       >

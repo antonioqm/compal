@@ -81,18 +81,23 @@ export function FormThickness({ action, data, ...props }: FormThicknessProp) {
         initialValues={{
           ...INITIAL_FORM_STATE,
         }}
+        validateOnBlur={true}
         validationSchema={FORM_VALIDATION}
         validate={(values: any) => {}}
         onSubmit={async (values: Thickness, actions) => {
           
           const { id } = values;
+          let response: any;
           action === "Update" && id
-            ? await updateModel<Thickness>({
+            ? response = await updateModel<Thickness>({
                 endpoint: "espessura",
                 payload: { ...values, id },
               })
-            : await createModel<Thickness>({ endpoint: "espessura", payload: values });
-            actions.resetForm()
+            : response = await createModel<Thickness>({ endpoint: "espessura", payload: values });
+          
+            if (!response.error && response === "created") {
+              actions.resetForm();
+            }
         }}
       >
         <Form className={styles.formWrapper}>

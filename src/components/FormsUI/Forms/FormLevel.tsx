@@ -15,19 +15,24 @@ interface LevelProp {
   maxTimeExposition: number;
   criticalExpositionTime: number;
   backingRequired: boolean;
-
 }
 interface FormLevelProp {
   action?: "Create" | "Update";
   data?: LevelProp;
-  closeForm: () => void
+  closeForm: () => void;
 }
 
-
-export const FormLevel = ({ action, data, closeForm, ...props }: FormLevelProp) => {
-  const [maxTime, setMaxTime] = useState<string | number>(0)
-  const [criticalExposition, setCriticalExposition] = useState<string | number>(0)
-  const router = useRouter()
+export const FormLevel = ({
+  action,
+  data,
+  closeForm,
+  ...props
+}: FormLevelProp) => {
+  const [maxTime, setMaxTime] = useState<string | number>(0);
+  const [criticalExposition, setCriticalExposition] = useState<string | number>(
+    0
+  );
+  const router = useRouter();
   const filedsClean = {
     levelName: "",
     maxTimeExposition: "",
@@ -40,21 +45,37 @@ export const FormLevel = ({ action, data, closeForm, ...props }: FormLevelProp) 
 
   const FORM_VALIDATION = Yup.object().shape({
     levelName: Yup.string().required(),
-    maxTimeExposition: Yup.number().integer().required('Obrigatório: tipo inteiro.').moreThan(0).lessThan(1000).test("maxLenght", "Deve ser maior que Tempo Crítico de Exposição", val => {
-      if (val) {
-        return val > criticalExposition;
-      }
-      return false
-    }),
-    criticalExpositionTime: Yup.number().integer().required('Obrigatório: tipo inteiro.').moreThan(0).lessThan(1000)
-      .test("maxLenght", "Deve ser menor que Tempo Máximo de Exposição", val => {
-        if (val) {
-          return val < maxTime;
+    maxTimeExposition: Yup.number()
+      .integer()
+      .required("Obrigatório: tipo inteiro.")
+      .moreThan(0)
+      .lessThan(1000)
+      .test(
+        "maxLenght",
+        "Deve ser maior que Tempo Crítico de Exposição",
+        (val) => {
+          if (val) {
+            return val > criticalExposition;
+          }
+          return false;
         }
-        return false
-      }),
+      ),
+    criticalExpositionTime: Yup.number()
+      .integer()
+      .required("Obrigatório: tipo inteiro.")
+      .moreThan(0)
+      .lessThan(1000)
+      .test(
+        "maxLenght",
+        "Deve ser menor que Tempo Máximo de Exposição",
+        (val) => {
+          if (val) {
+            return val < maxTime;
+          }
+          return false;
+        }
+      ),
     backingRequired: Yup.boolean().required(),
-    
   });
 
   const formik = useFormik({
@@ -65,11 +86,7 @@ export const FormLevel = ({ action, data, closeForm, ...props }: FormLevelProp) 
     },
   });
 
- 
-
   const { updateModel, createModel } = useLevelsMutations();
-
-  
 
   return (
     <>
@@ -80,42 +97,56 @@ export const FormLevel = ({ action, data, closeForm, ...props }: FormLevelProp) 
         }}
         validationSchema={FORM_VALIDATION}
         validate={(values: LevelModel) => {
-          setMaxTime(values.maxTimeExposition)
-          setCriticalExposition(values.criticalExpositionTime)
-          console.log('validate ---', values)
-         }}
-        onSubmit={async (values: LevelModel, actions ) => {
+          setMaxTime(values.maxTimeExposition);
+          setCriticalExposition(values.criticalExpositionTime);
+        }}
+        validateOnBlur={true}
+        onSubmit={async (values: LevelModel, actions) => {
           const { id } = values;
-          // set backingRequired to false by default
-          let response: any;
-          values.backingRequired = false;
-          if (action === "Update" && id) {
-            response = await updateModel<LevelModel>({
-              endpoint: "nivel",
-              payload: { ...values, id },
-            })
-          } else {
-            response = await createModel<LevelModel>({ endpoint: "nivel", payload: values });
-          }
 
-          closeForm()
-          if (response?.response?.status == 200) {
-            actions.resetForm()
+          values.backingRequired = false;
+          let response: any;
+          action === "Update" && id
+            ? (response = await updateModel<LevelModel>({
+                endpoint: "nivel",
+                payload: { ...values, id },
+              }))
+            : (response = await createModel<LevelModel>({
+                endpoint: "nivel",
+                payload: values,
+              }));
+
+          if (!response.error && response === "created") {
+            actions.resetForm();
           }
         }}
       >
         <Form className={styles.formWrapper}>
-         
-          <TextfieldWrapper placeholder='1A' mask='[0a]' name={"levelName"} label={"Nível"} />
           <TextfieldWrapper
-            inputProps={{ min: 1, max: 999, pattern: '[0-9]*', inputMode: 'numeric' }}
-            type={'number'}
+            placeholder="1A"
+            mask="[0a]"
+            name={"levelName"}
+            label={"Nível"}
+          />
+          <TextfieldWrapper
+            inputProps={{
+              min: 1,
+              max: 999,
+              pattern: "[0-9]*",
+              inputMode: "numeric",
+            }}
+            type={"number"}
             name={"maxTimeExposition"}
             label={"Tempo Máximo de Exposição (Horas)"}
           />
           <TextfieldWrapper
-            inputProps={{ min: 1, max: 999, pattern: '[0-9]*', inputMode: 'numeric',  }}
-            type={'number'}
+            inputProps={{
+              min: 1,
+              max: 999,
+              pattern: "[0-9]*",
+              inputMode: "numeric",
+            }}
+            type={"number"}
             name={"criticalExpositionTime"}
             label={"Tempo Crítico de Exposição (Horas)"}
           />

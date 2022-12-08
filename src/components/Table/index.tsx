@@ -19,7 +19,7 @@ import { LevelModel } from "../../interfaces/level.interface";
 import { ThicknessModel } from "../../interfaces/thickness.interface";
 import { currentPage } from "../../ROUTES";
 import { loadingState, useLevelsMutations } from "../../state/atom";
-import { formatDate } from "../../utils/format";
+import { formatDate, formatNumber } from "../../utils/format";
 import DialogRemove from "../DialogRemove/DialogRemove";
 import { SkeletonTable } from "../Skeleton/SkeletonTable";
 import Swipeable from "../Swipeable/Swipeable";
@@ -167,7 +167,7 @@ export default function TableCompal({ endpoint, header, body, nameKeys }: DataTa
                                 ) : (
                                     <>
                                     {`${ key.name === 'thicknessName' ?
-                                    bodyField[key.name] + ' mm'
+                                    formatNumber(bodyField[key.name]) + ' mm'
                                     : formatDate(bodyField[key.name])
                                     }`}
                                     </>
