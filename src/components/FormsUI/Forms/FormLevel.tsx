@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { LevelModel } from "../../../interfaces/level.interface";
-import { useLevelsMutations } from "../../../state/atom";
+import { useModelMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 
@@ -86,7 +86,7 @@ export const FormLevel = ({
     },
   });
 
-  const { updateModel, createModel } = useLevelsMutations();
+  const { updateModel, createModel } = useModelMutations();
 
   return (
     <>

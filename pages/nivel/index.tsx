@@ -7,7 +7,7 @@ import Layout from "../../src/components/Layout";
 import Table from "../../src/components/Table";
 import { LevelModel, LevelResponse } from "../../src/interfaces/level.interface";
 import {
-  filterModel, modelState, useLevelsMutations
+  filterModel, modelState, useModelMutations
 } from "../../src/state/atom";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
@@ -40,7 +40,7 @@ export default function Nivel() {
   const [levelResponse, setLevelResponse] = useState<LevelResponse>();
 
 
-  const { listAllModel } = useLevelsMutations();
+  const { listAllModel } = useModelMutations();
 
   const [totalPages, setTotalPages] = useState<number>(1);
 

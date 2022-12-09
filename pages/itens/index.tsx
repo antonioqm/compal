@@ -22,7 +22,7 @@ import { ItemModel, ItemResponse } from "../../src/interfaces/item.interface";
 import { currentPage } from "../../src/ROUTES";
 import {
   filterModel,
-  modelState, useLevelsMutations
+  modelState, useModelMutations
 } from "../../src/state/atom";
 import { formatDate, formatHours } from "../../src/utils/format";
 import { InventoryType } from "../../src/utils/statusItems";
@@ -66,7 +66,7 @@ export default function Itens() {
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
 
-  const { listAllModel } = useLevelsMutations();
+  const { listAllModel } = useModelMutations();
 
   const handleDelete = async (value: ItemModel) => {
     console.log("handleDelete", value);

@@ -30,8 +30,8 @@ export function setupApiClient(ctx:GetServerSidePropsContext | undefined = undef
           if (!isRefreshing) {
             isRefreshing = true;
             apiClient.create<User>('account/login', {
-              email: 'admin@admin.com',
-              password: '123456'
+              email: '',
+              password: ''
             }).then((response: User) => {
 
               const { token } = response;

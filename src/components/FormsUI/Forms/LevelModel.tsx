@@ -9,7 +9,7 @@ import { apiClient } from "../../../api/api";
 import Select from "../../../components/FormsUI/Select/SelectWrapper";
 import { Level } from "../../../interfaces/level.interface";
 import { Thickness } from "../../../interfaces/thickness.interface";
-import { useLevelsMutations } from "../../../state/atom";
+import { useModelMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 
@@ -58,7 +58,7 @@ export function FormThickness({ action, data, ...props }: FormThicknessProp) {
     },
   });
 
-  const { updateModel, createModel, listAllModel } = useLevelsMutations();
+  const { updateModel, createModel, listAllModel } = useModelMutations();
 
   const [listLevel, setListLevel] = useState<levelItemSelect[]>([])
 

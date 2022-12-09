@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { apiClient } from "../../../api/api";
-import { useLevelsMutations } from "../../../state/atom";
+import { useModelMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import Select from "../Select/SelectWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
@@ -36,7 +36,7 @@ export interface InventorySelectList {
 
 export const FormInventory = ({ action, data, ...props }: Prop) => {
   const router = useRouter()
-  const { listAllModel, updateModel, createModel } = useLevelsMutations();
+  const { listAllModel, updateModel, createModel } = useModelMutations();
   const [disabledTemperature, setDisabledTemperature] = useState<boolean>((false));
   const [inventorySelectList, setInventorySelectList] = useState<
     InventorySelectList[]

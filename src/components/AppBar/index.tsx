@@ -39,7 +39,11 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default function Appbar() {
+interface PropsAppbar{
+  title: string;
+}
+
+export default function Appbar({title}:PropsAppbar) {
   const myRef = useRef<any>(null);
   const { open } = useContext(GlobalContext);
   const router = useRouter();
@@ -53,7 +57,7 @@ export default function Appbar() {
     <ElevationScroll>
       <AppBar position="fixed" open={open}>
         <Toolbar sx={{ height: '100%' }}>
-          {Route.addButton && (
+          {Route?.addButton ? (
             <Swipeable
             ref={myRef}
               type={'Create'}
@@ -62,6 +66,16 @@ export default function Appbar() {
             >
               {Route && <Route.FormComponent  closeForm={closeDrawer}  action={'Create'} />}
             </Swipeable>
+          ) : (
+            <Typography
+            fontWeight={800}
+            color={"#64A70B"}
+            textTransform={"uppercase"}
+            variant="h6"
+            component="h6"
+          >
+            {`${title}`}
+          </Typography>
           )}
 
           <Typography

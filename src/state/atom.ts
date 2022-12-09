@@ -27,6 +27,10 @@ interface CreateTokenRequest {
   password: string;
 }
 
+interface CurrentUser {
+  currentUser: string;
+  id: string;
+}
 interface Payload {
   id: number;
 }
@@ -59,6 +63,11 @@ export const filterProductsValue = atom({
   default: "",
 });
 
+export const currentUser = atom<CurrentUser | undefined>({
+  key: 'currentUser',
+  default: undefined
+})
+
 export const filterModel = selector({
   key: "filterModel",
   get: ({ get }) => {
@@ -86,7 +95,7 @@ function getNameToSnackbar(endpoint: string) {
   }
 }
 
-export function useLevelsMutations() {
+export function useModelMutations() {
 
   const [models, setModels] = useRecoilState(modelState)
   const [loading, setLoading] = useRecoilState(loadingState)
@@ -110,6 +119,7 @@ export function useLevelsMutations() {
     }
 
   }
+  
   const listAllModel = async  <Model>(endpoint:string):Promise<Model> => {
     try {
       setLoading(true)

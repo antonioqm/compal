@@ -20,7 +20,7 @@ import { TableCell } from '../../src/components/Table/TableCell';
 import { TableRow } from '../../src/components/Table/TableRow';
 import { ComponentModel, ComponentResponse } from '../../src/interfaces/component.interface';
 import { currentPage } from '../../src/ROUTES';
-import { filterModel, loadingState, modelState, useLevelsMutations } from '../../src/state/atom';
+import { filterModel, loadingState, modelState, useModelMutations } from '../../src/state/atom';
 import { formatDate, formatNumber } from '../../src/utils/format';
 import { withSSRAuth } from '../../src/utils/withSSRAuth';
 
@@ -110,8 +110,8 @@ export default function PartNumber() {
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
 
-  const { listAllModel } = useLevelsMutations();
-  const { deleteModel } = useLevelsMutations();
+  const { listAllModel } = useModelMutations();
+  const { deleteModel } = useModelMutations();
 
   const handleDelete = async (value: ComponentModel) => {
     if (value.id) {

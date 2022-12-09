@@ -18,7 +18,7 @@ import { useRecoilState } from "recoil";
 import { LevelModel } from "../../interfaces/level.interface";
 import { ThicknessModel } from "../../interfaces/thickness.interface";
 import { currentPage } from "../../ROUTES";
-import { loadingState, useLevelsMutations } from "../../state/atom";
+import { loadingState, useModelMutations } from "../../state/atom";
 import { formatDate, formatNumber } from "../../utils/format";
 import DialogRemove from "../DialogRemove/DialogRemove";
 import { SkeletonTable } from "../Skeleton/SkeletonTable";
@@ -83,7 +83,7 @@ interface DataTable {
 export default function TableCompal({ endpoint, header, body, nameKeys }: DataTable) {
   const [editing, setEditing] = React.useState<LevelModel | ThicknessModel>();
   const [loading, setLoading] = useRecoilState(loadingState)
-  const { deleteModel } = useLevelsMutations();
+  const { deleteModel } = useModelMutations();
 
   // const [open, setOpen] = useState(false);
 

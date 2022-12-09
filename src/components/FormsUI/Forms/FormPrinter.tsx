@@ -18,7 +18,7 @@ import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { apiClient } from "../../../api/api";
 import { LabelModel } from "../../../interfaces/label.interface";
-import { useLevelsMutations } from "../../../state/atom";
+import { useModelMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 import ToggleBottonWrapper from "../ToggleBotton/ToggleBottonWrapper";
@@ -36,7 +36,7 @@ interface EtiquetaRequest {
 
 export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
   const router = useRouter()
-  const { listAllModel, updateModel, createModel } = useLevelsMutations();
+  const { listAllModel, updateModel, createModel } = useModelMutations();
   const [disabledStart, setDisabledStart] = useState<boolean>(false);
   const [disabledEnd, setDisabledEnd] = useState<boolean>(false);
   const [showMessageSucess, setShowMessageSucess] = useState<boolean>(false);
@@ -97,7 +97,7 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           try {
             setAwaitingPrinting(true);
             const printedResponse = await apiClient.get(
-              `etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}`
+              `etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}/2`
             );
             setAwaitingPrinting(false);
             setShowMessageSucess(true);

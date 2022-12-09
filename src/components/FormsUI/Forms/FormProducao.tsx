@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import Producao from "../../../interfaces/producao.interface";
-import { useLevelsMutations } from "../../../state/atom";
+import { useModelMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 export interface ProducaoProp {
@@ -35,7 +35,7 @@ export const FormProducao = ({ action, data, ...props }: FormProducaoPropProp) =
   });
 
   
-  const { updateModel, createModel } = useLevelsMutations();
+  const { updateModel, createModel } = useModelMutations();
   
   return (
     <>

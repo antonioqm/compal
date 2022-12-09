@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import * as React from "react";
 import { useRecoilState } from "recoil";
 import { Level } from "../../interfaces/level.interface";
-import { loadingState, useLevelsMutations } from "../../state/atom";
+import { loadingState, useModelMutations } from "../../state/atom";
 import { SkeletonTable } from "../Skeleton/SkeletonTable";
 
 interface DataTable {
@@ -14,7 +14,7 @@ interface DataTable {
 export default function ({ children }: DataTable) {
   const [editing, setEditing] = React.useState<Level>();
   const [loading, setLoading] = useRecoilState(loadingState)
-  const { deleteModel } = useLevelsMutations();
+  const { deleteModel } = useModelMutations();
 
   const handleDelete = async (value:Level) => {
     

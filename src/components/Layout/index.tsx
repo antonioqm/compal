@@ -94,7 +94,7 @@ const Home = ({ children, title, ...props }: Props) => {
             display: "flex",
           }}
         >
-          <AppBar />
+          <AppBar title={title} />
           <Drawer />
           <Box
             component="main"

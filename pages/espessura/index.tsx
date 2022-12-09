@@ -6,7 +6,7 @@ import { setupApiClient } from '../../src/api/api'
 import Layout from '../../src/components/Layout'
 import Table from '../../src/components/Table'
 import { ThicknessModel, ThicknessResponse } from '../../src/interfaces/thickness.interface'
-import { filterModel, modelState, useLevelsMutations } from '../../src/state/atom'
+import { filterModel, modelState, useModelMutations } from '../../src/state/atom'
 import { withSSRAuth } from '../../src/utils/withSSRAuth'
 
 
@@ -34,7 +34,7 @@ export default function Espessura() {
   const listThickness:ThicknessModel[] = useRecoilValue<ThicknessModel[]>(filterModel);
   const [model, setModel] = useRecoilState(modelState);
 
-  const {listAllModel } = useLevelsMutations();
+  const {listAllModel } = useModelMutations();
   
   
   const [open, setOpen] = useState(false)

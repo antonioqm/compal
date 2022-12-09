@@ -1,8 +1,8 @@
 import {
-  TableBody,
-  TableHead,
-  TableRow as TableRowMui,
-  Typography
+    TableBody,
+    TableHead,
+    TableRow as TableRowMui,
+    Typography
 } from "@mui/material";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -20,8 +20,8 @@ import ProducaoResponse from "../../src/interfaces/producao.interface";
 import { currentPage } from "../../src/ROUTES";
 
 import {
-  ResponseState,
-  useLevelsMutations
+    ResponseState,
+    useModelMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
@@ -33,7 +33,7 @@ const header = [
   ];
 
 export default function LinhaProducao() {
-  const { listAllModel } = useLevelsMutations();
+  const { listAllModel } = useModelMutations();
   const [changes,] = useRecoilState(ResponseState)
   const [hoverAction, setHoverAction] = useState<boolean>(false);
 
@@ -41,7 +41,7 @@ export default function LinhaProducao() {
   const Route = currentPage(router.pathname)!;
   
 
-  const { deleteModel } = useLevelsMutations();
+  const { deleteModel } = useModelMutations();
   const handleDelete = async (value:ProducaoResponse) => {
     
     if (value.id) {

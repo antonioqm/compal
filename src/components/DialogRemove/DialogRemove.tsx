@@ -1,10 +1,10 @@
 import {
-  Button,
-  Dialog, DialogActions, DialogContent,
-  DialogContentText, DialogTitle, IconButton
+    Button,
+    Dialog, DialogActions, DialogContent,
+    DialogContentText, DialogTitle, IconButton
 } from "@mui/material";
 import React, { useState } from "react";
-import { useLevelsMutations } from "../../state/atom";
+import { useModelMutations } from "../../state/atom";
 import { TrashIcon } from "../icons/icons";
 
 interface DialogProp {
@@ -18,7 +18,7 @@ interface DialogProp {
 export default ({id, onAction}:DialogProp) => {
   
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
-  const { deleteModel } = useLevelsMutations();
+  const { deleteModel } = useModelMutations();
 
   const [open, setOpen] = useState(false);
 

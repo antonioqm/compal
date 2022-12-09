@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { ptShort } from "yup-locale-pt";
 import styles from "../../../../styles/Login.module.scss";
 import { Label } from "../../../interfaces/label.interface";
-import { useLevelsMutations } from "../../../state/atom";
+import { useModelMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
 interface FormLabelPropProp {
@@ -28,7 +28,7 @@ export const FormLabel = ({ data }: FormLabelPropProp) => {
       .required()
       .typeError("Informe uma quantidade válida"),
   });
-  const { createModel } = useLevelsMutations();
+  const { createModel } = useModelMutations();
   return (
     <>
       <Box sx={{ bgcolor: "orange", height: "100%", width: "100%" }}></Box>

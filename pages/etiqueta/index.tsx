@@ -23,7 +23,7 @@ import {
   LabelResponse
 } from "../../src/interfaces/label.interface";
 import { currentPage } from "../../src/ROUTES";
-import { filterModel, modelState, useLevelsMutations } from '../../src/state/atom';
+import { filterModel, modelState, useModelMutations } from '../../src/state/atom';
 import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
@@ -46,7 +46,7 @@ export default function Etiqueta() {
   const router = useRouter();
   const { FormComponent, label } = currentPage(router.pathname)!;
 
-  const { listAllModel,  } = useLevelsMutations();
+  const { listAllModel,  } = useModelMutations();
 
   const onOpenPrinter = async (value: LabelModel) => {
     console.log("onOpenPrinter", value);

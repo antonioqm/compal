@@ -4,7 +4,7 @@ import {
 import { IconPrinter, IconPrinterOff } from "@tabler/icons";
 import React, { useState } from "react";
 import { LabelModel } from "../../interfaces/label.interface";
-import { useLevelsMutations } from "../../state/atom";
+import { useModelMutations } from "../../state/atom";
 import { FormPrinter } from "../FormsUI/Forms/FormPrinter";
 
 interface DialogPrintergProp {
@@ -14,7 +14,7 @@ interface DialogPrintergProp {
 }
 export default ({id, etiqueta, reloadDataLabel}:DialogPrintergProp) => {
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
-  const { deleteModel } = useLevelsMutations();
+  const { deleteModel } = useModelMutations();
 
   const [open, setOpen] = useState(false);
 

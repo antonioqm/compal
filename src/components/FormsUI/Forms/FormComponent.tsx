@@ -8,7 +8,7 @@ import { apiClient } from "../../../api/api";
 import { ComponentRequest } from "../../../interfaces/component.interface";
 import { LevelModel } from "../../../interfaces/level.interface";
 import { ThicknessModel } from "../../../interfaces/thickness.interface";
-import { useLevelsMutations } from "../../../state/atom";
+import { useModelMutations } from "../../../state/atom";
 import ButtonWrapper from "../Button/ButtonWrapper";
 import Select from "../Select/SelectWrapper";
 import { TextfieldWrapper } from "../TextField/TextFieldWrapper";
@@ -65,7 +65,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
 
   });
 
-  const { createModel, updateModel } = useLevelsMutations();
+  const { createModel, updateModel } = useModelMutations();
 
   const [listLevel, setListLevel] = useState<SelectItem[]>([]);
   const [listThickness, setListThickness] = useState<SelectItem[]>([]);

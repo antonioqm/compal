@@ -18,14 +18,14 @@ import { TableCell } from "../../src/components/Table/TableCell";
 import { TableRow } from "../../src/components/Table/TableRow";
 import { InventoryModel, InventoryResponse } from "../../src/interfaces/inventory.interface";
 import { currentPage } from "../../src/ROUTES";
-import { useLevelsMutations } from "../../src/state/atom";
+import { useModelMutations } from "../../src/state/atom";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
 const header = ["Código", "Descrição", "Temperatura", "Tipo"];
 
 export default function Inventory() {
   const router = useRouter();
   const Route = currentPage(router.pathname)!;
-  const { listAllModel, deleteModel } = useLevelsMutations();
+  const { listAllModel, deleteModel } = useModelMutations();
   const [page, setPage] = useState<number>(1);
 
 
