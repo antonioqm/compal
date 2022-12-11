@@ -181,7 +181,7 @@ export const getServerSideProps: GetServerSideProps = withSSRAuth(
   async (ctx) => {
     const apiClient = setupApiClient(ctx);
 
-    await apiClient.get("account/currentUser");
+    // await apiClient.get("account/currentUser");
     return {
       props: {},
     };

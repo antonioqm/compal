@@ -49,11 +49,9 @@ export function AuthProvider({ children }: AuthProvideProps) {
   useEffect(() => {
     const { 'nextAuth.token': token } = parseCookies()
     if (token) {
-      console.log('hasToken-------')
       apiClient.getCurrentUser()
         .then(({ data }) => {
           setCurrentUser(data)
-          console.log('response--------user----user_current: ', user_current)
           const decoded = jwtDecode<any>(token)
 
           setUser(user)

@@ -6,10 +6,11 @@ import {
   TableRow as TableRowMui,
   Typography
 } from "@mui/material";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { apiClient } from "../../src/api/api";
+import { apiClient, setupApiClient } from "../../src/api/api";
 import DialogHistory from "../../src/components/DialogHistory/DialogHistory";
 import Filter from "../../src/components/Filter/Filter";
 import { ItemFilter } from "../../src/components/Filter/interfaces/Item.interface";
@@ -26,6 +27,7 @@ import {
 } from "../../src/state/atom";
 import { formatDate, formatHours } from "../../src/utils/format";
 import { InventoryType } from "../../src/utils/statusItems";
+import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 const header = [
   "Part Number",
@@ -351,6 +353,16 @@ export default function Itens() {
   );
 }
 
+export const getServerSideProps: GetServerSideProps = withSSRAuth(
+  async (ctx) => {
+    const apiClient = setupApiClient(ctx);
+
+    // await apiClient.get("account/currentUser");
+    return {
+      props: {},
+    };
+  }
+);
 
 // Só exposto abaixo de 100%;
 // Acima de 100% excelente;

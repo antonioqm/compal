@@ -1,17 +1,17 @@
 import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
+  Card, CardContent,
   Chip,
   Stack,
   Typography
 } from "@mui/material";
+import { GetServerSideProps } from "next";
 import { useContext, useEffect } from "react";
 import { useRecoilState } from "recoil";
+import { setupApiClient } from "../../src/api/api";
 import Layout from "../../src/components/Layout";
 import { AuthContext } from "../../src/contexts/AuthContext";
 import { modelState, useModelMutations } from "../../src/state/atom";
+import { withSSRAuth } from "../../src/utils/withSSRAuth";
 
 interface User {
   name: string;
@@ -64,9 +64,6 @@ export default () => {
                   })}
                 </Stack>
               </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
             </Card>
           );
         })}
@@ -74,3 +71,14 @@ export default () => {
     </Layout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = withSSRAuth(
+  async (ctx) => {
+    const apiClient = setupApiClient(ctx);
+
+    // await apiClient.get("account/currentUser");
+    return {
+      props: {},
+    };
+  }
+);

@@ -1,8 +1,8 @@
 import {
-    TableBody,
-    TableHead,
-    TableRow as TableRowMui,
-    Typography
+  TableBody,
+  TableHead,
+  TableRow as TableRowMui,
+  Typography
 } from "@mui/material";
 import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
@@ -20,8 +20,8 @@ import ProducaoResponse from "../../src/interfaces/producao.interface";
 import { currentPage } from "../../src/ROUTES";
 
 import {
-    ResponseState,
-    useModelMutations
+  ResponseState,
+  useModelMutations
 } from "../../src/state/atom";
 import { formatDate } from "../../src/utils/format";
 import { withSSRAuth } from "../../src/utils/withSSRAuth";
@@ -143,7 +143,7 @@ export const getServerSideProps: GetServerSideProps = withSSRAuth(
   async (ctx) => {
     const apiClient = setupApiClient(ctx);
 
-    await apiClient.get("account/currentUser");
+    // await apiClient.get("account/currentUser");
     return {
       props: {},
     };
