@@ -63,7 +63,7 @@ export default function Nivel() {
   }, [page]);
 
   return (
-    <Layout title="Home">
+    <Layout title="Níveis">
       <Typography variant="h1"></Typography>
 
       <Table endpoint='nivel' header={header} body={lisLevel} nameKeys={keyFields} />

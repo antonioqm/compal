@@ -155,7 +155,7 @@ export default function PartNumber() {
   }, [page, urlFilter]);
 
   return (
-    <Layout title="Home">
+    <Layout title="Componentes">
       <Filter onChangeFilter={updateUrlFilters} items={partnumberFilter}  endpoint='itens-expostos' />
       <Table>
         <TableHead>

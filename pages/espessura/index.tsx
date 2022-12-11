@@ -66,7 +66,7 @@ export default function Espessura() {
   }, [page]);
   
   return (
-    <Layout title='Home' >
+    <Layout title='Espessuras' >
       <Typography variant='h1'></Typography>
       <Table
         endpoint={'espessura'}

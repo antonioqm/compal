@@ -82,7 +82,7 @@ export default function Etiqueta() {
   }, [page]);
 
   return (
-    <Layout title="Home">
+    <Layout title="Etiquetas">
       <Typography variant="h1"></Typography>
       <Table>
         <TableHead>

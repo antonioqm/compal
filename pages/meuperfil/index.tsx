@@ -37,7 +37,7 @@ export default () => {
   }
 
   return (
-    <Layout title="Users">
+    <Layout title="Usuários">
       {/* <Filter onChangeFilter={updateUrlFilters} items={userFilter}  endpoint='itens-expostos' /> */}
       <Stack gap={3} alignItems={'stretch'} direction={'row'} flexWrap={'wrap'} >
         {listItem.map((user, index) => {

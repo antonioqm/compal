@@ -141,7 +141,7 @@ export default function Itens() {
   }
 
   return (
-    <Layout title="Home">
+    <Layout title="Itens">
       <Filter
         onChangeFilter={updateUrlFilters}
         items={itemsFilter}

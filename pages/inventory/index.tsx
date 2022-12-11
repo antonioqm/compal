@@ -60,7 +60,7 @@ export default function Inventory() {
   }, [page]);
 
   return (
-    <Layout title="Home">
+    <Layout title="Inventários">
       <Typography variant="h1"></Typography>
       <Table>
         <TableHead>

@@ -77,7 +77,7 @@ export default function LinhaProducao() {
   }, [changes]);
 
   return (
-    <Layout title="Home">
+    <Layout title="Linha de Produção">
       <Typography variant="h1"></Typography>
       <Table>
         <TableHead>
