@@ -25,7 +25,6 @@ export const TextMask = React.forwardRef<HTMLElement, CustomProps>(
         // }}
         inputRef={ref}
         onChange={(value: any) => {
-          console.log('type mask', typeof(mask))
           return onChange(value)
         }
         }

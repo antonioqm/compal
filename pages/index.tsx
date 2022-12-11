@@ -22,8 +22,8 @@ export default () => {
   const containerRef = React.useRef(null);
 
   const INITIAL_FORM_STATE = {
-    email: "admin@admin.com",
-    password: "123456",
+    email: "",
+    password: "",
   };
 
   const FORM_VALIDATION = Yup.object().shape({
@@ -107,6 +107,7 @@ export default () => {
                   }
                   name={"password"}
                   label={"Senha"}
+                  type={'password'}
                 />
                 <ButtonWrapper
                   disableElevation

@@ -28,7 +28,6 @@ export default () => {
 
   useEffect(() => {
     listAllModel("account/list").then((res: any) => {
-      console.log(" User", res);
       setListItem(res);
     });
   }, []);

@@ -14,5 +14,5 @@ export interface LabelModel {
 
 
 export interface Label {
-	quantity: number,
+	quantity: number | string,
 }

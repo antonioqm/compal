@@ -1,7 +1,6 @@
 import Param from "../interfaces/Param.interface"
 
 export function createUrlParams(params: Param[]): Promise<string>{
-  console.log('----', params)
   return new Promise((resolve, reject) => {
     try {
       const newUrlParams = params.reduce((acc, currentItem, index) => {

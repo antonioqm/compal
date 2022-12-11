@@ -35,7 +35,6 @@ export default function Inventory() {
       await deleteModel<InventoryModel>({endpoint:'/inventario', payload: {...value, id: value.id}})
       
     }
-    console.log('handleDelete', value);
   };
 
   const [listInventory, setListInventory] = useState<InventoryModel[]>([]);

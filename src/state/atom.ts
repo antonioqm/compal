@@ -74,7 +74,6 @@ export const filterModel = selector({
    
     const modelsState = get(modelState);
     const filterProductsValueState = get(filterProductsValue);
-    console.log('filterProductsValueState', filterProductsValueState)
 
     if (filterProductsValueState.length) {
       return modelsState.filter(
@@ -113,8 +112,6 @@ export function useModelMutations() {
       return userWithToken;
       
     } catch (error:any) {
-      
-      console.log('Login error', error)
       return error
     }
 
@@ -136,7 +133,6 @@ export function useModelMutations() {
       // data: error?.response?.data,
       message: error?.message,
   })
-      console.log('Model error', error)
       return error
     }
 
@@ -184,7 +180,6 @@ export function useModelMutations() {
       } else {
         message =  error.message
       }
-      console.log(error.response.status)
         setResponse({type: 'error',
         status: error.response.status,
         statusText: error.response.status,
@@ -205,7 +200,6 @@ export function useModelMutations() {
       setLoading(true)
       const newValue:(Model & Payload) = await apiClient.update(`${endpoint}/${id}`, payload)
       setLoading(false)
-      console.log('newValue', newValue)
 
       const newModels = models.map((model) => {
         if (model.id !== newValue.id) {

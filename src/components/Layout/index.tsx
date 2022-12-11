@@ -38,9 +38,7 @@ const Home = ({ children, title, ...props }: Props) => {
     setOpenSnackbar(false);
     // setIsOpenDrawer(false)
   };
-  console.log('em layout raiz', response)
   useEffect(() => {
-    console.log('estamos aqui')
     if (response !== undefined ){
       setOpenSnackbar(
         (response?.type === "success" || response?.type === "error") &&

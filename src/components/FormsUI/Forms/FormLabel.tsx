@@ -17,7 +17,7 @@ export const FormLabel = ({ data }: FormLabelPropProp) => {
 
   const router = useRouter()
 
-  const INITIAL_FORM_STATE = { ...data }
+  const INITIAL_FORM_STATE = data ? {...data}  : {quantity: ''}
   Yup.setLocale(ptShort);
   const FORM_VALIDATION = Yup.object().shape({
     quantity: Yup
@@ -36,9 +36,9 @@ export const FormLabel = ({ data }: FormLabelPropProp) => {
         initialValues={INITIAL_FORM_STATE}
         validationSchema={FORM_VALIDATION}
         validateOnBlur={true}
-        onSubmit={async (values: Label, actions ) => {
+        onSubmit={async (values: Label, actions) => {
           await createModel<Label>({ endpoint: "etiquetas", payload: values });
-          actions.resetForm()
+          actions.resetForm();
           
         }}
       >

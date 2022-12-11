@@ -118,7 +118,6 @@ export default function PartNumber() {
       await deleteModel<ComponentModel>({endpoint:'/partNumber', payload: {...value, id: value.id}})
       
     }
-    console.log('handleDelete', value);
   };
 
   const listComponents:ComponentModel[] = useRecoilValue<ComponentModel[]>(filterModel);
@@ -135,7 +134,6 @@ export default function PartNumber() {
     };
   
   const updateUrlFilters = (url: string) => {
-      console.log('teste de url ', url)
       setUrlFilter(url)
     }
     const handlePage = (e: React.ChangeEvent<unknown>, newPage: number) => {

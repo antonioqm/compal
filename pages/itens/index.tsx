@@ -71,7 +71,6 @@ export default function Itens() {
   const { listAllModel } = useModelMutations();
 
   const handleDelete = async (value: ItemModel) => {
-    console.log("handleDelete", value);
   };
 
   const [expanded, setExpanded] = useState<string | false>(false);

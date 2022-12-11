@@ -58,13 +58,13 @@ export const TextfieldWrapper = ({ name, label, type, mask, min, max, endAdornme
         {
           <OutlinedInput
             inputComponent={ mask ? TextMask : null}
-            inputProps={{ mask: mask ? mask : '', ...inputProps, type }}
+            inputProps={{ mask: mask ? mask : '', ...inputProps }}
           sx={{
             "&.Mui-disabled": { color: '#c0c0c0'},
           }}
           {...configTextfield}
           id={`outlined-adornment-${name}`}
-          type={showPassword || name !== 'password' ? type : "password"}
+          type={showPassword && name === 'password' ? 'text' :  type}
                     
           endAdornment={
             <>

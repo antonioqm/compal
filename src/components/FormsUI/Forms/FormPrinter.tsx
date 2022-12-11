@@ -70,8 +70,6 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
   });
 
   const validateStartEnd = (values: EtiquetaRequest) => {
-    console.log('validateStartEnd', values)
-    console.log('etiqueta', etiqueta)
 
     if (values.printerInterval as boolean) {
       values.start = '1';

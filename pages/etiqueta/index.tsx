@@ -49,7 +49,6 @@ export default function Etiqueta() {
   const { listAllModel,  } = useModelMutations();
 
   const onOpenPrinter = async (value: LabelModel) => {
-    console.log("onOpenPrinter", value);
   };
 
   // const [listLabel, setListLabel] = useState<LabelModel[]>([]);

@@ -9,7 +9,6 @@ interface CustomProps {
 export const NumberFormat = React.forwardRef<any, CustomProps>(
   function NumberFormat(props, ref) {
     const { onChange, ...other } = props;
-    console.log('onChange', )
     return (
       <NumericFormat
         {...other}
