@@ -1,9 +1,11 @@
 import {
-    Button,
-    Dialog, DialogActions, DialogContent,
-    DialogContentText, DialogTitle, IconButton
+  Button,
+  Dialog, DialogActions, DialogContent,
+  DialogContentText, DialogTitle, IconButton
 } from "@mui/material";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { currentPage } from "../../ROUTES";
 import { useModelMutations } from "../../state/atom";
 import { TrashIcon } from "../icons/icons";
 
@@ -19,6 +21,8 @@ export default ({id, onAction}:DialogProp) => {
   
   const [openDialogTrash, setOpenDialogTrash] = React.useState(false);
   const { deleteModel } = useModelMutations();
+  const router = useRouter();
+  const Route = currentPage(router.pathname)!;
 
   const [open, setOpen] = useState(false);
 
@@ -59,7 +63,7 @@ export default ({id, onAction}:DialogProp) => {
         <DialogTitle id="alert-dialog-title">{`Remover `}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {`Tem certeza de que deseja remover item?`}
+            {`Tem certeza de que deseja remover este ${Route.label}?`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

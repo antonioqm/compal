@@ -51,16 +51,17 @@ export const TextfieldWrapper = ({ name, label, type, mask, min, max, endAdornme
 
   return (
     <>
-      <FormControl   fullWidth variant="outlined">
-        <InputLabel sx={{ '&.MuiFormLabel-root-MuiInputLabel-root.Mui-disabled': {color: 'red'} }} focused htmlFor={`outlined-adornment-${name}`}>
+      <FormControl fullWidth variant="outlined">
+        <InputLabel focused htmlFor={`outlined-adornment-${name}`}>
           {label}
         </InputLabel>
         {
           <OutlinedInput
+
             inputComponent={ mask ? TextMask : null}
             inputProps={{ mask: mask ? mask : '', ...inputProps }}
-          sx={{
-            "&.Mui-disabled": { color: '#c0c0c0'},
+            sx={{
+            "&.Mui-disabled": { color: 'blue'},
           }}
           {...configTextfield}
           id={`outlined-adornment-${name}`}

@@ -111,6 +111,7 @@ export const FormInventory = ({ action, data, ...props }: Prop) => {
         }}
         validateOnBlur={true}
         validate={validateTemperature}
+        validateOnMount={true}
         validationSchema={FORM_VALIDATION}
         onSubmit={async (values: Inventory, actions) => {
 

@@ -6,7 +6,7 @@ export interface InventoryModel {
   id: number;
   codeInventory: string;
   description: string;
-  temperature?: number;
+  temperature: number;
   typeInventory: TypeInventoryReponse;
   
 }

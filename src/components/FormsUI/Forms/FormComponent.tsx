@@ -39,7 +39,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
   const filedsClean = {
     id: "",
     codePartNumber: "",
-    levelId: 1,
+    levelId: "",
     numberMaxBacking: "",
     espessura: "",
     timeToleranceInBaking: "",
@@ -59,8 +59,8 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
   const FORM_VALIDATION = Yup.object().shape({
     codePartNumber: Yup.string().required(),
     levelId:Yup.number().integer().required(),
-    numberMaxBacking: Yup.number().integer().required(),
-    espessura: Yup.number().required(),
+    numberMaxBacking: Yup.number().integer().moreThan(0).lessThan(6).required(),
+    espessura: Yup.number().moreThan(0).lessThan(20.01).required(),
     timeToleranceInBaking: Yup.number().integer().required()
 
   });
@@ -151,14 +151,14 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
           }}
           type="number"
           name={"espessura"}
-          label={"Espessura"}
+          label={"Espessura (mm)"}
  
         />
         <TextfieldWrapper
           inputProps={{ min: 0, step: 1, max:1000 }}
           type="number"
           name={"timeToleranceInBaking"}
-          label={"Tempo de tolerância de baking"}
+          label={"Tempo de tolerância de baking (minutos)"}
         />
         <TextfieldWrapper
           inputProps={{ min: 0, step: 1, max: 1000 }}

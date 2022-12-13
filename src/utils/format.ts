@@ -18,7 +18,7 @@ export const formatDate = (dateString: any) => {
 
 }
 export const formatNumber = (number: any) => {
-  return new Intl.NumberFormat('pt-BR', { maximumSignificantDigits: 2 }).format(number);
+  return new Intl.NumberFormat('pt-BR', {  maximumSignificantDigits: 10  }).format(number);
 }
 
 

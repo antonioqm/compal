@@ -86,7 +86,7 @@ export default function Inventory() {
                   {inventory.description}
                 </TableCell>
                 <TableCell component="th" align="left" scope="row">
-                  {inventory.temperature + 'ºC'}
+                  {inventory.temperature > 0 ? inventory.temperature + ' ºC' : '—'}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {inventory.typeInventory && inventory.typeInventory.name}

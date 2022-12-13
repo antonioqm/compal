@@ -54,7 +54,8 @@ export default ({
   return (
     <>
      <FormControl fullWidth variant="outlined">
-        <InputLabel sx={{ background: '#fff', px: .5 }} focused htmlFor={`outlined-adornment-${name}`}>
+        <InputLabel 
+       sx={{ background: '#fff', px: .5, }} htmlFor={`outlined-adornment-${name}`}>
           {label}
         </InputLabel>
        

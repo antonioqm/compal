@@ -167,7 +167,7 @@ export default function TableCompal({ endpoint, header, body, nameKeys }: DataTa
                                 ) : (
                                     <>
                                     {`${ key.name === 'thicknessName' ?
-                                    formatNumber(bodyField[key.name]) + ' mm'
+                                    '<= ' + formatNumber(bodyField[key.name]) + ' mm'
                                     : formatDate(bodyField[key.name])
                                     }`}
                                     </>

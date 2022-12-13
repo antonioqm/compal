@@ -24,6 +24,7 @@ interface levelItemSelect {
 }
 
 export function FormThickness({ action, data, ...props }: FormThicknessProp) {
+  const onlyNumber = /^\d+,\d{2}$/
   const router = useRouter();
   const filedsClean = {
     thicknessName: "",
@@ -37,21 +38,21 @@ export function FormThickness({ action, data, ...props }: FormThicknessProp) {
   const INITIAL_FORM_STATE = data ? data : filedsClean;
 
   const FORM_VALIDATION = Yup.object().shape({
-    thicknessName: Yup.number().required().lessThan(1000).moreThan(0),
+    thicknessName: Yup.number().required().lessThan(20.01).moreThan(0),
     minTimeBaking40: Yup.number()
       .integer()
       .required()
-      .lessThan(1000)
+      .lessThan(5000)
       .moreThan(0),
     minTimeBaking90: Yup.number()
       .integer()
       .required()
-      .lessThan(1000)
+      .lessThan(500)
       .moreThan(0),
     minTimeBaking125: Yup.number()
       .integer()
       .required()
-      .lessThan(1000)
+      .lessThan(100)
       .moreThan(0),
     // levelId: Yup.number().required(),
   });
@@ -120,6 +121,7 @@ export function FormThickness({ action, data, ...props }: FormThicknessProp) {
             type={"number"}
             name={"thicknessName"}
             label={"Espessura (mm)"}
+
           />
           <Select
             items={listLevel}
@@ -139,6 +141,7 @@ export function FormThickness({ action, data, ...props }: FormThicknessProp) {
             name={"minTimeBaking90"}
             label={"Tempo mínimo de Baking 90º (Horas)*"}
           />
+
           <TextfieldWrapper
             inputProps={{ min: 1, max: 999, step: 1 }}
             type={"number"}
