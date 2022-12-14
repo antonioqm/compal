@@ -95,9 +95,7 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           try {
             setAwaitingPrinting(true);
             const printedResponse = await apiClient.get(
-              // `etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}/2`
-              // `etiquetas/imprimir/:msdCodeToPrint?typeLabelId=2&qtdTPrinter=1&printerConfig=0`
-              `etiquetas/imprimir/2/${etiquetaRequest.start}/${etiquetaRequest.end}?typeLabelId=2&printerConfId=0`
+              `etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}?typeLabelId=2`
             );
             setAwaitingPrinting(false);
             setShowMessageSucess(true);
