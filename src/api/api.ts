@@ -13,7 +13,7 @@ export function setupApiClient(ctx:GetServerSidePropsContext | undefined = undef
   let cookies = parseCookies(ctx)
 
   const api = axios.create({
-    baseURL: 'http://200.129.173.244:5001/v1/',
+    baseURL: 'http://http://10.162.254.30:8089/v1/',
   });
 
   api.defaults.headers.common.Authorization = `Bearer ${cookies['nextAuth.token']}`
