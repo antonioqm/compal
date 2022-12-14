@@ -95,7 +95,7 @@ export const FormPrinter = ({ etiqueta, updateDialog }: PrintProps) => {
           try {
             setAwaitingPrinting(true);
             const printedResponse = await apiClient.get(
-              `etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}?typeLabelId=2`
+              `etiquetas/imprimir/${etiqueta.id}/${etiquetaRequest.start}/${etiquetaRequest.end}`
             );
             setAwaitingPrinting(false);
             setShowMessageSucess(true);
