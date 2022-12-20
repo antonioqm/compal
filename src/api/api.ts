@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { GetServerSidePropsContext } from 'next';
 import { parseCookies, setCookie } from 'nookies';
-import { signOut, User } from '../contexts/AuthContext';
+import { User, signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from '../services/errors/AuthTokenError';
 
 let isRefreshing = false;
