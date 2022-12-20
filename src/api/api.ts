@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { GetServerSidePropsContext } from 'next';
 import { parseCookies, setCookie } from 'nookies';
-import { signOut, User } from '../contexts/AuthContext';
+import { User, signOut } from '../contexts/AuthContext';
 import { AuthTokenError } from '../services/errors/AuthTokenError';
 
 let isRefreshing = false;
@@ -13,7 +13,7 @@ export function setupApiClient(ctx:GetServerSidePropsContext | undefined = undef
   let cookies = parseCookies(ctx)
 
   const api = axios.create({
-    baseURL: 'http://10.162.254.30:8089/v1/',
+    baseURL: 'http://200.129.173.244:5001/v1/',
   });
 
   api.defaults.headers.common.Authorization = `Bearer ${cookies['nextAuth.token']}`
