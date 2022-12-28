@@ -140,7 +140,7 @@ export const FormComponent = ({ action, data, ...props }: Prop) => {
         <TextfieldWrapper
           name={"codePartNumber"}
           label={"Partnumber"}
-          mask={/^[\d|\w|\-|\.]{1,10}$/}
+          mask={/^[\d|\w|\-|\.]{1,16}$/}
         />
 
         <Select  items={listLevel} name={"levelId"} label={"Nível"} />

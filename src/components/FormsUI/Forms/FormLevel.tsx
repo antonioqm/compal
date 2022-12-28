@@ -49,7 +49,7 @@ export const FormLevel = ({
       .integer()
       .required("Obrigatório: tipo inteiro.")
       .moreThan(0)
-      .lessThan(1000)
+      .lessThan(10000)
       .test(
         "maxLenght",
         "Deve ser maior que Tempo Crítico de Exposição",
